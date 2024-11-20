@@ -28,7 +28,7 @@
 
 ### 🛠️ 시스템 아키텍쳐
 <kbd>
-<img width="600" height="300" src="https://github.com/user-attachments/assets/28015311-3361-4d76-9621-9dcd7811e706" alt="nolmung_architecture" style="border:1px solid black;">
+<img width="600" height="300" src="https://github.com/user-attachments/assets/67086b43-b2ee-4965-8355-2a770d129fa7" alt="nolmung_architecture" style="border:1px solid black;">
 </kbd>
 
 ### 📌 ERD
