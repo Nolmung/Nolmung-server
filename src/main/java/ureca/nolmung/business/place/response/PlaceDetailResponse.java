@@ -25,11 +25,11 @@ public class PlaceDetailResponse {
 	private String openHour;
 	private boolean parkingYn;
 	private String price;
-	private Integer acceptSize;
+	private String acceptSize;
 	private String rule;
 	private boolean inPossibleYn;
 	private boolean outPossibleYn;
-	private Integer extraPrice;
+	private String extraPrice;
 	private Double starRatingAvg;
 	private Integer reviewCount;
 	private List<Label> labels;

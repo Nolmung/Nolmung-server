@@ -1,4 +1,4 @@
-package ureca.nolmung.jpa.reviewLabel;
+package ureca.nolmung.jpa.reviewlabel;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

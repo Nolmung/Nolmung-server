@@ -30,12 +30,6 @@ public class Place extends BaseEntity {
     @Column(columnDefinition = "TEXT")
     private String placeImageUrl;
 
-    @Column(nullable = false)
-    private Double mapx;        // 위도
-
-    @Column(nullable = false)
-    private Double mapy;        // 경도
-
     @Column
     private String roadAddress;     // 도로명주소
 
@@ -66,10 +60,10 @@ public class Place extends BaseEntity {
     @Column(columnDefinition = "TEXT", nullable = false)
     private String rule;        // 제한사항
 
-    @Column(nullable = false)
+    @Column(name = "inpossible_yn", nullable = false)
     private boolean inPossibleYn;       // 내부동반가능여부
 
-    @Column(nullable = false)
+    @Column(name = "outpossible_yn", nullable = false)
     private boolean outPossibleYn;      // 외부동반가능여부
 
     @Column(nullable = false)
@@ -84,7 +78,10 @@ public class Place extends BaseEntity {
     @Column(nullable = false)
     private Double ratingAvg = 0.0;     // 별점 평균
 
+    @Column(name = "mapx")
     private double latitude;
+
+    @Column(name = "mapy")
     private double longitude;
 
     /**

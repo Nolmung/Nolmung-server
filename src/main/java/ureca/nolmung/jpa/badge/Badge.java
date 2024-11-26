@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import ureca.nolmung.jpa.badgeCode.BadgeCode;
+import ureca.nolmung.jpa.badgecode.BadgeCode;
 import ureca.nolmung.jpa.config.BaseEntity;
 import ureca.nolmung.jpa.user.User;
 

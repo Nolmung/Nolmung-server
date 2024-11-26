@@ -1,4 +1,4 @@
-package ureca.nolmung.jpa.badgeCode;
+package ureca.nolmung.jpa.badgecode;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

@@ -28,7 +28,8 @@ public class PlacePosition {
 	@Column(name = "place_position_id")
 	private Long id;
 
-	@Column(columnDefinition = "geometry(Point, 4326)")
+	// @Column(columnDefinition = "geometry(Point, 4326)")
+	@Column(columnDefinition = "GEOMETRY")
 	private Point location;
 
 	@OneToOne(fetch = FetchType.LAZY)

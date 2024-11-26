@@ -38,6 +38,7 @@ public class PlaceManager {
 	public void makePointData(List<Place> places) {
 		for (Place place : places) {
 			Point point = geometryFactory.createPoint(new Coordinate(place.getLongitude(), place.getLatitude()));
+			point.setSRID(4326);
 			PlacePosition placePosition = PlacePosition.builder()
 				.place(place)
 				.location(point)
