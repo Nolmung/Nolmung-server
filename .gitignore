@@ -38,3 +38,7 @@ out/
 
 ### Secret Config ###
 application.yml
+.env
+
+### Ignore everything in src/main/generated ###
+src/main/generated/*

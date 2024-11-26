@@ -69,12 +69,15 @@ public class Place extends BaseEntity {
     @Column(nullable = false)
     private String extraPrice;     // 반려견 추가요금
 
+    @Builder.Default
     @Column(nullable = false)
     private Double ratingTotal = 0.0;     // 별점 총합
 
+    @Builder.Default
     @Column(nullable = false)
     private Integer ratingCount = 0;    // 별점 개수
 
+    @Builder.Default
     @Column(nullable = false)
     private Double ratingAvg = 0.0;     // 별점 평균
 
