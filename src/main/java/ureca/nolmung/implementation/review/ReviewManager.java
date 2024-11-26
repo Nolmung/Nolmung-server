@@ -13,12 +13,12 @@ import ureca.nolmung.jpa.label.Label;
 import ureca.nolmung.jpa.label.LabelId;
 import ureca.nolmung.jpa.place.Place;
 import ureca.nolmung.jpa.review.Review;
-import ureca.nolmung.jpa.reviewLabel.ReviewLabel;
+import ureca.nolmung.jpa.reviewlabel.ReviewLabel;
 import ureca.nolmung.jpa.user.User;
 import ureca.nolmung.persistence.label.LabelRepository;
 import ureca.nolmung.persistence.place.PlaceRepository;
 import ureca.nolmung.persistence.review.ReviewRepository;
-import ureca.nolmung.persistence.reviewLabel.ReviewLabelRepository;
+import ureca.nolmung.persistence.reviewlabel.ReviewLabelRepository;
 
 import java.util.List;
 import java.util.Optional;

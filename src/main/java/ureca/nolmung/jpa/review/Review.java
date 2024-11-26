@@ -7,7 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import ureca.nolmung.jpa.config.BaseEntity;
 import ureca.nolmung.jpa.place.Place;
-import ureca.nolmung.jpa.reviewLabel.ReviewLabel;
+import ureca.nolmung.jpa.reviewlabel.ReviewLabel;
 import ureca.nolmung.jpa.user.User;
 
 import java.util.ArrayList;

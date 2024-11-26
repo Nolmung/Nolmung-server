@@ -30,12 +30,6 @@ public class Place extends BaseEntity {
     @Column(columnDefinition = "TEXT")
     private String placeImageUrl;
 
-    @Column(nullable = false)
-    private Double mapx;        // 위도
-
-    @Column(nullable = false)
-    private Double mapy;        // 경도
-
     @Column
     private String roadAddress;     // 도로명주소
 
@@ -66,11 +60,11 @@ public class Place extends BaseEntity {
     @Column(columnDefinition = "TEXT", nullable = false)
     private String rule;        // 제한사항
 
-    @Column(nullable = false)
-    private boolean inpossibleYn;       // 내부동반가능여부
+    @Column(name = "inpossible_yn", nullable = false)
+    private boolean inPossibleYn;       // 내부동반가능여부
 
-    @Column(nullable = false)
-    private boolean outpossibleYn;      // 외부동반가능여부
+    @Column(name = "outpossible_yn", nullable = false)
+    private boolean outPossibleYn;      // 외부동반가능여부
 
     @Column(nullable = false)
     private String extraPrice;     // 반려견 추가요금
@@ -84,10 +78,16 @@ public class Place extends BaseEntity {
     @Column(nullable = false)
     private Double ratingAvg = 0.0;     // 별점 평균
 
+    @Column(name = "mapx")
+    private double latitude;
+
+    @Column(name = "mapy")
+    private double longitude;
+
     /**
      * 리뷰 등록 시, 별점 정보 갱신
      * */
-    public void addRating(double newRating){
+    public void addRating(double newRating) {
         this.ratingTotal += newRating;
         this.ratingCount++;
         this.calculateRating();
@@ -96,7 +96,7 @@ public class Place extends BaseEntity {
     /**
      * 리뷰 삭제 시, 별점 정보 갱신
      * */
-    public void removeRating(double oldRating){
+    public void removeRating(double oldRating) {
         this.ratingTotal -= oldRating;
         this.ratingCount = Math.max(0, this.ratingCount - 1);
         this.calculateRating();
@@ -112,4 +112,5 @@ public class Place extends BaseEntity {
             this.ratingAvg = ratingTotal / ratingCount;
         }
     }
+
 }

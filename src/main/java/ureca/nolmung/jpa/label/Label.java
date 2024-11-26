@@ -11,7 +11,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import ureca.nolmung.jpa.config.BaseEntity;
 import ureca.nolmung.jpa.place.Place;
 
 @Getter
@@ -19,7 +18,7 @@ import ureca.nolmung.jpa.place.Place;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class Label extends BaseEntity {
+public class Label {
 
     @EmbeddedId
     private LabelId id;
@@ -47,4 +46,5 @@ public class Label extends BaseEntity {
             this.labelCount--;
         }
     }
+
 }

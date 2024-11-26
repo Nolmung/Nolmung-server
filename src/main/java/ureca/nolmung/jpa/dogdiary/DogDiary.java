@@ -1,25 +1,23 @@
-package ureca.nolmung.jpa.diaryPlace;
+package ureca.nolmung.jpa.dogdiary;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import ureca.nolmung.jpa.config.BaseEntity;
 import ureca.nolmung.jpa.diary.Diary;
-import ureca.nolmung.jpa.place.Place;
-import ureca.nolmung.jpa.user.User;
+import ureca.nolmung.jpa.dog.Dog;
 
 @Getter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class DiaryPlace extends BaseEntity {
+public class DogDiary {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "diary_place_id")
+    @Column(name = "dog_diary_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -27,6 +25,6 @@ public class DiaryPlace extends BaseEntity {
     private Diary diary;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "place_id")
-    private Place place;
+    @JoinColumn(name = "dog_id")
+    private Dog dog;
 }
