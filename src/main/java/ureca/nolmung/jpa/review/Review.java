@@ -36,6 +36,7 @@ public class Review extends BaseEntity {
     @Column(nullable = false)
     private int rating;
 
+    @Builder.Default
     @OneToMany(mappedBy = "review", cascade = CascadeType.REMOVE)
     private List<ReviewLabel> reviewLabels = new ArrayList<>();
 }
