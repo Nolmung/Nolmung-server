@@ -1,29 +1,34 @@
 package ureca.nolmung.jpa.label;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.EmbeddedId;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.MapsId;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import ureca.nolmung.jpa.config.BaseEntity;
-import ureca.nolmung.jpa.place.Enum.Category;
+import ureca.nolmung.jpa.place.Place;
 
 @Getter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class Label extends BaseEntity {
+public class Label {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "label_id")
-    private Long id;
+    @EmbeddedId
+    private LabelId id;
 
-    @Column(length = 30, nullable = false)
-    private String content;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @MapsId("placeId")
+    @JoinColumn(name = "place_id")
+    private Place place;
 
-    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Category category;
+    private Integer labelCount;
+
 }

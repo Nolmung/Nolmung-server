@@ -67,14 +67,30 @@ public class Place extends BaseEntity {
     private String rule;        // 제한사항
 
     @Column(nullable = false)
-    private boolean impossibleYn;       // 내부동반가능여부
+    private boolean inPossibleYn;       // 내부동반가능여부
 
     @Column(nullable = false)
-    private boolean outpossibleYn;      // 외부동반가능여부
+    private boolean outPossibleYn;      // 외부동반가능여부
 
     @Column(nullable = false)
     private Integer extraPrice;     // 반려견 추가요금
 
-    @Column
-    private Double ratingTotal;     // 별점 총합
+    @Column(nullable = false)
+    private Double ratingTotal = 0.0;     // 별점 총합
+
+    @Column(nullable = false)
+    private Integer ratingCount = 0;    // 별점 개수
+
+    @Column(nullable = false)
+    private Double ratingAvg = 0.0;
+
+    private double latitude;
+    private double longitude;
+
+    // 별점 갱신 메소드
+    public void updateRating(int newRating){
+        this.ratingTotal += newRating;
+        this.ratingCount++;
+    }
+
 }
