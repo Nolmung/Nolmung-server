@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Embeddable
 public class LabelId implements Serializable {
+
 	private Long labelId;
 	private Long placeId;
 
@@ -19,8 +20,8 @@ public class LabelId implements Serializable {
 		if (this == o) return true;
 		if (!(o instanceof LabelId)) return false;
 		LabelId labelId = (LabelId) o;
-		return Objects.equals(labelId, labelId.labelId) &&
-			Objects.equals(placeId, labelId.placeId);
+		return Objects.equals(this.labelId, labelId.labelId) &&
+			Objects.equals(this.placeId, labelId.placeId);
 	}
 
 	@Override
