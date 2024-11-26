@@ -61,20 +61,55 @@ public class Place extends BaseEntity {
     private String price;
 
     @Column(nullable = false)
-    private Integer acceptSize;     //수용가능크기
+    private String acceptSize;     //수용가능크기
 
     @Column(columnDefinition = "TEXT", nullable = false)
     private String rule;        // 제한사항
 
     @Column(nullable = false)
-    private boolean impossibleYn;       // 내부동반가능여부
+    private boolean inpossibleYn;       // 내부동반가능여부
 
     @Column(nullable = false)
     private boolean outpossibleYn;      // 외부동반가능여부
 
     @Column(nullable = false)
-    private Integer extraPrice;     // 반려견 추가요금
+    private String extraPrice;     // 반려견 추가요금
 
-    @Column
-    private Double ratingTotal;     // 별점 총합
+    @Column(nullable = false)
+    private Double ratingTotal = 0.0;     // 별점 총합
+
+    @Column(nullable = false)
+    private Integer ratingCount = 0;    // 별점 개수
+
+    @Column(nullable = false)
+    private Double ratingAvg = 0.0;     // 별점 평균
+
+    /**
+     * 리뷰 등록 시, 별점 정보 갱신
+     * */
+    public void addRating(double newRating){
+        this.ratingTotal += newRating;
+        this.ratingCount++;
+        this.calculateRating();
+    }
+
+    /**
+     * 리뷰 삭제 시, 별점 정보 갱신
+     * */
+    public void removeRating(double oldRating){
+        this.ratingTotal -= oldRating;
+        this.ratingCount = Math.max(0, this.ratingCount - 1);
+        this.calculateRating();
+    }
+
+    /**
+     * 별점 평균 계산
+     * */
+    public void calculateRating() {
+        if (ratingCount == 0) {
+            this.ratingAvg = 0.0;
+        } else {
+            this.ratingAvg = ratingTotal / ratingCount;
+        }
+    }
 }

@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import ureca.nolmung.jpa.config.BaseEntity;
+import ureca.nolmung.jpa.dog.Enum.DogSize;
 import ureca.nolmung.jpa.dog.Enum.Gender;
 import ureca.nolmung.jpa.user.User;
 
@@ -40,8 +41,9 @@ public class Dog extends BaseEntity {
     @Column(length = 30, nullable = false)
     private String type;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private int weight;
+    private DogSize size;
 
     @Column(nullable = false)
     private LocalDate birth;

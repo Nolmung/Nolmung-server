@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum Category {
+    ALL,                // 공통
     MUSEUM,             // 박물관
     TRAVEL,             // 여행지
     ARTGALLERY,         // 미술관
