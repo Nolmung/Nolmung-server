@@ -44,7 +44,7 @@ jobs:
         arguments: clean build -x test
         
     - name: Build Docker image
-      run: docker build -f Dockerfile -t ${{ secrets.DOCKERHUB_USERNAME }}/pr-deliver .
+      run: docker build -f Dockerfile -t ${{ secrets.DOCKERHUB_USERNAME }}/nolmung .
 
     - name: DockerHub login
       uses: docker/login-action@v2
@@ -53,18 +53,18 @@ jobs:
         password: ${{ secrets.DOCKERHUB_TOKEN }}
 
     - name: Push Docker image
-      run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/pr-deliver
+      run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/nolmung
 
     - name: Deploy to EC2 via SSH
       uses: appleboy/ssh-action@master
       with:
         host: ${{ secrets.AWS_EC2_HOST }}
-        username: ubuntu
+        username: ec2-user
         key: ${{ secrets.AWS_EC2_SECRET_ACCESS_KEY }}
         port: 22
         script: |
           # Docker Hub에서 최신 이미지 풀
-          docker pull ${{ secrets.DOCKERHUB_USERNAME }}/pr-deliver
+          docker pull ${{ secrets.DOCKERHUB_USERNAME }}/nolmung
           
           # 기존 컨테이너가 실행 중이면 중지
           docker stop pr-deliver || true
