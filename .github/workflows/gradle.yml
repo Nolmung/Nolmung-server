@@ -73,7 +73,7 @@ jobs:
           docker rm pr-deliver || true
           
           # 새로운 컨테이너 실행
-          docker run --name pr-deliver --rm -d -p 80:8080 \
+          docker run --name pr-deliver --rm -d -p 443:8080 \
             ${{ secrets.DOCKERHUB_USERNAME }}/nolmung
     # NOTE: The Gradle Wrapper is the default and recommended way to run Gradle (https://docs.gradle.org/current/userguide/gradle_wrapper.html).
     # If your project does not have the Gradle Wrapper configured, you can use the following configuration to run Gradle with a specified version.
