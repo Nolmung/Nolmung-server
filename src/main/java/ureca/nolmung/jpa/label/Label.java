@@ -31,16 +31,10 @@ public class Label {
     @Column(nullable = false)
     private Integer labelCount;
 
-    /**
-     * 리뷰 등록 시, 장소별 라벨 카운트 증가
-     * */
     public void addLabelCount() {
         this.labelCount++;
     }
 
-    /**
-     * 리뷰 삭제 시, 장소별 라벨 카운트 감소
-     * */
     public void removeLabelCount() {
         if (this.labelCount > 0) {
             this.labelCount--;
