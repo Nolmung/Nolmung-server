@@ -58,9 +58,9 @@ jobs:
     - name: Deploy to EC2 via SSH
       uses: appleboy/ssh-action@master
       with:
-        host: ${{ secrets.AWS_ACCESS_KEY }}
+        host: ${{ secrets.AWS_EC2_HOST }}
         username: ubuntu
-        key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        key: ${{ secrets.AWS_EC2_SECRET_ACCESS_KEY }}
         port: 22
         script: |
           # Docker Hub에서 최신 이미지 풀
