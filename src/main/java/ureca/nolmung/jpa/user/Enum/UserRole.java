@@ -8,5 +8,5 @@ import java.security.Key;
 @Getter
 @RequiredArgsConstructor
 public enum UserRole {
-    USER, ADMIN
+    GUEST, USER, ADMIN
 }
