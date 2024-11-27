@@ -67,10 +67,10 @@ jobs:
           docker pull ${{ secrets.DOCKERHUB_USERNAME }}/nolmung
           
           # 기존 컨테이너가 실행 중이면 중지
-          docker stop pr-deliver || true
+          docker stop $(sudo docker ps -aq) || true
           
           # 기존 컨테이너 삭제
-          docker rm pr-deliver || true
+          docker rm -f $(sudo docker ps -qa) || true
           
           # 새로운 컨테이너 실행
           docker run --name pr-deliver --rm -d -p 443:8080 \
