@@ -54,8 +54,9 @@ public class PlaceManager {
 		}
 	}
 
-	public List<Place> findBySearchOption(Category category, String acceptSize, Double ratingAvg) {
-		return placeRepositoryImpl.findBySearchOption(category, acceptSize, ratingAvg);
+	public List<Place> findBySearchOption(Category category, String acceptSize, Double ratingAvg, PlaceOnMapServiceRequest serviceRequest) {
+		Polygon polygon = generatePolygon(serviceRequest);
+		return placeRepositoryImpl.findBySearchOption(category, acceptSize, ratingAvg, polygon);
 	}
 
 	public List<Place> findPlaceMapOn(PlaceOnMapServiceRequest serviceRequest) {
