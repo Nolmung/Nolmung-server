@@ -24,7 +24,7 @@ public class DiaryManager {
 	private final DiaryRepository diaryRepository;
 
 	public List<PlaceDiaryResponse> findDiaryByPlace(Place place) {
-		List<DiaryPlace> diaryPlaces = diaryPlaceRepository.findAllByPlaceOOrderByCreatedAtDesc(place);
+		List<DiaryPlace> diaryPlaces = diaryPlaceRepository.findAllByPlaceOrderByCreatedAtDesc(place);
 		List<PlaceDiaryResponse> placeDiaryResponses = new ArrayList<>();
 		for (DiaryPlace diaryPlace : diaryPlaces) {
 			Diary diary = diaryRepository.findById(diaryPlace.getId())

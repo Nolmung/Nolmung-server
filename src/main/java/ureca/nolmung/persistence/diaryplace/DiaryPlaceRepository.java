@@ -11,6 +11,6 @@ import ureca.nolmung.jpa.place.Place;
 @Repository
 public interface DiaryPlaceRepository extends JpaRepository<DiaryPlace, Long> {
 
-	List<DiaryPlace> findAllByPlaceOOrderByCreatedAtDesc(Place place);
+	List<DiaryPlace> findAllByPlaceOrderByCreatedAtDesc(Place place);
 
 }
