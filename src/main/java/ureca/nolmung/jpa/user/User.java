@@ -7,10 +7,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import ureca.nolmung.business.user.dto.request.SignUpReq;
 import ureca.nolmung.jpa.config.BaseEntity;
+import ureca.nolmung.jpa.diary.Diary;
 import ureca.nolmung.jpa.user.Enum.Gender;
 import ureca.nolmung.jpa.user.Enum.Provider;
 import ureca.nolmung.jpa.user.Enum.UserRole;
 import ureca.nolmung.jpa.user.Enum.UserStatus;
+
+import java.util.List;
 
 @Getter
 @Builder
@@ -63,6 +66,9 @@ public class User extends BaseEntity {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Provider provider;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private List<Diary> diaries;
 
     public User(String name, String profileImageUrl, String email)
     {
