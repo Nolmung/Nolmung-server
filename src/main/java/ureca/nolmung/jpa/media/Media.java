@@ -31,4 +31,8 @@ public class Media extends BaseEntity {
 
     @Column(columnDefinition = "TEXT")
     private String mediaUrl;
+
+    public void addDiary(Diary diary) {
+        this.diary = diary;
+    }
 }

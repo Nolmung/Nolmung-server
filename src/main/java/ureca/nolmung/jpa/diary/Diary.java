@@ -6,7 +6,11 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import ureca.nolmung.jpa.config.BaseEntity;
+import ureca.nolmung.jpa.media.Media;
 import ureca.nolmung.jpa.user.User;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Builder
