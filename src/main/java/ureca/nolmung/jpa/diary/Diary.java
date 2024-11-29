@@ -36,4 +36,7 @@ public class Diary extends BaseEntity {
 
     @Column(nullable = false)
     private boolean publicYn;
+
+    @OneToMany(mappedBy = "diary", fetch = FetchType.LAZY)
+    private List<Media> mediaList;
 }
