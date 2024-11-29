@@ -27,4 +27,13 @@ public class DogService implements DogUseCase{
         Dog dog = dogManager.addDog(user,req);
         return dogDtoMapper.toDogResp(dog);
     }
+
+    @Override
+    @Transactional
+    public DogResp updateDog(Long userId, Long dogId, DogReq req) {
+
+        Dog currentDog = dogManager.validateDogExistence(userId, dogId);
+        Dog updatedDog = dogManager.updateDog(currentDog, req);
+        return dogDtoMapper.toDogResp(updatedDog);
+    }
 }
