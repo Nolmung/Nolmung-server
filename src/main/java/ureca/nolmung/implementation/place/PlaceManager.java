@@ -54,9 +54,9 @@ public class PlaceManager {
 		}
 	}
 
-	public List<Place> findBySearchOption(Category category, String acceptSize, Double ratingAvg, PlaceOnMapServiceRequest serviceRequest) {
+	public List<Place> findBySearchOption(Long userId, Category category, String acceptSize, Double ratingAvg, Boolean isBookmarked, PlaceOnMapServiceRequest serviceRequest) {
 		Polygon polygon = generatePolygon(serviceRequest);
-		return placeRepository.findBySearchOption(category, acceptSize, ratingAvg, polygon);
+		return placeRepository.findBySearchOption(userId, category, acceptSize, ratingAvg, isBookmarked, polygon);
 	}
 
 	public List<Place> findPlaceMapOn(PlaceOnMapServiceRequest serviceRequest) {

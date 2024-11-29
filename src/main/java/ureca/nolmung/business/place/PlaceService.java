@@ -51,8 +51,8 @@ public class PlaceService implements PlaceUseCase {
 	}
 
 	@Override
-	public List<SearchedPlaceResponse> findBySearchOption(Category category, String acceptSize, Double ratingAvg, PlaceOnMapServiceRequest serviceRequest) {
-		List<Place> places = placeManager.findBySearchOption(category, acceptSize, ratingAvg, serviceRequest);
+	public List<SearchedPlaceResponse> findBySearchOption(Long userId, Category category, String acceptSize, Double ratingAvg, Boolean isBookmarked, PlaceOnMapServiceRequest serviceRequest) {
+		List<Place> places = placeManager.findBySearchOption(userId, category, acceptSize, ratingAvg, isBookmarked, serviceRequest);
 		return placeDtoMapper.toSearchedPlaceReponseList(places);
 	}
 

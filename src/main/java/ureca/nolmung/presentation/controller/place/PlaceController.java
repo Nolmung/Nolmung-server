@@ -45,11 +45,13 @@ public class PlaceController {
 	@Operation(summary = "장소 조회 필터링")
 	@PostMapping("/filter")
 	public ResponseDto<List<SearchedPlaceResponse>> findPlaceByFilter(
-		@RequestParam(required = false)Category category,
-		@RequestParam(required = false)String acceptSize,
-		@RequestParam(required = false)Double ratingAvg, @Valid @RequestBody PlaceOnMapRequest request) {
-		return ResponseUtil.SUCCESS("장소 조회에 성공하였습니다.", placeUseCase.findBySearchOption(category, acceptSize, ratingAvg, request.toServiceRequest()));
-
+		@RequestParam(required = false) Long userId,
+		@RequestParam(required = false) Category category,
+		@RequestParam(required = false) String acceptSize,
+		@RequestParam(required = false) Double ratingAvg,
+		@RequestParam(required = false) Boolean isBookmarked,
+		@RequestBody PlaceOnMapRequest request) {
+		return ResponseUtil.SUCCESS("장소 조회에 성공하였습니다.", placeUseCase.findBySearchOption(userId, category, acceptSize, ratingAvg, isBookmarked, request.toServiceRequest()));
 	}
 
 	@Operation(summary = "장소 상세 정보 조회")

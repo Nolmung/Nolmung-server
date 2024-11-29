@@ -8,5 +8,5 @@ import ureca.nolmung.jpa.place.Enum.Category;
 import ureca.nolmung.jpa.place.Place;
 
 public interface PlaceRepositoryCustom {
-	List<Place> findBySearchOption(Category category, String acceptSize, Double ratingAvg, Polygon polygon);
+	List<Place> findBySearchOption(Long userId, Category category, String acceptSize, Double ratingAvg, Boolean isBookmarked, Polygon polygon);
 }
