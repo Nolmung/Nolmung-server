@@ -1,6 +1,6 @@
 package ureca.nolmung.business.dog;
 
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ureca.nolmung.business.dog.dto.request.DogReq;
@@ -43,6 +43,13 @@ public class DogService implements DogUseCase{
         Dog currentDog = dogManager.validateDogExistence(userId, dogId);
         dogManager.deleteDog(dogId);
         return dogDtoMapper.toDogResp(currentDog);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public DogResp getDog(Long userId, Long dogId) {
+        Dog dog = dogManager.validateDogExistence(userId, dogId);
+        return dogDtoMapper.toDogResp(dog);
     }
 
 

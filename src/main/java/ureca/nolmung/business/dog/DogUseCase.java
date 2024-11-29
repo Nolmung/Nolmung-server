@@ -8,4 +8,5 @@ public interface DogUseCase {
     DogResp updateDog(Long userId, Long dogId, DogReq req);
     DogResp deleteDog(Long userId, Long dogId);
 
+    DogResp getDog(Long userId,Long dogId);
 }
