@@ -89,7 +89,7 @@ public class Place extends BaseEntity {
 
     @Builder.Default
     @Column(nullable = false)
-    private int bookmarks = 0;
+    private int bookmarkCount = 0;
 
     /**
      * 리뷰 등록 시, 별점 정보 갱신
