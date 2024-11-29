@@ -2,8 +2,6 @@ package ureca.nolmung.implementation.diary;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-
 import org.springframework.stereotype.Component;
 import lombok.RequiredArgsConstructor;
 import ureca.nolmung.business.diary.dto.request.AddDiaryReq;
@@ -39,6 +37,7 @@ public class DiaryManager {
 	private final PlaceRepository placeRepository;
 	private final DogDiaryRepository dogDiaryRepository;
 	private final DogRepository dogRepository;
+	private final UserRepository userRepository;
 
 	public List<PlaceDiaryResponse> findDiaryByPlace(Place place) {
 		List<DiaryPlace> diaryPlaces = diaryPlaceRepository.findAllByPlaceOrderByCreatedAtDesc(place);
