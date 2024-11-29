@@ -23,5 +23,6 @@ public interface PlaceRepository extends JpaRepository<Place, Long> {
 	@Query("SELECT p FROM Place p WHERE p.acceptSize LIKE CONCAT('%', :size, '%')")
 	List<Place> findAllByDogSize(@Param("size") String size);
 
-
+	@Query("SELECT p FROM Place p WHERE p.address LIKE CONCAT('%', :addressProvince, '%')")
+	List<Place> findByUserAddress(@Param("addressProvince")String AddressProvince);
 }

@@ -5,7 +5,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 import ureca.nolmung.jpa.dog.Dog;
 import ureca.nolmung.jpa.place.Place;
-import ureca.nolmung.persistence.dog.DogRepository;
 import ureca.nolmung.persistence.place.PlaceRepository;
 
 import java.util.ArrayList;
@@ -18,7 +17,6 @@ import java.util.Random;
 public class RecommendManager {
 
     private final PlaceRepository placeRepository;
-    private final DogRepository dogRepository;
 
     public List<Place> getMostBookmarkedPlaces() {
         List<Place> places = placeRepository.findTopNPlaces(PageRequest.of(0, 5));
@@ -35,6 +33,10 @@ public class RecommendManager {
             allPlaces.addAll(places);
         }
         return allPlaces;
+    }
+
+    public List<Place> getPlaceRecommendationsNearByUser(String addressProvince) {
+        return placeRepository.findByUserAddress(addressProvince);
     }
 
     public List<Place> getRandomPlaces(List<Place> places, int count) {
