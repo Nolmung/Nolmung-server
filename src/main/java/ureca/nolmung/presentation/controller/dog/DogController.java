@@ -24,7 +24,11 @@ public class DogController {
 
     @PutMapping("")
     public ResponseDto<DogResp> updateDog(@RequestParam("userId") Long userId,@RequestParam("dogId") Long dogId, @RequestBody DogReq req) {
-        DogResp resp = dogUseCase.updateDog(userId, dogId, req);
-        return ResponseUtil.SUCCESS("반려견 프로필 수정에 성공하였습니다.",resp);
+        return ResponseUtil.SUCCESS("반려견 프로필 수정에 성공하였습니다.",dogUseCase.updateDog(userId, dogId, req));
+    }
+
+    @DeleteMapping("")
+    public ResponseDto<DogResp> deleteDog(@RequestParam("userId") Long userId, @RequestParam("dogId") Long dogId) {
+        return ResponseUtil.SUCCESS("반려견 프로필 삭제에 성공하였습니다.", dogUseCase.deleteDog(userId, dogId));
     }
 }
