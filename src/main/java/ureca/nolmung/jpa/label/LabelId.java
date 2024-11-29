@@ -5,8 +5,10 @@ import java.util.Objects;
 
 import jakarta.persistence.Embeddable;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @Embeddable

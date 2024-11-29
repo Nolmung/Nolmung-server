@@ -4,6 +4,8 @@ import java.util.List;
 
 import lombok.Builder;
 import lombok.Getter;
+import ureca.nolmung.business.diary.response.PlaceDiaryResponse;
+import ureca.nolmung.business.labels.response.LabelResponse;
 import ureca.nolmung.jpa.diary.Diary;
 import ureca.nolmung.jpa.label.Label;
 import ureca.nolmung.jpa.place.Enum.Category;
@@ -32,13 +34,13 @@ public class PlaceDetailResponse {
 	private String extraPrice;
 	private Double starRatingAvg;
 	private Integer reviewCount;
-	private List<Label> labels;
+	private List<LabelResponse> labels;
 	private Integer totalDiaries;
-	private List<Diary> diaries;
+	private List<PlaceDiaryResponse> diaries;
 	private double latitude;
 	private double longitude;
 
-	public static PlaceDetailResponse of(Place place, List<Label> labels, List<Diary> diaries) {
+	public static PlaceDetailResponse of(Place place, List<LabelResponse> labels, List<PlaceDiaryResponse> diaries) {
 		return PlaceDetailResponse.builder()
 			.placeId(place.getId())
 			.placeName(place.getName())
