@@ -35,7 +35,7 @@ public class PlaceManager {
 
 	public Place findPlaceById(long placeId) {
 		return placeRepository.findById(placeId)
-			.orElseThrow(() -> new PlaceException(PlaceExceptionType.Place_NOT_FOUND_EXCEPTION));
+			.orElseThrow(() -> new PlaceException(PlaceExceptionType.PLACE_NOT_FOUND_EXCEPTION));
 	}
 
 	public List<Place> findAllPlace() {

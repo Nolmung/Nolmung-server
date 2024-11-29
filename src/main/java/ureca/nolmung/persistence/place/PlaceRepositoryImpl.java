@@ -1,7 +1,6 @@
 package ureca.nolmung.persistence.place;
 
 import static ureca.nolmung.jpa.place.QPlace.*;
-import static ureca.nolmung.jpa.placeposition.QPlacePosition.*;
 
 import java.util.List;
 
@@ -59,7 +58,7 @@ public class PlaceRepositoryImpl implements PlaceRepositoryCustom {
 	}
 
 	private BooleanExpression isWithinPolygon(Polygon polygon) {
-		return Expressions.booleanTemplate("ST_Contains({0},{1})", polygon, placePosition.location);
+		return Expressions.booleanTemplate("ST_Contains({0},{1})", polygon, place.placePosition.location);
 	}
 
 }
