@@ -39,7 +39,6 @@ public class DogManager {
         return newDog;
     }
 
-
     public Dog updateDog(Dog dog, DogReq req) {
 
         dog.update(req);

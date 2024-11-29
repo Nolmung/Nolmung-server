@@ -19,10 +19,28 @@ public class RecommendController {
 
     private final RecommendUseCase recommendUseCase;
 
+    //TODO 나중에 토큰 어쩌구 JWT 어쩌구 인증된 사용자만 할 수 있게 처리 필요
     @GetMapping("/users/{userId}/similar/bookmarks")
     public ResponseDto<List<RecommendResp>> getPlaceRecommendations(@PathVariable Long userId) {
         return ResponseUtil.SUCCESS(
-                "추천된 장소 조회에 성공하였습니다.",
+                "개인 맞춤형 장소 추천에 성공하였습니다.",
                 recommendUseCase.getPlaceRecommendationsFromPersonalize(userId));
+    }
+
+    @GetMapping("/bookmarks")
+    public ResponseDto<List<RecommendResp>> getBookmarkRecommendations() {
+        return ResponseUtil.SUCCESS(
+                "즐겨찾기가 많은 장소 추천에 성공하였습니다.",
+                recommendUseCase.getMostBookmarkedPlaces()
+        );
+    }
+
+    //TODO 나중에 토큰 어쩌구 JWT 어쩌구 인증된 사용자만 할 수 있게 처리 필요
+    @GetMapping("/users/{userId}/weight")
+    public ResponseDto<List<RecommendResp>> getWeightRecommendations(@PathVariable Long userId) {
+        return ResponseUtil.SUCCESS(
+                "반려견들 크기에 맞는 장소 추천에 성공하였습니다.",
+                recommendUseCase.getPlaceRecommendationsForDogs(userId)
+        );
     }
 }

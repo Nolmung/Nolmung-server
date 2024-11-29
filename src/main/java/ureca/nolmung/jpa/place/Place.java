@@ -88,6 +88,13 @@ public class Place extends BaseEntity {
     @Column(name = "mapy")
     private double longitude;
 
+    @Builder.Default
+    @Column(nullable = false)
+    private int bookmarkCount = 0;
+
+    /**
+     * 리뷰 등록 시, 별점 정보 갱신
+     * */
     @OneToOne(mappedBy = "place", cascade = CascadeType.ALL)
     private PlacePosition placePosition;
 

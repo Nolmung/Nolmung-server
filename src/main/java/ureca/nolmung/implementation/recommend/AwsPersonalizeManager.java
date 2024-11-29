@@ -40,6 +40,7 @@ public class AwsPersonalizeManager {
             items = recommendationsResponse.itemList();
 
         } catch (AwsServiceException e) {
+            //TODO 공통 예외처리 고민
             System.err.println(e.awsErrorDetails().errorMessage());
             System.exit(1);
         }
@@ -59,15 +60,14 @@ public class AwsPersonalizeManager {
         return places;
     }
 
-    public List<PredictedItem> getRandomRecs(List<PredictedItem> recs) {
+    public List<PredictedItem> getRandomRecs(List<PredictedItem> recs, int count) {
         Random random = new Random();
-        if (recs.size() <= 5) {
+        if (recs.size() <= count) {
             return new ArrayList<>(recs);
         }
-        List<PredictedItem> modifiableRecs = new ArrayList<>(recs);
 
-        Collections.shuffle(modifiableRecs, random);
+        Collections.shuffle(recs, random);
 
-        return new ArrayList<>(modifiableRecs.subList(0, 5));
+        return new ArrayList<>(recs.subList(0, count));
     }
 }
