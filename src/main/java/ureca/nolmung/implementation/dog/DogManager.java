@@ -8,6 +8,9 @@ import ureca.nolmung.jpa.dog.Enum.DogSize;
 import ureca.nolmung.jpa.dog.Enum.Gender;
 import ureca.nolmung.jpa.user.User;
 import ureca.nolmung.persistence.dog.DogRepository;
+import ureca.nolmung.persistence.dogdiary.DogDiaryRepository;
+
+import java.util.List;
 
 import java.util.List;
 

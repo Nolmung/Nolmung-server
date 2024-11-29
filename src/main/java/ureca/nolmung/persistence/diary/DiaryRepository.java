@@ -1,6 +1,8 @@
 package ureca.nolmung.persistence.diary;
 
 import java.util.List;
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -14,8 +16,17 @@ public interface DiaryRepository extends JpaRepository<Diary, Long> {
             "FROM Diary d " +
             "JOIN FETCH d.user u " +
             "LEFT JOIN FETCH d.mediaList m " +
-            "WHERE u.id = :userId " +
+            "WHERE d.user.id = :userId " +
             "AND (m.mediaType = 'IMAGE' OR m IS NULL) " +
             "ORDER BY d.createdAt DESC")
     List<Diary> findDiariesWithFirstMediaByUser(@Param("userId") Long userId);
+
+    @Query("SELECT d FROM Diary d LEFT JOIN FETCH d.mediaList WHERE d.id = :diaryId")
+    Diary findWithMediaById(@Param("diaryId") Long diaryId);
+
+//    @Query("SELECT d " +
+//            "FROM Diary d " +
+//            "LEFT JOIN FETCH d.mediaList m " +
+//            "WHERE d.id = :diaryId " )
+//    List<Diary> findDiaryWithMediasById(@Param("diaryId") Long diaryId);
 }
