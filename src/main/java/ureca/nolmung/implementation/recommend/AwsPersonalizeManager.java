@@ -60,6 +60,7 @@ public class AwsPersonalizeManager {
         return places;
     }
 
+    //TODO 파라미터로 가져갈 개수 정해주기 ( 지금은 5 )
     public List<PredictedItem> getRandomRecs(List<PredictedItem> recs) {
         Random random = new Random();
         if (recs.size() <= 5) {
