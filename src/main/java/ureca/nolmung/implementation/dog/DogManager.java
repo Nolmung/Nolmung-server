@@ -9,6 +9,8 @@ import ureca.nolmung.jpa.dog.Enum.Gender;
 import ureca.nolmung.jpa.user.User;
 import ureca.nolmung.persistence.dog.DogRepository;
 
+import java.util.List;
+
 @Component
 @RequiredArgsConstructor
 public class DogManager {
@@ -37,7 +39,6 @@ public class DogManager {
         return newDog;
     }
 
-
     public Dog updateDog(Dog dog, DogReq req) {
 
         dog.update(req);
@@ -49,5 +50,9 @@ public class DogManager {
     public void deleteDog(Long dogId) {
 
         dogRepository.deleteById(dogId);
+    }
+
+    public List<Dog> getDogList(Long userId) {
+        return dogRepository.findByUserId(userId);
     }
 }

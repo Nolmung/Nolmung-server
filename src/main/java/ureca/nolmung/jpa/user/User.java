@@ -36,11 +36,7 @@ public class User extends BaseEntity {
 
     //@Column(length = 30, nullable = false)
     @Column(length = 30)
-    private String addressProvince;    // 거주지 시도명
-
-    //@Column(length = 30, nullable = false)
-    @Column(length = 30)
-    private String address_District;    // 거주지 시군구명
+    private String addressProvince;    // 거주지 시군명
 
     @Column(columnDefinition = "TEXT")
     private String profileImageUrl;
@@ -86,7 +82,6 @@ public class User extends BaseEntity {
         // 화면에서 사용자를 통해 입력 받는 정보들 설정
         this.nickname=req.getNickname();
         this.addressProvince=req.getAddressProvince();
-        this.address_District =req.getAddressDistrict();
         this.age = req.getAge();
         this.gender = req.getGender();
         this.role=UserRole.USER;
