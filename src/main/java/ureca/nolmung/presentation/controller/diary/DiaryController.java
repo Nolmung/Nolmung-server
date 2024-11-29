@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import ureca.nolmung.business.diary.DiaryUseCase;
 import ureca.nolmung.business.diary.dto.request.AddDiaryReq;
+import ureca.nolmung.business.diary.dto.response.AddDiaryResp;
 import ureca.nolmung.business.diary.dto.response.DiaryListResp;
 import ureca.nolmung.config.response.ResponseDto;
 import ureca.nolmung.config.response.ResponseUtil;
@@ -18,7 +19,7 @@ public class DiaryController {
     private final DiaryUseCase diaryUseCase;
 
     @PostMapping("")
-    public ResponseDto<Long> addDiary(@RequestBody AddDiaryReq req) {
+    public ResponseDto<AddDiaryResp> addDiary(@RequestBody AddDiaryReq req) {
         return ResponseUtil.SUCCESS("일기 생성에 성공하였습니다.", diaryUseCase.addDiary(req.userId(), req));
     }
 

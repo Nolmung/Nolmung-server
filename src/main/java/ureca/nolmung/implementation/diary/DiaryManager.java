@@ -7,6 +7,7 @@ import java.util.Map;
 import org.springframework.stereotype.Component;
 import lombok.RequiredArgsConstructor;
 import ureca.nolmung.business.diary.dto.request.AddDiaryReq;
+import ureca.nolmung.business.diary.dto.response.AddDiaryResp;
 import ureca.nolmung.business.diary.response.PlaceDiaryResponse;
 import ureca.nolmung.implementation.dog.DogException;
 import ureca.nolmung.implementation.dog.DogExceptionType;
@@ -38,7 +39,6 @@ public class DiaryManager {
 	private final PlaceRepository placeRepository;
 	private final DogDiaryRepository dogDiaryRepository;
 	private final DogRepository dogRepository;
-	private final UserRepository userRepository;
 
 	public List<PlaceDiaryResponse> findDiaryByPlace(Place place) {
 		List<DiaryPlace> diaryPlaces = diaryPlaceRepository.findAllByPlaceOrderByCreatedAtDesc(place);
@@ -52,9 +52,9 @@ public class DiaryManager {
 		return placeDiaryResponses;
 	}
 
-	public Long addDiary(User loginUser, AddDiaryReq req) {
+	public AddDiaryResp addDiary(User user, AddDiaryReq req) {
 
-		Diary diary = createDiary(loginUser, req);
+		Diary diary = createDiary(user, req);
 		Diary savedDiary = diaryRepository.save(diary);
 
 		req.places().forEach(placeId -> {
@@ -80,7 +80,7 @@ public class DiaryManager {
 			mediaRepository.save(media);
 		});
 
-		return savedDiary.getId();
+		return new AddDiaryResp(savedDiary.getId());
 	}
 
 	public List<Diary> getDiaryList(Long userId) {
