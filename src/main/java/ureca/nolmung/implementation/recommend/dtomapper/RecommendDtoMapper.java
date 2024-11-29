@@ -19,6 +19,7 @@ public class RecommendDtoMapper {
                         place.getName(),
                         place.getCategory(),
                         place.getRoadAddress(),
+                        place.getAddress(),
                         place.getPlaceImageUrl(),
                         place.getRatingAvg(),
                         place.getRatingCount()
@@ -33,6 +34,22 @@ public class RecommendDtoMapper {
                         place.getName(),
                         place.getCategory(),
                         place.getRoadAddress(),
+                        place.getAddress(),
+                        place.getPlaceImageUrl(),
+                        place.getRatingAvg(),
+                        place.getRatingCount()
+                ))
+                .collect(Collectors.toList());
+    }
+
+    public List<RecommendResp> toGetPlaceRecommendationsForDogs(List<Place> places) {
+        return places.stream()
+                .map(place -> new RecommendResp(
+                        place.getId(),
+                        place.getName(),
+                        place.getCategory(),
+                        place.getRoadAddress(),
+                        place.getAddress(),
                         place.getPlaceImageUrl(),
                         place.getRatingAvg(),
                         place.getRatingCount()
