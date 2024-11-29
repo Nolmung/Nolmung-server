@@ -44,7 +44,8 @@ public class SecurityConfig {
                     config.setAllowedOrigins(Arrays.asList("*"));
                     config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
                     config.setAllowCredentials(true);
-                    config.setAllowedHeaders(Arrays.asList("Cache-Control", "Content-Type", "X-Api-Key"));
+                    //config.setAllowedHeaders(Arrays.asList("Cache-Control", "Content-Type", "X-Api-Key"));
+                    config.setAllowedHeaders(Arrays.asList("*"));
                     config.setMaxAge(3600L);
                     return config;
                 }
