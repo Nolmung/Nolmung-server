@@ -43,4 +43,12 @@ public class RecommendController {
                 recommendUseCase.getPlaceRecommendationsForDogs(userId)
         );
     }
+
+    @GetMapping("/users/{userId}/nearby")
+    public ResponseDto<List<RecommendResp>> getNearbyRecommendations(@PathVariable Long userId) {
+        return ResponseUtil.SUCCESS(
+                "사용자 근처의 장소 추천에 성공하였습니다.",
+                recommendUseCase.getPlaceRecommendationsNearByUser(userId)
+        );
+    }
 }
