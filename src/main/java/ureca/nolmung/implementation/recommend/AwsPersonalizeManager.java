@@ -40,6 +40,7 @@ public class AwsPersonalizeManager {
             items = recommendationsResponse.itemList();
 
         } catch (AwsServiceException e) {
+            //TODO 공통 예외처리 고민
             System.err.println(e.awsErrorDetails().errorMessage());
             System.exit(1);
         }
