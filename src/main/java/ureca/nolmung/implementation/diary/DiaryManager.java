@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.springframework.stereotype.Component;
 import lombok.RequiredArgsConstructor;
+import org.springframework.transaction.annotation.Transactional;
 import ureca.nolmung.business.diary.dto.request.AddDiaryReq;
 import ureca.nolmung.business.diary.dto.response.AddDiaryResp;
 import ureca.nolmung.business.diary.response.PlaceDiaryResponse;
@@ -86,6 +87,14 @@ public class DiaryManager {
 		return diaryRepository.findDiariesWithFirstMediaByUser(userId);
 	}
 
+	public Diary getDetailDiary(Long diaryId) {
+		return diaryRepository.findWithMediaById(diaryId);
+	}
+//	public Diary getDetailDiary(Long diaryId) {
+//		Diary diary = diaryRepository.findById(diaryId)
+//				.orElseThrow(() -> new DiaryException(DiaryExceptionType.DIARY_NOT_FOUND_EXCEPTION));
+//		return diary;
+//	}
 	private static Media createMedia(AddDiaryReq.MediaDto mediaReq) {
 		return Media.builder()
 				.mediaType(MediaType.valueOf(mediaReq.mediaType()))
@@ -107,11 +116,16 @@ public class DiaryManager {
 	}
 
 	private static Diary createDiary(User loginUser, AddDiaryReq req) {
-		return Diary.builder()
+		return ureca.nolmung.jpa.diary.Diary.builder()
 				.user(loginUser)
 				.title(req.title())
 				.content(req.content())
 				.publicYn(req.publicYn())
 				.build();
+	}
+
+	public Diary checkExistDiary(Long diaryId) {
+		return diaryRepository.findById(diaryId)
+				.orElseThrow(() -> new DiaryException(DiaryExceptionType.DIARY_NOT_FOUND_EXCEPTION));
 	}
 }

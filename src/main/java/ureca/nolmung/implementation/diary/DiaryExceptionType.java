@@ -14,11 +14,11 @@ public enum DiaryExceptionType implements ExceptionType {
 
     @Override
     public Status status() {
-        return null;
+        return status;
     }
 
     @Override
     public String message() {
-        return "";
+        return message;
     }
 }

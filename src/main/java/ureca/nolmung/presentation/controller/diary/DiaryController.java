@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.*;
 import ureca.nolmung.business.diary.DiaryUseCase;
 import ureca.nolmung.business.diary.dto.request.AddDiaryReq;
 import ureca.nolmung.business.diary.dto.response.AddDiaryResp;
+import ureca.nolmung.business.diary.dto.response.DiaryDetailResp;
 import ureca.nolmung.business.diary.dto.response.DiaryListResp;
 import ureca.nolmung.config.response.ResponseDto;
 import ureca.nolmung.config.response.ResponseUtil;
@@ -26,5 +27,10 @@ public class DiaryController {
     @GetMapping("")
     public ResponseDto<DiaryListResp> getAllDiaries(@RequestParam Long userId) {
         return ResponseUtil.SUCCESS("일기 조회에 성공하였습니다.", diaryUseCase.getAllDiaries(userId));
+    }
+
+    @GetMapping("/{diaryId}")
+    public ResponseDto<DiaryDetailResp> getDetailDiary(@PathVariable Long diaryId) {
+        return ResponseUtil.SUCCESS("일기 상세조회에 성공하였습니다.", diaryUseCase.getDetailDiary(diaryId));
     }
 }
