@@ -1,14 +1,12 @@
 package ureca.nolmung.exception;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import ureca.nolmung.exception.bookmark.BookmarkException;
+import ureca.nolmung.exception.place.PlaceException;
 import ureca.nolmung.exception.user.UserException;
-import ureca.nolmung.implementation.place.PlaceException;
 
 @RestControllerAdvice
 public class ApiControllerAdvice {

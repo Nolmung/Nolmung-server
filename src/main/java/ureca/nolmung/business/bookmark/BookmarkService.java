@@ -1,18 +1,22 @@
 package ureca.nolmung.business.bookmark;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import ureca.nolmung.business.bookmark.request.BookmarkServiceRequest;
+import ureca.nolmung.business.bookmark.response.BookmarkResponse;
 import ureca.nolmung.exception.bookmark.BookmarkException;
 import ureca.nolmung.exception.bookmark.BookmarkExceptionType;
+import ureca.nolmung.exception.place.PlaceException;
+import ureca.nolmung.exception.place.PlaceExceptionType;
 import ureca.nolmung.exception.user.UserException;
 import ureca.nolmung.exception.user.UserExceptionType;
 import ureca.nolmung.implementation.bookmark.BookmarkManager;
-import ureca.nolmung.implementation.place.PlaceException;
-import ureca.nolmung.implementation.place.PlaceExceptionType;
 import ureca.nolmung.jpa.bookmark.Bookmark;
+import ureca.nolmung.jpa.place.Enum.Category;
 import ureca.nolmung.jpa.place.Place;
 import ureca.nolmung.jpa.user.User;
 import ureca.nolmung.persistence.bookmark.BookmarkRepository;
@@ -51,5 +55,13 @@ public class BookmarkService implements BookmarkUseCase {
 
 		bookmarkManager.delete(bookmark, user);
 		return bookmarkId;
+	}
+
+	@Override
+	public List<BookmarkResponse> findAllBookmarks(Long userId, Category category) {
+		User user = userRepository.findById(userId)
+			.orElseThrow(() -> new UserException(UserExceptionType.USER_NOT_FOUND_EXCEPTION));
+		List<Bookmark> bookmarks = bookmarkRepository.findByUserAndCategory(user, category);
+		return bookmarkManager.findAllBookmarks(bookmarks);
 	}
 }
