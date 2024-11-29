@@ -10,8 +10,6 @@ import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
 import ureca.nolmung.business.place.request.PlaceOnMapServiceRequest;
-import ureca.nolmung.exception.place.PlaceException;
-import ureca.nolmung.exception.place.PlaceExceptionType;
 import ureca.nolmung.jpa.place.Enum.Category;
 import ureca.nolmung.jpa.place.Place;
 import ureca.nolmung.jpa.placeposition.PlacePosition;

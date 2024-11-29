@@ -4,9 +4,9 @@ import org.springframework.validation.BindException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import ureca.nolmung.exception.bookmark.BookmarkException;
-import ureca.nolmung.exception.place.PlaceException;
-import ureca.nolmung.exception.user.UserException;
+import ureca.nolmung.implementation.bookmark.BookmarkException;
+import ureca.nolmung.implementation.place.PlaceException;
+import ureca.nolmung.implementation.user.UserException;
 
 @RestControllerAdvice
 public class ApiControllerAdvice {

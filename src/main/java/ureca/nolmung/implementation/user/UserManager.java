@@ -2,8 +2,6 @@ package ureca.nolmung.implementation.user;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import ureca.nolmung.exception.user.UserException;
-import ureca.nolmung.exception.user.UserExceptionType;
 import ureca.nolmung.jpa.user.User;
 import ureca.nolmung.persistence.user.UserRepository;
 
