@@ -33,6 +33,13 @@ dependencies {
     // mysql
     runtimeOnly 'com.mysql:mysql-connector-j'
 
+    //AWS personalize, sdk
+    dependencies {
+        implementation 'software.amazon.awssdk:personalize:2.16.83'
+        implementation 'software.amazon.awssdk:personalizeruntime:2.16.83'
+        implementation 'software.amazon.awssdk:personalizeevents:2.16.83'
+    }
+
     // lombok
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
