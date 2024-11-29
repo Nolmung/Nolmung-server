@@ -35,7 +35,7 @@ public class PlaceManager {
 
 	public Place findPlaceById(long placeId) {
 		return placeRepository.findById(placeId)
-			.orElseThrow(() -> new PlaceException(PlaceExceptionType.Place_NOT_FOUND_EXCEPTION));
+			.orElseThrow(() -> new PlaceException(PlaceExceptionType.PLACE_NOT_FOUND_EXCEPTION));
 	}
 
 	public List<Place> findAllPlace() {
@@ -54,8 +54,9 @@ public class PlaceManager {
 		}
 	}
 
-	public List<Place> findBySearchOption(Category category, String acceptSize, Double ratingAvg) {
-		return placeRepositoryImpl.findBySearchOption(category, acceptSize, ratingAvg);
+	public List<Place> findBySearchOption(Category category, String acceptSize, Double ratingAvg, PlaceOnMapServiceRequest serviceRequest) {
+		Polygon polygon = generatePolygon(serviceRequest);
+		return placeRepositoryImpl.findBySearchOption(category, acceptSize, ratingAvg, polygon);
 	}
 
 	public List<Place> findPlaceMapOn(PlaceOnMapServiceRequest serviceRequest) {

@@ -15,8 +15,6 @@ import ureca.nolmung.implementation.diary.DiaryManager;
 import ureca.nolmung.implementation.label.LabelManager;
 import ureca.nolmung.implementation.place.PlaceManager;
 import ureca.nolmung.implementation.place.dtomapper.PlaceDtoMapper;
-import ureca.nolmung.jpa.diary.Diary;
-import ureca.nolmung.jpa.label.Label;
 import ureca.nolmung.jpa.place.Enum.Category;
 import ureca.nolmung.jpa.place.Place;
 
@@ -53,8 +51,8 @@ public class PlaceService implements PlaceUseCase {
 	}
 
 	@Override
-	public List<SearchedPlaceResponse> findBySearchOption(Category category, String acceptSize, Double ratingAvg) {
-		List<Place> places = placeManager.findBySearchOption(category, acceptSize, ratingAvg);
+	public List<SearchedPlaceResponse> findBySearchOption(Category category, String acceptSize, Double ratingAvg, PlaceOnMapServiceRequest serviceRequest) {
+		List<Place> places = placeManager.findBySearchOption(category, acceptSize, ratingAvg, serviceRequest);
 		return placeDtoMapper.toSearchedPlaceReponseList(places);
 	}
 

@@ -15,7 +15,7 @@ public interface PlaceUseCase {
 
 	Integer makePointData();
 
-	List<SearchedPlaceResponse> findBySearchOption(Category category, String acceptSize, Double ratingAvg);
+	List<SearchedPlaceResponse> findBySearchOption(Category category, String acceptSize, Double ratingAvg, PlaceOnMapServiceRequest serviceRequest);
 
 	List<SearchedPlaceResponse> findPlaceOnMap(PlaceOnMapServiceRequest serviceRequest);
 }
