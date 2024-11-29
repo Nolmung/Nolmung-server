@@ -9,6 +9,7 @@ import ureca.nolmung.exception.user.UserException;
 import ureca.nolmung.exception.user.UserExceptionType;
 import ureca.nolmung.implementation.diary.DiaryManager;
 import ureca.nolmung.implementation.diary.dtomapper.DiaryDtoMapper;
+import ureca.nolmung.jpa.diary.Diary;
 import ureca.nolmung.jpa.user.User;
 import ureca.nolmung.persistence.user.UserRepository;
 
@@ -36,7 +37,7 @@ public class DiaryService implements DiaryUseCase {
     public DiaryListResp getAllDiaries(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserException(UserExceptionType.USER_NOT_FOUND_EXCEPTION));
-        List<Map<String, Object>> diaryList = diaryManager.getDiaryList(userId);
+        List<Diary> diaryList = diaryManager.getDiaryList(userId);
 
         return diaryDtoMapper.toAddDiaryResp(user, diaryList);
     }

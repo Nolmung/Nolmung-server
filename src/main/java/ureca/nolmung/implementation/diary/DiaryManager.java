@@ -83,7 +83,7 @@ public class DiaryManager {
 		return savedDiary.getId();
 	}
 
-	public List<Map<String, Object>> getDiaryList(Long userId) {
+	public List<Diary> getDiaryList(Long userId) {
 		return diaryRepository.findDiariesWithFirstMediaByUser(userId);
 	}
 
