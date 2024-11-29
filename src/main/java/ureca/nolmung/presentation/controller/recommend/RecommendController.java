@@ -22,7 +22,15 @@ public class RecommendController {
     @GetMapping("/users/{userId}/similar/bookmarks")
     public ResponseDto<List<RecommendResp>> getPlaceRecommendations(@PathVariable Long userId) {
         return ResponseUtil.SUCCESS(
-                "추천된 장소 조회에 성공하였습니다.",
+                "개인 맞춤형 장소 추천에 성공하였습니다.",
                 recommendUseCase.getPlaceRecommendationsFromPersonalize(userId));
+    }
+
+    @GetMapping("/bookmarks")
+    public ResponseDto<List<RecommendResp>> getBookmarkRecommendations() {
+        return ResponseUtil.SUCCESS(
+                "즐겨찾기가 많은 장소 추천에 성공하였습니다.",
+                recommendUseCase.getMostBookmarkedPlaces()
+        );
     }
 }

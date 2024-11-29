@@ -26,4 +26,10 @@ public class RecommendService implements RecommendUseCase{
         List<Place> places = awsPersonalizeManager.getPlaces(randomRecs);
         return recommendDtoMapper.toGetPlaceRecommendationsFromPersonalize(places);
     }
+
+    @Override
+    public List<RecommendResp> getMostBookmarkedPlaces() {
+        List<Place> places = recommendManager.getMostBookmarkedPlaces();
+        return recommendDtoMapper.toGetMostBookmarkedPlaces(places);
+    }
 }
