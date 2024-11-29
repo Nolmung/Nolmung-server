@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import ureca.nolmung.business.dog.dto.request.DogReq;
 import ureca.nolmung.jpa.config.BaseEntity;
 import ureca.nolmung.jpa.dog.Enum.DogSize;
 import ureca.nolmung.jpa.dog.Enum.Gender;
@@ -50,4 +51,16 @@ public class Dog extends BaseEntity {
 
     @Column(columnDefinition = "TEXT")
     private String profileImageUrl;
+
+    public void update(DogReq req) {
+        this.name = req.dogName();
+        this.gender = Gender.valueOf(req.gender());
+        this.neuteredYn = req.neuterYn();
+        this.type = req.dogType();
+        this.size = DogSize.valueOf(req.size());
+        this.birth = req.birth();
+        this.profileImageUrl = req.profileUrl();
+    }
+
+
 }

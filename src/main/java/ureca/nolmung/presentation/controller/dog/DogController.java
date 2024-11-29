@@ -21,4 +21,10 @@ public class DogController {
         DogResp resp = dogUseCase.addDog(userId, req);
         return ResponseUtil.SUCCESS("반려견 프로필 생성에 성공하였습니다.",resp);
     }
+
+    @PutMapping("")
+    public ResponseDto<DogResp> updateDog(@RequestParam("userId") Long userId,@RequestParam("dogId") Long dogId, @RequestBody DogReq req) {
+        DogResp resp = dogUseCase.updateDog(userId, dogId, req);
+        return ResponseUtil.SUCCESS("반려견 프로필 수정에 성공하였습니다.",resp);
+    }
 }
