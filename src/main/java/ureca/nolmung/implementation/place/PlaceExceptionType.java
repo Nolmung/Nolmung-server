@@ -1,13 +1,13 @@
-package ureca.nolmung.exception.review;
+package ureca.nolmung.implementation.place;
 
 import lombok.AllArgsConstructor;
 import ureca.nolmung.exception.ExceptionType;
 import ureca.nolmung.exception.Status;
 
 @AllArgsConstructor
-public enum ReviewExceptionType implements ExceptionType {
+public enum PlaceExceptionType implements ExceptionType {
 
-    REVIEW_NOT_FOUND_EXCEPTION(Status.NOT_FOUND, "해당 리뷰가 존재하지 않습니다.");
+    PLACE_NOT_FOUND_EXCEPTION(Status.NOT_FOUND, "해당 장소가 존재하지 않습니다.");
 
     private final Status status;
     private final String message;

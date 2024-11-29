@@ -7,8 +7,8 @@ import software.amazon.awssdk.services.personalizeruntime.PersonalizeRuntimeClie
 import software.amazon.awssdk.services.personalizeruntime.model.GetRecommendationsRequest;
 import software.amazon.awssdk.services.personalizeruntime.model.GetRecommendationsResponse;
 import software.amazon.awssdk.services.personalizeruntime.model.PredictedItem;
-import ureca.nolmung.exception.place.PlaceException;
-import ureca.nolmung.exception.place.PlaceExceptionType;
+import ureca.nolmung.implementation.place.PlaceException;
+import ureca.nolmung.implementation.place.PlaceExceptionType;
 import ureca.nolmung.jpa.place.Place;
 import ureca.nolmung.persistence.place.PlaceRepository;
 

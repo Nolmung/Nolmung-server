@@ -7,8 +7,6 @@ import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
 import ureca.nolmung.business.bookmark.response.BookmarkResponse;
-import ureca.nolmung.exception.bookmark.BookmarkException;
-import ureca.nolmung.exception.bookmark.BookmarkExceptionType;
 import ureca.nolmung.jpa.bookmark.Bookmark;
 import ureca.nolmung.jpa.user.User;
 import ureca.nolmung.persistence.bookmark.BookmarkRepository;

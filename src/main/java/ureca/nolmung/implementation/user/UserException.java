@@ -1,4 +1,4 @@
-package ureca.nolmung.exception.place;
+package ureca.nolmung.implementation.user;
 
 
 import lombok.Getter;
@@ -6,9 +6,9 @@ import ureca.nolmung.exception.BaseException;
 import ureca.nolmung.exception.ExceptionType;
 
 @Getter
-public class PlaceException extends BaseException {
+public class UserException extends BaseException {
 
-    public PlaceException(ExceptionType exceptionType) {
+    public UserException(ExceptionType exceptionType) {
         super(exceptionType);
     }
 }

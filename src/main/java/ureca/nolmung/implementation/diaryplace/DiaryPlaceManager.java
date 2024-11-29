@@ -1,11 +1,9 @@
 package ureca.nolmung.implementation.diaryplace;
 
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import ureca.nolmung.implementation.place.PlaceException;
 import ureca.nolmung.implementation.place.PlaceExceptionType;
-import ureca.nolmung.jpa.diaryplace.DiaryPlace;
 import ureca.nolmung.jpa.place.Place;
 import ureca.nolmung.persistence.diaryplace.DiaryPlaceRepository;
 import ureca.nolmung.persistence.place.PlaceRepository;
@@ -25,7 +23,7 @@ public class DiaryPlaceManager {
         List<Place> placeList = new ArrayList<>();
         for (Long placeId : placeIds) {
             placeList.add(placeRepository.findById(placeId)
-                    .orElseThrow(() -> new PlaceException(PlaceExceptionType.Place_NOT_FOUND_EXCEPTION)));
+                    .orElseThrow(() -> new PlaceException(PlaceExceptionType.PLACE_NOT_FOUND_EXCEPTION)));
         }
         return placeList;
     }

@@ -1,4 +1,4 @@
-package ureca.nolmung.exception.bookmark;
+package ureca.nolmung.implementation.bookmark;
 
 import lombok.Getter;
 import ureca.nolmung.exception.BaseException;

@@ -1,13 +1,13 @@
-package ureca.nolmung.exception.user;
+package ureca.nolmung.implementation.label;
 
 import lombok.AllArgsConstructor;
 import ureca.nolmung.exception.ExceptionType;
 import ureca.nolmung.exception.Status;
 
 @AllArgsConstructor
-public enum UserExceptionType implements ExceptionType {
+public enum LabelExceptionType implements ExceptionType {
 
-    USER_NOT_FOUND_EXCEPTION(Status.NOT_FOUND, "회원이 존재하지 않습니다.");
+    LABEL_NOT_FOUND_EXCEPTION(Status.NOT_FOUND, "해당 라벨이 존재하지 않습니다.");
 
     private final Status status;
     private final String message;

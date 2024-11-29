@@ -8,8 +8,8 @@ import ureca.nolmung.business.user.dto.request.SignUpReq;
 import ureca.nolmung.config.jwt.JWTUtil;
 import ureca.nolmung.exception.jwt.JwtException;
 import ureca.nolmung.exception.jwt.JwtExceptionType;
-import ureca.nolmung.exception.user.UserException;
-import ureca.nolmung.exception.user.UserExceptionType;
+import ureca.nolmung.implementation.user.UserException;
+import ureca.nolmung.implementation.user.UserExceptionType;
 import ureca.nolmung.jpa.user.User;
 import ureca.nolmung.persistence.user.UserRepository;
 

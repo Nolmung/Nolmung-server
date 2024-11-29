@@ -1,4 +1,4 @@
-package ureca.nolmung.exception.label;
+package ureca.nolmung.implementation.review;
 
 
 import lombok.Getter;
@@ -6,9 +6,9 @@ import ureca.nolmung.exception.BaseException;
 import ureca.nolmung.exception.ExceptionType;
 
 @Getter
-public class LabelException extends BaseException {
+public class ReviewException extends BaseException {
 
-    public LabelException(ExceptionType exceptionType) {
+    public ReviewException(ExceptionType exceptionType) {
         super(exceptionType);
     }
 }
