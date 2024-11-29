@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import ureca.nolmung.business.place.PlaceService;
 import ureca.nolmung.business.place.PlaceUseCase;
 import ureca.nolmung.business.place.response.PlaceDetailResponse;
 import ureca.nolmung.business.place.response.SearchedPlaceResponse;
