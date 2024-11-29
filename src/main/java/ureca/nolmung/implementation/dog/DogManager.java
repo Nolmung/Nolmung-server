@@ -3,8 +3,6 @@ package ureca.nolmung.implementation.dog;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import ureca.nolmung.business.dog.dto.request.DogReq;
-import ureca.nolmung.business.dog.dto.response.DogResp;
-import ureca.nolmung.implementation.dog.dtomapper.DogDtoMapper;
 import ureca.nolmung.jpa.dog.Dog;
 import ureca.nolmung.jpa.dog.Enum.DogSize;
 import ureca.nolmung.jpa.dog.Enum.Gender;
@@ -16,9 +14,8 @@ import ureca.nolmung.persistence.dog.DogRepository;
 public class DogManager {
 
     private final DogRepository dogRepository;
-    private final DogDtoMapper dogDtoMapper;
 
-    public DogResp addDog(User user, DogReq req) {
+    public Dog addDog(User user, DogReq req) {
 
         Dog newDog = Dog.builder()
                 .user(user)
@@ -32,6 +29,6 @@ public class DogManager {
 
         dogRepository.save(newDog);
 
-        return dogDtoMapper.toDogResp(newDog);
+        return newDog;
     }
 }
