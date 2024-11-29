@@ -5,4 +5,5 @@ import ureca.nolmung.business.dog.dto.response.DogResp;
 
 public interface DogUseCase {
     DogResp addDog(Long userId, DogReq req);
+    DogResp updateDog(Long userId, Long dogId, DogReq req);
 }

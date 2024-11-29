@@ -15,6 +15,11 @@ public class DogManager {
 
     private final DogRepository dogRepository;
 
+    public Dog validateDogExistence(Long userId, Long dogId) {
+        return dogRepository.findByUserIdAndId(userId, dogId)
+                .orElseThrow(() -> new DogException(DogExceptionType.DOG_NOT_FOUND_EXCEPTION));
+    }
+
     public Dog addDog(User user, DogReq req) {
 
         Dog newDog = Dog.builder()
@@ -31,4 +36,15 @@ public class DogManager {
 
         return newDog;
     }
+
+
+    public Dog updateDog(Dog dog, DogReq req) {
+
+        dog.update(req);
+
+        return dog;
+    }
+
+
+
 }

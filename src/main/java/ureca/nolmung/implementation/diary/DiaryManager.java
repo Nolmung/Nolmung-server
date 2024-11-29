@@ -2,16 +2,13 @@ package ureca.nolmung.implementation.diary;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.springframework.stereotype.Component;
-
 import lombok.RequiredArgsConstructor;
 import ureca.nolmung.business.diary.dto.request.AddDiaryReq;
+import ureca.nolmung.business.diary.dto.response.AddDiaryResp;
 import ureca.nolmung.business.diary.response.PlaceDiaryResponse;
 import ureca.nolmung.implementation.dog.DogException;
 import ureca.nolmung.implementation.dog.DogExceptionType;
-import ureca.nolmung.implementation.media.MediaException;
-import ureca.nolmung.implementation.media.MediaExceptionType;
 import ureca.nolmung.implementation.place.PlaceException;
 import ureca.nolmung.implementation.place.PlaceExceptionType;
 import ureca.nolmung.jpa.diary.Diary;
@@ -28,6 +25,7 @@ import ureca.nolmung.persistence.dog.DogRepository;
 import ureca.nolmung.persistence.dogdiary.DogDiaryRepository;
 import ureca.nolmung.persistence.media.MediaRepository;
 import ureca.nolmung.persistence.place.PlaceRepository;
+import ureca.nolmung.persistence.user.UserRepository;
 
 @Component
 @RequiredArgsConstructor
@@ -39,6 +37,7 @@ public class DiaryManager {
 	private final PlaceRepository placeRepository;
 	private final DogDiaryRepository dogDiaryRepository;
 	private final DogRepository dogRepository;
+	private final UserRepository userRepository;
 
 	public List<PlaceDiaryResponse> findDiaryByPlace(Place place) {
 		List<DiaryPlace> diaryPlaces = diaryPlaceRepository.findAllByPlaceOrderByCreatedAtDesc(place);
@@ -52,9 +51,9 @@ public class DiaryManager {
 		return placeDiaryResponses;
 	}
 
-	public Long addDiary(User loginUser, AddDiaryReq req) {
+	public AddDiaryResp addDiary(User user, AddDiaryReq req) {
 
-		Diary diary = createDiary(loginUser, req);
+		Diary diary = createDiary(user, req);
 		Diary savedDiary = diaryRepository.save(diary);
 
 		req.places().forEach(placeId -> {
@@ -80,7 +79,11 @@ public class DiaryManager {
 			mediaRepository.save(media);
 		});
 
-		return savedDiary.getId();
+		return new AddDiaryResp(savedDiary.getId());
+	}
+
+	public List<Diary> getDiaryList(Long userId) {
+		return diaryRepository.findDiariesWithFirstMediaByUser(userId);
 	}
 
 	private static Media createMedia(AddDiaryReq.MediaDto mediaReq) {
