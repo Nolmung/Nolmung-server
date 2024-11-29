@@ -88,9 +88,12 @@ public class Place extends BaseEntity {
     @Column(name = "mapy")
     private double longitude;
 
+    @Builder.Default
+    @Column(nullable = false)
+    private Integer bookmarkCount = 0;
+
     @OneToOne(mappedBy = "place", cascade = CascadeType.ALL)
     private PlacePosition placePosition;
-
 
     public void addRating(double newRating) {
         this.ratingTotal += newRating;
@@ -110,6 +113,10 @@ public class Place extends BaseEntity {
         } else {
             this.ratingAvg = ratingTotal / ratingCount;
         }
+    }
+
+    public void addBookmarkCount() {
+        this.bookmarkCount++;
     }
 
 }
