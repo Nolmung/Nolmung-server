@@ -11,6 +11,9 @@ import ureca.nolmung.implementation.user.UserManager;
 import ureca.nolmung.jpa.dog.Dog;
 import ureca.nolmung.jpa.user.User;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 public class DogService implements DogUseCase{
@@ -50,6 +53,17 @@ public class DogService implements DogUseCase{
     public DogResp getDog(Long userId, Long dogId) {
         Dog dog = dogManager.validateDogExistence(userId, dogId);
         return dogDtoMapper.toDogResp(dog);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<DogResp> getDogList(Long userId) {
+
+        userManager.validateUserExistence(userId);
+
+        return dogManager.getDogList(userId).stream()
+                .map(dog -> dogDtoMapper.toDogResp(dog))  // Dog 객체를 DogResp로 변환
+                .collect(Collectors.toList());
     }
 
 
