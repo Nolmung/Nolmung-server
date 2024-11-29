@@ -6,8 +6,6 @@ import lombok.Builder;
 import lombok.Getter;
 import ureca.nolmung.business.diary.response.PlaceDiaryResponse;
 import ureca.nolmung.business.labels.response.LabelResponse;
-import ureca.nolmung.jpa.diary.Diary;
-import ureca.nolmung.jpa.label.Label;
 import ureca.nolmung.jpa.place.Enum.Category;
 import ureca.nolmung.jpa.place.Place;
 
