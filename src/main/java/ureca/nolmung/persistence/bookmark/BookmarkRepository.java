@@ -8,7 +8,7 @@ import ureca.nolmung.jpa.place.Place;
 import ureca.nolmung.jpa.user.User;
 
 @Repository
-public interface BookmarkRepository extends JpaRepository<Bookmark, Long> {
+public interface BookmarkRepository extends JpaRepository<Bookmark, Long>, BookmarkRepositoryCustom {
 
 	Boolean existsByUserAndPlace(User user, Place place);
 

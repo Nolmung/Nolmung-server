@@ -1,8 +1,12 @@
 package ureca.nolmung.implementation.bookmark;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
+import ureca.nolmung.business.bookmark.response.BookmarkResponse;
 import ureca.nolmung.exception.bookmark.BookmarkException;
 import ureca.nolmung.exception.bookmark.BookmarkExceptionType;
 import ureca.nolmung.jpa.bookmark.Bookmark;
@@ -36,4 +40,9 @@ public class BookmarkManager {
 		return true;
 	}
 
+	public List<BookmarkResponse> findAllBookmarks(List<Bookmark> bookmarks) {
+		return bookmarks.stream()
+			.map(bookmark -> BookmarkResponse.of(bookmark, bookmark.getPlace()))
+			.collect(Collectors.toList());
+	}
 }

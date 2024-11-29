@@ -1,5 +1,6 @@
 package ureca.nolmung.persistence.place;
 
+import static ureca.nolmung.jpa.place.Enum.Category.*;
 import static ureca.nolmung.jpa.place.QPlace.*;
 
 import java.util.List;
@@ -51,7 +52,7 @@ public class PlaceRepositoryImpl implements PlaceRepositoryCustom {
 	}
 
 	private BooleanExpression eqCategory(Category category) {
-		if (category == null) {
+		if (category == null || category.equals(ALL)) {
 			return null;
 		}
 		return place.category.eq(category);

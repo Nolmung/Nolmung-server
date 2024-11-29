@@ -10,11 +10,12 @@ import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
 import ureca.nolmung.business.place.request.PlaceOnMapServiceRequest;
+import ureca.nolmung.exception.place.PlaceException;
+import ureca.nolmung.exception.place.PlaceExceptionType;
 import ureca.nolmung.jpa.place.Enum.Category;
 import ureca.nolmung.jpa.place.Place;
 import ureca.nolmung.jpa.placeposition.PlacePosition;
 import ureca.nolmung.persistence.place.PlaceRepository;
-import ureca.nolmung.persistence.place.PlaceRepositoryImpl;
 import ureca.nolmung.persistence.placeposition.PlacePositionRepository;
 
 @Component
@@ -25,7 +26,6 @@ public class PlaceManager {
 
 	private final PlaceRepository placeRepository;
 	private final PlacePositionRepository placePositionRepository;
-	private final PlaceRepositoryImpl placeRepositoryImpl;
 
 	private final GeometryFactory geometryFactory = new GeometryFactory();
 
@@ -56,7 +56,7 @@ public class PlaceManager {
 
 	public List<Place> findBySearchOption(Category category, String acceptSize, Double ratingAvg, PlaceOnMapServiceRequest serviceRequest) {
 		Polygon polygon = generatePolygon(serviceRequest);
-		return placeRepositoryImpl.findBySearchOption(category, acceptSize, ratingAvg, polygon);
+		return placeRepository.findBySearchOption(category, acceptSize, ratingAvg, polygon);
 	}
 
 	public List<Place> findPlaceMapOn(PlaceOnMapServiceRequest serviceRequest) {

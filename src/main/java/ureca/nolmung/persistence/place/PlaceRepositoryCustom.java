@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.locationtech.jts.geom.Polygon;
 
-import ureca.nolmung.business.place.request.PlaceOnMapServiceRequest;
 import ureca.nolmung.jpa.place.Enum.Category;
 import ureca.nolmung.jpa.place.Place;
 
