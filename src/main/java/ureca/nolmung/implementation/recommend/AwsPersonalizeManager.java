@@ -53,7 +53,7 @@ public class AwsPersonalizeManager {
             Long id = Long.valueOf(item.itemId());
             places.add(placeRepository
                     .findById(id)
-                    .orElseThrow(() -> new PlaceException(PlaceExceptionType.Place_NOT_FOUND_EXCEPTION)));
+                    .orElseThrow(() -> new PlaceException(PlaceExceptionType.PLACE_NOT_FOUND_EXCEPTION)));
         }
 
         return places;
