@@ -65,9 +65,10 @@ public class AwsPersonalizeManager {
         if (recs.size() <= count) {
             return new ArrayList<>(recs);
         }
+        List<PredictedItem> modifiableRecs = new ArrayList<>(recs);
 
-        Collections.shuffle(recs, random);
+        Collections.shuffle(modifiableRecs, random);
 
-        return new ArrayList<>(recs.subList(0, count));
+        return new ArrayList<>(modifiableRecs.subList(0, count));
     }
 }
