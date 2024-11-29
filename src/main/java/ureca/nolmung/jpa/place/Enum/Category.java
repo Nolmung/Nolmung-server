@@ -9,7 +9,7 @@ public enum Category {
     ALL("공통"),
     MUSEUM("박물관"),
     TRAVEL("여행지"),
-    ART_GALLERY("미술관"),
+    ARTGALLERY("미술관"),
     ACCOMMODATION("숙소"),
     PLAYGROUND("놀이터"),
     PARK("공원"),
