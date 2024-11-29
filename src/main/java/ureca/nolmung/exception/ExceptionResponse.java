@@ -1,5 +1,5 @@
 package ureca.nolmung.exception;
 
 
-public record ExceptionResponse(String message) {}
+public record ExceptionResponse(Status status, String message) {}
 
