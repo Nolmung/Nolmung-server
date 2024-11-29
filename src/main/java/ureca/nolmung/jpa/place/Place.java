@@ -90,14 +90,10 @@ public class Place extends BaseEntity {
 
     @Builder.Default
     @Column(nullable = false)
-    private int bookmarkCount = 0;
+    private Integer bookmarkCount = 0;
 
-    /**
-     * 리뷰 등록 시, 별점 정보 갱신
-     * */
     @OneToOne(mappedBy = "place", cascade = CascadeType.ALL)
     private PlacePosition placePosition;
-
 
     public void addRating(double newRating) {
         this.ratingTotal += newRating;
@@ -117,6 +113,10 @@ public class Place extends BaseEntity {
         } else {
             this.ratingAvg = ratingTotal / ratingCount;
         }
+    }
+
+    public void addBookmarkCount() {
+        this.bookmarkCount++;
     }
 
 }

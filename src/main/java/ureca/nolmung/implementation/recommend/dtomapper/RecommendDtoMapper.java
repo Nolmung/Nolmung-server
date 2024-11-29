@@ -12,14 +12,13 @@ import java.util.stream.Collectors;
 public class RecommendDtoMapper {
 
 
-    public List<RecommendResp> toGetPlaceRecommendations(List<Place> places) {
+    public List<RecommendResp> toGetPlaceRecommendationsFromPersonalize(List<Place> places) {
         return places.stream()
                 .map(place -> new RecommendResp(
                         place.getId(),
                         place.getName(),
                         place.getCategory(),
                         place.getRoadAddress(),
-                        place.getAddress(),
                         place.getPlaceImageUrl(),
                         place.getRatingAvg(),
                         place.getRatingCount()

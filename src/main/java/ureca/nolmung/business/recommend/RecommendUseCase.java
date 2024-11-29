@@ -6,7 +6,4 @@ import java.util.List;
 
 public interface RecommendUseCase {
     List<RecommendResp> getPlaceRecommendationsFromPersonalize(Long userId);
-    List<RecommendResp> getMostBookmarkedPlaces();
-    List<RecommendResp> getPlaceRecommendationsForDogs(Long userId);
-    List<RecommendResp> getPlaceRecommendationsNearByUser(Long userId);
 }
