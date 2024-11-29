@@ -1,5 +1,6 @@
 package ureca.nolmung.presentation.controller.bookmark;
 
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,6 +28,12 @@ public class BookmarkController {
 	@PostMapping("")
 	public ResponseDto<Long> createBookmark(@RequestParam Long userId, @Valid @RequestBody BookmarkRequest request) {
 		return ResponseUtil.SUCCESS("즐겨찾기 등록에 성공하였습니다.", bookmarkUseCase.createBookmark(userId, request.toServiceRequest()));
+	}
+
+	@Operation(summary = "즐겨찾기 삭제")
+	@DeleteMapping("")
+	public ResponseDto<Long> deleteBookmark(@RequestParam Long userId, @RequestParam Long bookmarkId) {
+		return ResponseUtil.SUCCESS("즐겨찾기 삭제에 성공하였습니다.", bookmarkUseCase.deleteBookmark(userId, bookmarkId));
 	}
 
 }
