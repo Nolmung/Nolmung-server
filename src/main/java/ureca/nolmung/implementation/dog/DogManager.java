@@ -46,5 +46,8 @@ public class DogManager {
     }
 
 
+    public void deleteDog(Long dogId) {
 
+        dogRepository.deleteById(dogId);
+    }
 }
