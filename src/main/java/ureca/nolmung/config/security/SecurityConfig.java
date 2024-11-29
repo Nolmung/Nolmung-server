@@ -40,7 +40,8 @@ public class SecurityConfig {
                 @Override
                 public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
                     CorsConfiguration config = new CorsConfiguration();
-                    config.setAllowedOrigins(Arrays.asList("http://localhost:8080", "https://nolmung.org", "http://localhost:3000", "https://develop--nolmung.netlify.app"));
+//                    config.setAllowedOrigins(Arrays.asList("http://localhost:8080", "https://nolmung.org", "http://localhost:3000", "https://develop--nolmung.netlify.app"));
+                    config.setAllowedOrigins(Arrays.asList("*"));
                     config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
                     config.setAllowCredentials(true);
                     config.setAllowedHeaders(Arrays.asList("Cache-Control", "Content-Type", "X-Api-Key"));
