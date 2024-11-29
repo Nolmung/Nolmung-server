@@ -38,7 +38,7 @@ public class RecommendService implements RecommendUseCase{
 
     @Override
     public List<RecommendResp> getPlaceRecommendationsForDogs(Long userId) {
-        List<Dog> dogs = dogManager.getUserDogs(userId);
+        List<Dog> dogs = dogManager.getDogList(userId);
         List<Place> places = recommendManager.getPlaceRecommendationsForDogs(dogs);
         List<Place> randomPlaces = recommendManager.getRandomPlaces(places, 5);
         return recommendDtoMapper.toGetPlaceRecommendationsForDogs(randomPlaces);
