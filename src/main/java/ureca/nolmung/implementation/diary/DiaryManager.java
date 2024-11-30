@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 import lombok.RequiredArgsConstructor;
 import ureca.nolmung.business.diary.dto.request.AddDiaryReq;
 import ureca.nolmung.business.diary.dto.response.AddDiaryResp;
+import ureca.nolmung.business.diary.dto.response.DeleteDiaryResp;
 import ureca.nolmung.business.diary.response.PlaceDiaryResponse;
 import ureca.nolmung.implementation.place.PlaceException;
 import ureca.nolmung.implementation.place.PlaceExceptionType;
@@ -89,11 +90,12 @@ public class DiaryManager {
 	public Diary getDetailDiary(Long diaryId) {
 		return diaryRepository.findWithMediaById(diaryId);
 	}
-//	public Diary getDetailDiary(Long diaryId) {
-//		Diary diary = diaryRepository.findById(diaryId)
-//				.orElseThrow(() -> new DiaryException(DiaryExceptionType.DIARY_NOT_FOUND_EXCEPTION));
-//		return diary;
-//	}
+
+	public DeleteDiaryResp deleteDiary(Diary diary) {
+		diaryRepository.delete(diary);
+		return new DeleteDiaryResp(diary.getId());
+	}
+
 	private static Media createMedia(AddDiaryReq.MediaDto mediaReq) {
 		return Media.builder()
 				.mediaType(MediaType.valueOf(mediaReq.mediaType()))
@@ -127,4 +129,5 @@ public class DiaryManager {
 		return diaryRepository.findById(diaryId)
 				.orElseThrow(() -> new DiaryException(DiaryExceptionType.DIARY_NOT_FOUND_EXCEPTION));
 	}
+
 }

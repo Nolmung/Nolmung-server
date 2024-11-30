@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ureca.nolmung.business.diary.dto.request.AddDiaryReq;
 import ureca.nolmung.business.diary.dto.response.AddDiaryResp;
+import ureca.nolmung.business.diary.dto.response.DeleteDiaryResp;
 import ureca.nolmung.business.diary.dto.response.DiaryDetailResp;
 import ureca.nolmung.business.diary.dto.response.DiaryListResp;
 import ureca.nolmung.implementation.diary.DiaryManager;
@@ -62,5 +63,12 @@ public class DiaryService implements DiaryUseCase {
         List<Media> mediaList = diary.getMediaList() != null ? diary.getMediaList() : List.of();
 
         return diaryDtoMapper.toDiaryDetailResp(diary, dogList, placeList, mediaList);
+    }
+
+    @Override
+    @Transactional
+    public DeleteDiaryResp deleteDiary(Long diaryId) {
+        Diary diaryCheck = diaryManager.checkExistDiary(diaryId);
+        return diaryManager.deleteDiary(diaryCheck);
     }
 }
