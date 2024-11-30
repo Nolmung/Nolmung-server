@@ -9,7 +9,6 @@ import org.locationtech.jts.geom.Polygon;
 import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
-import ureca.nolmung.business.place.request.PlaceOnMapServiceRequest;
 import ureca.nolmung.jpa.place.Enum.Category;
 import ureca.nolmung.jpa.place.Place;
 import ureca.nolmung.jpa.placeposition.PlacePosition;
@@ -52,32 +51,28 @@ public class PlaceManager {
 		}
 	}
 
-	public List<Place> findBySearchOption(Long userId, Category category, String acceptSize, Double ratingAvg, Boolean isBookmarked, PlaceOnMapServiceRequest serviceRequest) {
-		Polygon polygon = generatePolygon(serviceRequest);
+	public List<Place> findBySearchOption(Long userId, Category category, String acceptSize, Double ratingAvg, Boolean isBookmarked, double latitude, double longitude, double maxLatitude, double maxLongitude) {
+		Polygon polygon = generatePolygon(latitude, longitude, maxLatitude, maxLongitude);
 		return placeRepository.findBySearchOption(userId, category, acceptSize, ratingAvg, isBookmarked, polygon);
 	}
 
-	public List<Place> findPlaceMapOn(PlaceOnMapServiceRequest serviceRequest) {
-		Polygon polygon = generatePolygon(serviceRequest);
+	public List<Place> findPlaceMapOn(double latitude, double longitude, double maxLatitude, double maxLongitude) {
+		Polygon polygon = generatePolygon(latitude, longitude, maxLatitude, maxLongitude);
 		return placePositionRepository.findPlaceByCoordinate(polygon);
 	}
 
-	private Polygon generatePolygon(PlaceOnMapServiceRequest serviceRequest) {
-		Coordinate[] vertexes = createVertexes(serviceRequest);
+	private Polygon generatePolygon(double latitude, double longitude, double maxLatitude, double maxLongitude) {
+		Coordinate[] vertexes = createVertexes(latitude, longitude, maxLatitude, maxLongitude);
 		Polygon polygon = geometryFactory.createPolygon(vertexes);
 		polygon.setSRID(SRID);
 		return polygon;
 	}
 
-	private Coordinate[] createVertexes(PlaceOnMapServiceRequest serviceRequest) {
-		double latitude = serviceRequest.getLatitude();
-		double latitudeDelta = calcLatitudeDelta(serviceRequest.getMaxLatitude(), serviceRequest.getLatitude());
-		double longitude = serviceRequest.getLongitude();
-		double longitudeDelta = calcLongitudeDelta(serviceRequest.getMaxLongitude(), serviceRequest.getLongitude());
+	private Coordinate[] createVertexes(double latitude, double longitude, double maxLatitude, double maxLongitude) {
+		double latitudeDelta = calcLatitudeDelta(maxLatitude, latitude);
+		double longitudeDelta = calcLongitudeDelta(maxLongitude, longitude);
 
-		double maxLatitude = latitude + latitudeDelta;
 		double minLatitude = latitude - latitudeDelta;
-		double maxLongitude = longitude + longitudeDelta;
 		double minLongitude = longitude - longitudeDelta;
 
 		return new Coordinate[] {

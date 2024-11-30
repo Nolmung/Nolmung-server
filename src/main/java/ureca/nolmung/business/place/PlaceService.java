@@ -8,7 +8,6 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import ureca.nolmung.business.diary.response.PlaceDiaryResponse;
 import ureca.nolmung.business.labels.response.LabelResponse;
-import ureca.nolmung.business.place.request.PlaceOnMapServiceRequest;
 import ureca.nolmung.business.place.response.PlaceDetailResponse;
 import ureca.nolmung.business.place.response.SearchedPlaceResponse;
 import ureca.nolmung.implementation.diary.DiaryManager;
@@ -51,14 +50,14 @@ public class PlaceService implements PlaceUseCase {
 	}
 
 	@Override
-	public List<SearchedPlaceResponse> findBySearchOption(Long userId, Category category, String acceptSize, Double ratingAvg, Boolean isBookmarked, PlaceOnMapServiceRequest serviceRequest) {
-		List<Place> places = placeManager.findBySearchOption(userId, category, acceptSize, ratingAvg, isBookmarked, serviceRequest);
+	public List<SearchedPlaceResponse> findBySearchOption(Long userId, Category category, String acceptSize, Double ratingAvg, Boolean isBookmarked, double latitude, double longitude, double maxLatitude, double maxLongitude) {
+		List<Place> places = placeManager.findBySearchOption(userId, category, acceptSize, ratingAvg, isBookmarked, latitude, longitude, maxLatitude, maxLongitude);
 		return placeDtoMapper.toSearchedPlaceReponseList(places);
 	}
 
 	@Override
-	public List<SearchedPlaceResponse> findPlaceOnMap(PlaceOnMapServiceRequest serviceRequest) {
-		List<Place> places = placeManager.findPlaceMapOn(serviceRequest);
+	public List<SearchedPlaceResponse> findPlaceOnMap(double latitude, double longitude, double maxLatitude, double maxLongitude) {
+		List<Place> places = placeManager.findPlaceMapOn(latitude, longitude, maxLatitude, maxLongitude);
 		return placeDtoMapper.toSearchedPlaceReponseList(places);
 	}
 }
