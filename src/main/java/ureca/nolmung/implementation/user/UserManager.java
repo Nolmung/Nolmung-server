@@ -1,7 +1,9 @@
 package ureca.nolmung.implementation.user;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+
+import lombok.RequiredArgsConstructor;
+import ureca.nolmung.business.user.dto.request.UserReq;
 import ureca.nolmung.jpa.user.User;
 import ureca.nolmung.persistence.user.UserRepository;
 
@@ -15,5 +17,10 @@ public class UserManager {
     public User validateUserExistence(Long userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new UserException(UserExceptionType.USER_NOT_FOUND_EXCEPTION));
+    }
+
+    public User updateUser(User user, UserReq req) {
+        user.update(req);
+        return user;
     }
 }
