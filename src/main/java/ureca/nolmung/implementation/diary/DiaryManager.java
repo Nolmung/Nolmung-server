@@ -5,8 +5,10 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 import lombok.RequiredArgsConstructor;
 import ureca.nolmung.business.diary.dto.request.AddDiaryReq;
+import ureca.nolmung.business.diary.dto.request.UpdateDiaryReq;
 import ureca.nolmung.business.diary.dto.response.AddDiaryResp;
 import ureca.nolmung.business.diary.dto.response.DeleteDiaryResp;
+import ureca.nolmung.business.diary.dto.response.UpdateDiaryResp;
 import ureca.nolmung.business.diary.response.PlaceDiaryResponse;
 import ureca.nolmung.implementation.place.PlaceException;
 import ureca.nolmung.implementation.place.PlaceExceptionType;
@@ -96,9 +98,50 @@ public class DiaryManager {
 		return new DeleteDiaryResp(diary.getId());
 	}
 
+	public UpdateDiaryResp updateDiary(Diary diary, UpdateDiaryReq req) {
+		List<Long> reqDogIds = req.dogs();
+		List<Long> existingDogIds = diary.getDogDiaries().stream()
+				.map(dogDiary -> dogDiary.getDog().getId())
+				.toList();
+
+		for(Long reqDogId : reqDogIds) {
+			if (!existingDogIds.contains(reqDogId)) {
+				Dog dog = dogRepository.findById(reqDogId)
+						.orElseThrow(() -> new DogException(DogExceptionType.DOG_NOT_FOUND_EXCEPTION));
+				DogDiary newDogDiary = createDogDiary(diary, dog);
+				diary.addDogDiary(newDogDiary);
+			}
+		}
+		diary.getDogDiaries().removeIf(dogDiary -> {
+			if(!reqDogIds.contains(dogDiary.getDog().getId())) {
+				return true;
+			}
+			return false;
+		});
+
+		mediaRepository.deleteByDiaryId(diary.getId());
+		req.medias().forEach(mediaReq -> {
+			Media newMedia = updateMedia(mediaReq);
+			newMedia.addDiary(diary);
+			mediaRepository.save(newMedia);
+		});
+
+		diary.updateDiary(req.title(), req.content(), req.publicYn());
+
+		return new UpdateDiaryResp(diary.getId());
+	}
+
+	private static Media updateMedia(UpdateDiaryReq.MediaDto mediaReq) {
+		return Media.builder()
+				.mediaType(MediaType.valueOf(mediaReq.mediaType()))
+				.mediaUrl(mediaReq.mediaUrl())
+				.build();
+	}
+
 	private static Media createMedia(AddDiaryReq.MediaDto mediaReq) {
 		return Media.builder()
 				.mediaType(MediaType.valueOf(mediaReq.mediaType()))
+				.mediaUrl(mediaReq.mediaUrl())
 				.build();
 	}
 
@@ -130,4 +173,10 @@ public class DiaryManager {
 				.orElseThrow(() -> new DiaryException(DiaryExceptionType.DIARY_NOT_FOUND_EXCEPTION));
 	}
 
+	public void checkDiaryWriter(Long userId, Long diaryId) {
+		Diary diary = diaryRepository.findById(diaryId).orElseThrow(() -> new DiaryException(DiaryExceptionType.DIARY_NOT_FOUND_EXCEPTION));
+		if (!diary.getUser().getId().equals(userId)) {
+			throw new DiaryException(DiaryExceptionType.DIARY_UNAUTHORIZED_EXCEPTION);
+		}
+	}
 }
