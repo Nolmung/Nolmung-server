@@ -2,7 +2,9 @@ package ureca.nolmung.implementation.diary;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.springframework.stereotype.Component;
+
 import lombok.RequiredArgsConstructor;
 import ureca.nolmung.business.banword.BanWordUseCase;
 import ureca.nolmung.business.diary.dto.request.AddDiaryReq;
@@ -11,10 +13,11 @@ import ureca.nolmung.business.diary.dto.response.AddDiaryResp;
 import ureca.nolmung.business.diary.dto.response.DeleteDiaryResp;
 import ureca.nolmung.business.diary.dto.response.UpdateDiaryResp;
 import ureca.nolmung.business.diary.response.PlaceDiaryResponse;
-import ureca.nolmung.implementation.place.PlaceException;
-import ureca.nolmung.implementation.place.PlaceExceptionType;
 import ureca.nolmung.implementation.dog.DogException;
 import ureca.nolmung.implementation.dog.DogExceptionType;
+import ureca.nolmung.implementation.place.PlaceException;
+import ureca.nolmung.implementation.place.PlaceExceptionType;
+import ureca.nolmung.jpa.banword.trie.Trie;
 import ureca.nolmung.jpa.diary.Diary;
 import ureca.nolmung.jpa.diaryplace.DiaryPlace;
 import ureca.nolmung.jpa.dog.Dog;
@@ -44,6 +47,7 @@ public class DiaryManager {
 	private final UserRepository userRepository;
 
 	private final BanWordUseCase banWordUseCase;
+	private final Trie trie;
 
 	public List<PlaceDiaryResponse> findDiaryByPlace(Place place) {
 		List<DiaryPlace> diaryPlaces = diaryPlaceRepository.findAllByPlaceOrderByCreatedAtDesc(place);
@@ -51,6 +55,9 @@ public class DiaryManager {
 		for (DiaryPlace diaryPlace : diaryPlaces) {
 			Diary diary = diaryRepository.findById(diaryPlace.getId())
 				.orElseThrow(() -> new DiaryException(DiaryExceptionType.DIARY_NOT_FOUND_EXCEPTION));
+			if (!diary.isPublicYn()) {
+				continue;
+			}
 			Media media = mediaRepository.findFirstByDiary(diary);
 			placeDiaryResponses.add(new PlaceDiaryResponse().of(diary, media.getMediaUrl()));
 		}
@@ -163,10 +170,10 @@ public class DiaryManager {
 	}
 
 	private Diary createDiary(User loginUser, AddDiaryReq req) {
-		if(banWordUseCase.checkBanWord(req.title()) != null) {
+		if (trie.search(req.title())) {
 			throw new DiaryException(DiaryExceptionType.DIARY_TITLE_CONTAINS_BAN_WORD);
 		}
-		if (banWordUseCase.checkBanWord(req.content()) != null) {
+		if (trie.search(req.content())) {
 			throw new DiaryException(DiaryExceptionType.DIARY_CONTENT_CONTAINS_BAN_WORD);
 		}
 

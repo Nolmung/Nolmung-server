@@ -7,5 +7,6 @@ public class TrieNode {
 
 	public Map<Character, TrieNode> children = new HashMap<>();
 	public boolean isEndOfWord = false;
+	public TrieNode failLink;
 
 }

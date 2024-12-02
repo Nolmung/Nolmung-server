@@ -6,8 +6,4 @@ public interface BanWordUseCase {
 
 	public void saveBanWordsFromFile();
 
-	public void loadBanWordTrie();
-
-	public String checkBanWord(String text);
-
 }
