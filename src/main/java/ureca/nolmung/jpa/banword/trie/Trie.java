@@ -15,10 +15,6 @@ public class Trie {
 		root = new TrieNode();
 	}
 
-	public TrieNode getRoot() {
-		return root;
-	}
-
 	public void insert(String word) {
 		TrieNode current = root;
 		for (char c : word.toCharArray()) {
@@ -68,7 +64,7 @@ public class Trie {
 		TrieNode current = root;
 		for (char c : word.toCharArray()) {
 			while (current != root && !current.children.containsKey(c)) {
-				current = current.failLink; // 실패 링크를 따라감
+				current = current.failLink;
 			}
 
 			if (current.children.containsKey(c)) {
@@ -76,7 +72,7 @@ public class Trie {
 			}
 
 			if (current.isEndOfWord) {
-				return true; // 단어가 발견됨
+				return true;
 			}
 		}
 		return false;

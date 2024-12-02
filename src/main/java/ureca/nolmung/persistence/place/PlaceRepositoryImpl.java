@@ -17,6 +17,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import ureca.nolmung.jpa.place.Enum.Category;
 import ureca.nolmung.jpa.place.Place;
+import ureca.nolmung.jpa.user.User;
 
 @Repository
 @RequiredArgsConstructor
@@ -25,12 +26,12 @@ public class PlaceRepositoryImpl implements PlaceRepositoryCustom {
 	private final JPAQueryFactory queryFactory;
 
 	@Override
-	public List<Place> findBySearchOption(Long userId, Category category, String acceptSize, Double ratingAvg, Boolean isBookmarked, Polygon polygon) {
+	public List<Place> findBySearchOption(User user, Category category, String acceptSize, Double ratingAvg, Boolean isBookmarked, Polygon polygon) {
 		return queryFactory.selectFrom(place)
 			.where(eqCategory(category),
 				eqAcceptSize(acceptSize),
 				eqRatingAvg(ratingAvg),
-				isBookmarked(userId, isBookmarked),
+				isBookmarked(user, isBookmarked),
 				isWithinPolygon(polygon))
 			.fetch();
 	}
@@ -56,15 +57,15 @@ public class PlaceRepositoryImpl implements PlaceRepositoryCustom {
 		return place.category.eq(category);
 	}
 
-	private BooleanExpression isBookmarked(Long userId, Boolean isBookmarked) {
-		if (isBookmarked == null || !isBookmarked) {
+	private BooleanExpression isBookmarked(User user, Boolean isBookmarked) {
+		if (isBookmarked == null || !isBookmarked || user == null) {
 			return null;
 		}
 
 		return place.id.in(
 			JPAExpressions.select(bookmark.place.id)
 				.from(bookmark)
-				.where(bookmark.user.id.eq(userId))
+				.where(bookmark.user.eq(user))
 		);
 	}
 

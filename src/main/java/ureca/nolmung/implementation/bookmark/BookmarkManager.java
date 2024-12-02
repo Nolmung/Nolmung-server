@@ -18,24 +18,25 @@ public class BookmarkManager {
 	private final BookmarkRepository bookmarkRepository;
 
 	public Long save(Bookmark bookmark) {
-		if (bookmarkRepository.existsByUserAndPlace(bookmark.getUser(), bookmark.getPlace())) {
-			throw new BookmarkException(BookmarkExceptionType.BOOKMARK_EXISTS_EXCEPTION);
-		}
+		checkIfBookmarkExists(bookmark);
 		return bookmarkRepository.save(bookmark).getId();
 	}
 
-	public void delete(Bookmark bookmark, User user) {
-		if (notValidateUser(bookmark, user)){
-			throw new BookmarkException(BookmarkExceptionType.NOT_USERS_BOOKMARK_EXCEPTION);
+	private void checkIfBookmarkExists(Bookmark bookmark) {
+		if (bookmarkRepository.existsByUserAndPlace(bookmark.getUser(), bookmark.getPlace())) {
+			throw new BookmarkException(BookmarkExceptionType.BOOKMARK_EXISTS_EXCEPTION);
 		}
+	}
+
+	public void delete(Bookmark bookmark, User user) {
+		validateUser(bookmark, user);
 		bookmarkRepository.delete(bookmark);
 	}
 
-	public boolean notValidateUser(Bookmark bookmark, User user) {
-		if (bookmark.getUser().equals(user)) {
-			return false;
+	public void validateUser(Bookmark bookmark, User user) {
+		if (!bookmark.getUser().equals(user)) {
+			throw new BookmarkException(BookmarkExceptionType.NOT_USERS_BOOKMARK_EXCEPTION);
 		}
-		return true;
 	}
 
 	public List<BookmarkResponse> findAllBookmarks(List<Bookmark> bookmarks) {
@@ -43,4 +44,5 @@ public class BookmarkManager {
 			.map(bookmark -> BookmarkResponse.of(bookmark, bookmark.getPlace()))
 			.collect(Collectors.toList());
 	}
+
 }
