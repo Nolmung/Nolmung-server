@@ -1,5 +1,7 @@
 package ureca.nolmung.presentation.controller.recommend;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,14 +14,16 @@ import ureca.nolmung.config.response.ResponseUtil;
 
 import java.util.List;
 
+@Tag(name = "추천")
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/v1/recommend")
+@RequestMapping("/v1/recommend")
 public class RecommendController {
 
     private final RecommendUseCase recommendUseCase;
 
     //TODO 나중에 토큰 어쩌구 JWT 어쩌구 인증된 사용자만 할 수 있게 처리 필요
+    @Operation(summary = "개인 맞춤형 장소 추천")
     @GetMapping("/users/{userId}/similar/bookmarks")
     public ResponseDto<List<RecommendResp>> getPlaceRecommendations(@PathVariable Long userId) {
         return ResponseUtil.SUCCESS(
@@ -27,6 +31,7 @@ public class RecommendController {
                 recommendUseCase.getPlaceRecommendationsFromPersonalize(userId));
     }
 
+    @Operation(summary = "즐겨찾기가 많은 장소 추천")
     @GetMapping("/bookmarks")
     public ResponseDto<List<RecommendResp>> getBookmarkRecommendations() {
         return ResponseUtil.SUCCESS(
@@ -36,6 +41,7 @@ public class RecommendController {
     }
 
     //TODO 나중에 토큰 어쩌구 JWT 어쩌구 인증된 사용자만 할 수 있게 처리 필요
+    @Operation(summary = "반려견들의 크기에 맞는 장소 추천")
     @GetMapping("/users/{userId}/weight")
     public ResponseDto<List<RecommendResp>> getWeightRecommendations(@PathVariable Long userId) {
         return ResponseUtil.SUCCESS(
@@ -44,6 +50,7 @@ public class RecommendController {
         );
     }
 
+    @Operation(summary = "사용자 거주지 근처의 장소 추천")
     @GetMapping("/users/{userId}/nearby")
     public ResponseDto<List<RecommendResp>> getNearbyRecommendations(@PathVariable Long userId) {
         return ResponseUtil.SUCCESS(
