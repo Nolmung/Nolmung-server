@@ -8,4 +8,5 @@ public class DiaryException extends BaseException {
     public DiaryException(ExceptionType exceptionType) {
         super(exceptionType);
     }
+
 }

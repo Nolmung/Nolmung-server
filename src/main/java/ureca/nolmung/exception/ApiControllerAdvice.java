@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import ureca.nolmung.implementation.bookmark.BookmarkException;
+import ureca.nolmung.implementation.diary.DiaryException;
 import ureca.nolmung.implementation.place.PlaceException;
 import ureca.nolmung.implementation.user.UserException;
 
@@ -28,6 +29,11 @@ public class ApiControllerAdvice {
 
 	@ExceptionHandler(UserException.class)
 	public ExceptionResponse userException(UserException e) {
+		return new ExceptionResponse(e.getExceptionType().status(), e.getMessage());
+	}
+
+	@ExceptionHandler(DiaryException.class)
+	public ExceptionResponse diaryException(DiaryException e) {
 		return new ExceptionResponse(e.getExceptionType().status(), e.getMessage());
 	}
 

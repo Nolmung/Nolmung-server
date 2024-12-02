@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.springframework.stereotype.Component;
 import lombok.RequiredArgsConstructor;
+import ureca.nolmung.business.banword.BanWordUseCase;
 import ureca.nolmung.business.diary.dto.request.AddDiaryReq;
 import ureca.nolmung.business.diary.dto.response.AddDiaryResp;
 import ureca.nolmung.business.diary.response.PlaceDiaryResponse;
@@ -38,6 +39,8 @@ public class DiaryManager {
 	private final DogDiaryRepository dogDiaryRepository;
 	private final DogRepository dogRepository;
 	private final UserRepository userRepository;
+
+	private final BanWordUseCase banWordUseCase;
 
 	public List<PlaceDiaryResponse> findDiaryByPlace(Place place) {
 		List<DiaryPlace> diaryPlaces = diaryPlaceRepository.findAllByPlaceOrderByCreatedAtDesc(place);
@@ -114,7 +117,14 @@ public class DiaryManager {
 				.build();
 	}
 
-	private static Diary createDiary(User loginUser, AddDiaryReq req) {
+	private Diary createDiary(User loginUser, AddDiaryReq req) {
+		if(banWordUseCase.checkBanWord(req.title()) != null) {
+			throw new DiaryException(DiaryExceptionType.DIARY_TITLE_CONTAINS_BAN_WORD);
+		}
+		if (banWordUseCase.checkBanWord(req.content()) != null) {
+			throw new DiaryException(DiaryExceptionType.DIARY_CONTENT_CONTAINS_BAN_WORD);
+		}
+
 		return ureca.nolmung.jpa.diary.Diary.builder()
 				.user(loginUser)
 				.title(req.title())
