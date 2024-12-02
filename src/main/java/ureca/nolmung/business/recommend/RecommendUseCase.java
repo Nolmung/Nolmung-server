@@ -9,4 +9,5 @@ public interface RecommendUseCase {
     List<RecommendResp> getPlaceRecommendationsForDogs(Long userId);
     List<RecommendResp> getPlaceRecommendationsNearByUser(Long userId);
     List<RecommendResp> getPlaceRecommendationsFromPersonalize(Long userId);
+    List<RecommendResp> getPlaceRecommendationsFromPersonalizeForBatch(Long userId);
 }

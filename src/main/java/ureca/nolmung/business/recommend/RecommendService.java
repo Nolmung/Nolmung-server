@@ -79,4 +79,11 @@ public class RecommendService implements RecommendUseCase{
         }
         //TODO refactoring 필요
     }
+
+    @Override
+    public List<RecommendResp> getPlaceRecommendationsFromPersonalizeForBatch(Long userId) {
+        List<PredictedItem> awsRecs = awsPersonalizeManager.getRecs(userId);
+        List<Place> places = awsPersonalizeManager.getPlaces(awsRecs);
+        return recommendDtoMapper.toGetPlaceRecommendations(places);
+    }
 }
