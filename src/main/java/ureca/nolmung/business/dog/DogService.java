@@ -11,7 +11,6 @@ import ureca.nolmung.business.dog.dto.request.DogReq;
 import ureca.nolmung.business.dog.dto.response.DogResp;
 import ureca.nolmung.implementation.dog.DogManager;
 import ureca.nolmung.implementation.dog.dtomapper.DogDtoMapper;
-import ureca.nolmung.implementation.user.UserManager;
 import ureca.nolmung.jpa.dog.Dog;
 import ureca.nolmung.jpa.user.User;
 
@@ -20,7 +19,6 @@ import ureca.nolmung.jpa.user.User;
 public class DogService implements DogUseCase{
 
     private final DogManager dogManager;
-    private final UserManager userManager;
     private final DogDtoMapper dogDtoMapper;
 
     @Override
@@ -59,8 +57,6 @@ public class DogService implements DogUseCase{
     @Override
     @Transactional(readOnly = true)
     public List<DogResp> getDogList(Long userId) {
-
-        userManager.validateUserExistence(userId);
 
         return dogManager.getDogList(userId).stream()
                 .map(dog -> dogDtoMapper.toDogResp(dog))  // Dog 객체를 DogResp로 변환
