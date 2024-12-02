@@ -1,8 +1,12 @@
 package ureca.nolmung.business.dog;
 
-import org.springframework.transaction.annotation.Transactional;
-import lombok.RequiredArgsConstructor;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import lombok.RequiredArgsConstructor;
 import ureca.nolmung.business.dog.dto.request.DogReq;
 import ureca.nolmung.business.dog.dto.response.DogResp;
 import ureca.nolmung.implementation.dog.DogManager;
@@ -10,9 +14,6 @@ import ureca.nolmung.implementation.dog.dtomapper.DogDtoMapper;
 import ureca.nolmung.implementation.user.UserManager;
 import ureca.nolmung.jpa.dog.Dog;
 import ureca.nolmung.jpa.user.User;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -24,9 +25,9 @@ public class DogService implements DogUseCase{
 
     @Override
     @Transactional
-    public DogResp addDog(Long userId, DogReq req) {
+    public DogResp addDog(User user, DogReq req) {
 
-        User user = userManager.validateUserExistence(userId);
+        dogManager.checkDogRegistrationLimit(user.getId());
         Dog dog = dogManager.addDog(user,req);
         return dogDtoMapper.toDogResp(dog);
     }

@@ -1,16 +1,26 @@
 package ureca.nolmung.presentation.controller.dog;
 
+import java.util.List;
+
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.*;
 import ureca.nolmung.business.dog.DogUseCase;
 import ureca.nolmung.business.dog.dto.request.DogReq;
 import ureca.nolmung.business.dog.dto.response.DogResp;
+import ureca.nolmung.business.user.dto.response.CustomUserDetails;
 import ureca.nolmung.config.response.ResponseDto;
 import ureca.nolmung.config.response.ResponseUtil;
-
-import java.util.List;
 
 @Tag(name = "반려견 프로필")
 @RestController
@@ -22,10 +32,8 @@ public class DogController {
 
     @Operation(summary = "반려견 프로필 등록")
     @PostMapping("")
-    public ResponseDto<DogResp> addDog(@RequestParam("userId") Long userId, @RequestBody DogReq req) {
-
-        DogResp resp = dogUseCase.addDog(userId, req);
-        return ResponseUtil.SUCCESS("반려견 프로필 생성에 성공하였습니다.",resp);
+    public ResponseDto<DogResp> addDog(@AuthenticationPrincipal CustomUserDetails userDetails, @RequestBody DogReq req) {
+        return ResponseUtil.SUCCESS("반려견 프로필 생성에 성공하였습니다.",dogUseCase.addDog(userDetails.getUser(), req));
     }
 
     @Operation(summary = "반려견 프로필 수정")

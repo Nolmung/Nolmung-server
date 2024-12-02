@@ -1,12 +1,13 @@
 package ureca.nolmung.business.dog;
 
-import ureca.nolmung.business.dog.dto.request.DogReq;
-import ureca.nolmung.business.dog.dto.response.DogResp;
-
 import java.util.List;
 
+import ureca.nolmung.business.dog.dto.request.DogReq;
+import ureca.nolmung.business.dog.dto.response.DogResp;
+import ureca.nolmung.jpa.user.User;
+
 public interface DogUseCase {
-    DogResp addDog(Long userId, DogReq req);
+    DogResp addDog(User user, DogReq req);
     DogResp updateDog(Long userId, Long dogId, DogReq req);
     DogResp deleteDog(Long userId, Long dogId);
 
