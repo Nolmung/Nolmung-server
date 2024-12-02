@@ -3,6 +3,8 @@ package ureca.nolmung.implementation.review;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import ureca.nolmung.business.review.dto.request.AddReviewReq;
+import ureca.nolmung.business.review.dto.response.AddReviewResp;
+import ureca.nolmung.business.review.dto.response.DeleteReviewResp;
 import ureca.nolmung.implementation.label.LabelException;
 import ureca.nolmung.implementation.label.LabelExceptionType;
 import ureca.nolmung.implementation.place.PlaceException;
@@ -30,7 +32,7 @@ public class ReviewManager {
     private final ReviewLabelRepository reviewLabelRepository;
     private final LabelRepository labelRepository;
 
-    public Long addReview(User user, AddReviewReq req) {
+    public AddReviewResp addReview(User user, AddReviewReq req) {
 
         // 1. 장소 유효성 검증
         Place place = placeRepository.findById(req.placeId())
@@ -67,11 +69,11 @@ public class ReviewManager {
             }
         }
 
-        return newReview.getId();
+        return new AddReviewResp(newReview.getId());
     }
 
 
-    public void deleteReview(Long reviewId) {
+    public DeleteReviewResp deleteReview(Long reviewId) {
 
         // 1. 리뷰 유효성 검증
         Review review = reviewRepository.findByIdWithPlace(reviewId)
@@ -105,6 +107,7 @@ public class ReviewManager {
         // 5. 리뷰 삭제
         reviewRepository.deleteById(reviewId);
 
+        return new DeleteReviewResp(reviewId);
     }
 
     private Review createReview(User user, AddReviewReq req, Place place) {
@@ -129,5 +132,13 @@ public class ReviewManager {
                 .place(place)
                 .labelCount(1)
                 .build();
+    }
+
+    public void checkReviewWriter(Long userId, Long reviewId) {
+        Review review = reviewRepository.findById(reviewId)
+                .orElseThrow(() -> new ReviewException(ReviewExceptionType.REVIEW_NOT_FOUND_EXCEPTION));
+        if(!review.getUser().getId().equals(userId)) {
+            throw new ReviewException(ReviewExceptionType.REVIEW_UNAUTHORIZED_EXCEPTION);
+        }
     }
 }
