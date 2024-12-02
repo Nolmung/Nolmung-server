@@ -45,6 +45,17 @@ public class Diary extends BaseEntity {
     @OneToMany(mappedBy = "diary", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<DiaryPlace> diaryPlaces = new ArrayList<>();
 
-    @OneToMany(mappedBy = "diary", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "diary", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<DogDiary> dogDiaries = new ArrayList<>();
+
+    public void updateDiary(String title, String content, boolean publicYn) {
+        this.title = title;
+        this.content = content;
+        this.publicYn = publicYn;
+    }
+
+    public void addDogDiary(DogDiary dogDiary) {
+        this.dogDiaries.add(dogDiary);
+    }
 }
+

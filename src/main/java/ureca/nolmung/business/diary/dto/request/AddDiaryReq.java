@@ -12,7 +12,6 @@ public record AddDiaryReq(
         Boolean publicYn
     ) {
     public record MediaDto(
-            Long mediaId,
             String mediaType,
             String mediaUrl
     ) {

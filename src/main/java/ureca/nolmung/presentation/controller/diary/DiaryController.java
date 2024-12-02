@@ -4,14 +4,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import ureca.nolmung.business.diary.DiaryUseCase;
 import ureca.nolmung.business.diary.dto.request.AddDiaryReq;
-import ureca.nolmung.business.diary.dto.response.AddDiaryResp;
-import ureca.nolmung.business.diary.dto.response.DeleteDiaryResp;
-import ureca.nolmung.business.diary.dto.response.DiaryDetailResp;
-import ureca.nolmung.business.diary.dto.response.DiaryListResp;
+import ureca.nolmung.business.diary.dto.request.UpdateDiaryReq;
+import ureca.nolmung.business.diary.dto.response.*;
 import ureca.nolmung.config.response.ResponseDto;
 import ureca.nolmung.config.response.ResponseUtil;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/diary")
@@ -38,5 +34,10 @@ public class DiaryController {
     @DeleteMapping("/{diaryId}")
     public ResponseDto<DeleteDiaryResp> deleteDiary(@PathVariable Long diaryId) {
         return ResponseUtil.SUCCESS("일기 삭제에 성공하였습니다.", diaryUseCase.deleteDiary(diaryId));
+    }
+
+    @PatchMapping("/{diaryId}")
+    public ResponseDto<UpdateDiaryResp> updateDiary(@PathVariable Long diaryId, @RequestBody UpdateDiaryReq req) {
+        return ResponseUtil.SUCCESS("일기 수정에 성공하였습니다.", diaryUseCase.updateDiary(diaryId, req));
     }
 }
