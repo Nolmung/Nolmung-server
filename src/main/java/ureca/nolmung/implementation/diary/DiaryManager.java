@@ -44,9 +44,6 @@ public class DiaryManager {
 	private final PlaceRepository placeRepository;
 	private final DogDiaryRepository dogDiaryRepository;
 	private final DogRepository dogRepository;
-	private final UserRepository userRepository;
-
-	private final BanWordUseCase banWordUseCase;
 	private final Trie trie;
 
 	public List<PlaceDiaryResponse> findDiaryByPlace(Place place) {

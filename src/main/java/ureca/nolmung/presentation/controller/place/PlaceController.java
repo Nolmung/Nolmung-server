@@ -2,6 +2,7 @@ package ureca.nolmung.presentation.controller.place;
 
 import java.util.List;
 
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import ureca.nolmung.business.place.PlaceUseCase;
 import ureca.nolmung.business.place.response.PlaceDetailResponse;
 import ureca.nolmung.business.place.response.SearchedPlaceResponse;
+import ureca.nolmung.business.user.dto.response.CustomUserDetails;
 import ureca.nolmung.config.response.ResponseDto;
 import ureca.nolmung.config.response.ResponseUtil;
 import ureca.nolmung.jpa.place.Enum.Category;
@@ -46,7 +48,7 @@ public class PlaceController {
 	@Operation(summary = "장소 조회 필터링")
 	@GetMapping("/filter")
 	public ResponseDto<List<SearchedPlaceResponse>> findPlaceByFilter(
-		@RequestParam(required = false) Long userId,
+		@AuthenticationPrincipal CustomUserDetails userDetails,
 		@RequestParam(required = false) Category category,
 		@RequestParam(required = false) String acceptSize,
 		@RequestParam(required = false) Double ratingAvg,
@@ -55,7 +57,7 @@ public class PlaceController {
 		@RequestParam double longitude,
 		@RequestParam double maxLatitude,
 		@RequestParam double maxLongitude) {
-		return ResponseUtil.SUCCESS("장소 조회에 성공하였습니다.", placeUseCase.findBySearchOption(userId, category, acceptSize, ratingAvg, isBookmarked, latitude, longitude, maxLatitude, maxLongitude));
+		return ResponseUtil.SUCCESS("장소 조회에 성공하였습니다.", placeUseCase.findBySearchOption(userDetails.getUser(), category, acceptSize, ratingAvg, isBookmarked, latitude, longitude, maxLatitude, maxLongitude));
 	}
 
 	@Operation(summary = "장소 상세 정보 조회")

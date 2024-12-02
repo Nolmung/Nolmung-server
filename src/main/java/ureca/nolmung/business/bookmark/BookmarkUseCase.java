@@ -5,12 +5,13 @@ import java.util.List;
 import ureca.nolmung.business.bookmark.request.BookmarkServiceRequest;
 import ureca.nolmung.business.bookmark.response.BookmarkResponse;
 import ureca.nolmung.jpa.place.Enum.Category;
+import ureca.nolmung.jpa.user.User;
 
 public interface BookmarkUseCase {
 
-	Long createBookmark(Long userId, BookmarkServiceRequest serviceRequest);
+	Long createBookmark(User user, BookmarkServiceRequest serviceRequest);
 
-	Long deleteBookmark(Long userId, Long bookmarkId);
+	Long deleteBookmark(User user, Long bookmarkId);
 
-	List<BookmarkResponse> findAllBookmarks(Long userId, Category category);
+	List<BookmarkResponse> findAllBookmarks(User user, Category category);
 }
