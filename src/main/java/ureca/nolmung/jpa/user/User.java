@@ -74,18 +74,8 @@ public class User extends BaseEntity {
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<Diary> diaries;
 
-    public User(String name, String profileImageUrl, String email)
-    {
-        // 소셜로그인을 통해 받아올 수 있는 정보들 설정
-        this.name=name;
-        this.profileImageUrl=profileImageUrl;
-        this.email=email;
-        this.provider = Provider.KAKAO;
-        this.role=UserRole.GUEST;
-        this.status = UserStatus.ACTIVE;
-    }
 
-    public void setSignUpReq(UserReq req)
+    public void singUp(UserReq req)
     {
         // 화면에서 사용자를 통해 입력 받는 정보들 설정
         this.nickname=req.userNickname();
@@ -95,10 +85,20 @@ public class User extends BaseEntity {
         this.role=UserRole.USER;
     }
 
-    public void update(UserReq req) {
+    public void updateUserInfo(UserReq req) {
         this.nickname = req.userNickname();
         this.addressProvince = req.userAddressProvince();
         this.age = req.userAge();
         this.gender = req.userGender();
+    }
+
+    public void setSocialLoginInfo(String name, String profileImageUrl, String email, Provider provider)
+    {
+        this.name=name;
+        this.profileImageUrl=profileImageUrl;
+        this.email=email;
+        this.provider = provider;
+        this.role=UserRole.GUEST;
+        this.status = UserStatus.ACTIVE;
     }
 }

@@ -2,10 +2,10 @@ package ureca.nolmung.config.jwt;
 
 import java.io.IOException;
 
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import jakarta.servlet.FilterChain;
@@ -14,44 +14,66 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import ureca.nolmung.business.oauth.dto.CustomOauth2User;
-import ureca.nolmung.jpa.user.Enum.UserRole;
 
-@Component
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JWTUtil jwtUtil;
 
     @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+
+        String path = request.getRequestURI();
+
+        String[] excludePaths = {
+                "/oauth2",
+                "/api/v1/users/signup",
+                "/swagger-resources",
+                "/swagger-ui",
+                "/v3/api-docs"
+        };
+
+        for (String excludePath : excludePaths) {
+            if (path.startsWith(excludePath)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
         // 쿠키에서 Authorization 키에 담긴 토큰을 찾음
-        String authorization = getTokenFromCookies(request);
+        String token = getTokenFromCookies(request);
 
         //Authorization 헤더 검증
-        if (authorization == null) {
-            filterChain.doFilter(request, response);
-            return;
+        if (token != null) {
+            try
+            {
+                if (jwtUtil.validateToken(token))
+                {
+                    Authentication authentication = jwtUtil.getAuthentication(token);
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                }
+            }
+            catch (JwtException e)
+            {
+                if (e instanceof ExpiredJwtException) {
+                    // 토큰 유효기간 만료
+                    response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "JWT 토큰이 만료되었습니다.");
+                }
+                else
+                {
+                    response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "JWT 토큰이 유효하지 않습니다.");
+                }
+                return;
+            }
+            catch (IllegalArgumentException e) { // 손상된 토큰
+                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "JWT 토큰의 형식이 잘못되었습니다.");
+                return;
+            }
         }
-
-        //토큰 소멸 시간 검증 - 현재 시간이 토큰의 만료 시간보다 이전인 경우 false를 반환하고, 만료 시간이 지나면 true를 반환
-        if (jwtUtil.isExpired(authorization)) {
-            //System.out.println("토큰 유효기간 만료");
-            filterChain.doFilter(request, response);
-            return;
-        }
-
-        //토큰에서 email, role, userId 획득
-        Long userId = jwtUtil.getUserId(authorization);
-        String email = jwtUtil.getEmail(authorization);
-        UserRole role = jwtUtil.getRole(authorization);
-
-        CustomOauth2User customOAuth2User = new CustomOauth2User(userId,email,role);
-        //스프링 시큐리티 인증 토큰 생성
-        Authentication authToken = new UsernamePasswordAuthenticationToken(customOAuth2User, null, customOAuth2User.getAuthorities());
-        //세션에 사용자 등록
-        SecurityContextHolder.getContext().setAuthentication(authToken);
 
         filterChain.doFilter(request, response);
     }
