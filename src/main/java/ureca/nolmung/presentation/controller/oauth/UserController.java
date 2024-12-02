@@ -1,19 +1,15 @@
 package ureca.nolmung.presentation.controller.oauth;
 
-import org.springframework.web.bind.annotation.CookieValue;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import ureca.nolmung.business.user.UserService;
-import ureca.nolmung.business.user.dto.request.SignUpReq;
+import ureca.nolmung.business.user.UserUseCase;
+import ureca.nolmung.business.user.dto.request.UserReq;
+import ureca.nolmung.business.user.dto.response.UserResp;
 import ureca.nolmung.config.jwt.JWTUtil;
 import ureca.nolmung.config.response.ResponseDto;
 import ureca.nolmung.config.response.ResponseUtil;
@@ -27,11 +23,12 @@ import jakarta.servlet.http.HttpServletResponse;
 public class UserController {
 
     private final UserService userService;
+    private final UserUseCase userUseCase;
     private final JWTUtil jwtUtil;
 
     @Operation(summary = "최초 소셜로그인 후 추가 정보 입력")
     @PostMapping("/signup/{userId}")
-    public ResponseDto<Long> signUp(@PathVariable("userId") Long userId, @RequestBody SignUpReq req, HttpServletResponse response) {
+    public ResponseDto<Long> signUp(@PathVariable("userId") Long userId, @RequestBody UserReq req, HttpServletResponse response) {
 
         String token = userService.completeSignUp(userId, req);
         response.addCookie(jwtUtil.createCookie("Authorization", token));
@@ -47,4 +44,18 @@ public class UserController {
         return ResponseUtil.SUCCESS("로그인에 성공했습니다.", loginUserId);
 
     }
+
+    @Operation(summary = "회원 정보 수정")
+    @PutMapping("/{userId}")
+    public ResponseDto<UserResp> signUp(@PathVariable("userId") Long userId, @RequestBody UserReq req) {
+        return ResponseUtil.SUCCESS("회원 정보 수정에 성공했습니다.", userUseCase.updateUser(userId,req));
+    }
+
+    @Operation(summary = "회원 정보 조회")
+    @GetMapping("/{userId}")
+    public ResponseDto<UserResp> getDog(@PathVariable("userId") Long userId) {
+        UserResp userResp = userUseCase.getUser(userId);
+        return ResponseUtil.SUCCESS("회원 정보 조회에 성공하였습니다.", userResp);
+    }
+
 }

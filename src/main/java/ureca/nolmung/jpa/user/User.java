@@ -1,19 +1,27 @@
 package ureca.nolmung.jpa.user;
 
-import jakarta.persistence.*;
+import java.util.List;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import ureca.nolmung.business.user.dto.request.SignUpReq;
+import ureca.nolmung.business.user.dto.request.UserReq;
 import ureca.nolmung.jpa.config.BaseEntity;
 import ureca.nolmung.jpa.diary.Diary;
 import ureca.nolmung.jpa.user.Enum.Gender;
 import ureca.nolmung.jpa.user.Enum.Provider;
 import ureca.nolmung.jpa.user.Enum.UserRole;
 import ureca.nolmung.jpa.user.Enum.UserStatus;
-
-import java.util.List;
 
 @Getter
 @Builder
@@ -77,14 +85,20 @@ public class User extends BaseEntity {
         this.status = UserStatus.ACTIVE;
     }
 
-    public void setSignUpReq(SignUpReq req)
+    public void setSignUpReq(UserReq req)
     {
         // 화면에서 사용자를 통해 입력 받는 정보들 설정
-        this.nickname=req.getNickname();
-        this.addressProvince=req.getAddressProvince();
-        this.age = req.getAge();
-        this.gender = req.getGender();
+        this.nickname=req.userNickname();
+        this.addressProvince=req.userAddressProvince();
+        this.age = req.userAge();
+        this.gender = req.userGender();
         this.role=UserRole.USER;
-        System.out.println(this.nickname);
+    }
+
+    public void update(UserReq req) {
+        this.nickname = req.userNickname();
+        this.addressProvince = req.userAddressProvince();
+        this.age = req.userAge();
+        this.gender = req.userGender();
     }
 }

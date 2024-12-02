@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import ureca.nolmung.jpa.config.BaseEntity;
+import ureca.nolmung.jpa.diaryplace.DiaryPlace;
+import ureca.nolmung.jpa.dogdiary.DogDiary;
 import ureca.nolmung.jpa.media.Media;
 import ureca.nolmung.jpa.user.User;
 
@@ -37,6 +39,23 @@ public class Diary extends BaseEntity {
     @Column(nullable = false)
     private boolean publicYn;
 
-    @OneToMany(mappedBy = "diary", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "diary", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Media> mediaList;
+
+    @OneToMany(mappedBy = "diary", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<DiaryPlace> diaryPlaces = new ArrayList<>();
+
+    @OneToMany(mappedBy = "diary", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<DogDiary> dogDiaries = new ArrayList<>();
+
+    public void updateDiary(String title, String content, boolean publicYn) {
+        this.title = title;
+        this.content = content;
+        this.publicYn = publicYn;
+    }
+
+    public void addDogDiary(DogDiary dogDiary) {
+        this.dogDiaries.add(dogDiary);
+    }
 }
+

@@ -5,9 +5,8 @@ import org.hibernate.Hibernate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ureca.nolmung.business.diary.dto.request.AddDiaryReq;
-import ureca.nolmung.business.diary.dto.response.AddDiaryResp;
-import ureca.nolmung.business.diary.dto.response.DiaryDetailResp;
-import ureca.nolmung.business.diary.dto.response.DiaryListResp;
+import ureca.nolmung.business.diary.dto.request.UpdateDiaryReq;
+import ureca.nolmung.business.diary.dto.response.*;
 import ureca.nolmung.implementation.diary.DiaryManager;
 import ureca.nolmung.implementation.diary.dtomapper.DiaryDtoMapper;
 import ureca.nolmung.implementation.diaryplace.DiaryPlaceManager;
@@ -33,7 +32,6 @@ public class DiaryService implements DiaryUseCase {
     private final DiaryDtoMapper diaryDtoMapper;
     private final DogDiaryManager dogDiaryManager;
     private final DiaryPlaceManager diaryPlaceManager;
-    private final MediaManager mediaManager;
 
     @Override
     @Transactional
@@ -62,5 +60,21 @@ public class DiaryService implements DiaryUseCase {
         List<Media> mediaList = diary.getMediaList() != null ? diary.getMediaList() : List.of();
 
         return diaryDtoMapper.toDiaryDetailResp(diary, dogList, placeList, mediaList);
+    }
+
+    @Override
+    @Transactional
+    public DeleteDiaryResp deleteDiary(Long diaryId) {
+        Diary diaryCheck = diaryManager.checkExistDiary(diaryId);
+        return diaryManager.deleteDiary(diaryCheck);
+    }
+
+    @Override
+    @Transactional
+    public UpdateDiaryResp updateDiary(Long diaryId, UpdateDiaryReq req) {
+        diaryManager.checkDiaryWriter(req.userId(), diaryId);
+        Diary diary = diaryManager.checkExistDiary(diaryId);
+
+        return diaryManager.updateDiary(diary, req);
     }
 }
