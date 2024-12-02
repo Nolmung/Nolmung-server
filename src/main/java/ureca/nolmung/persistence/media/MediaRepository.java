@@ -14,4 +14,6 @@ public interface MediaRepository extends JpaRepository<Media, Long> {
 	Media findFirstByDiary(Diary diary);
 
 	List<Media> findByDiaryId(Long diaryId);
+
+	void deleteByDiaryId(Long id);
 }

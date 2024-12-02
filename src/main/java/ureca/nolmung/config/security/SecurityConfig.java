@@ -1,6 +1,7 @@
 package ureca.nolmung.config.security;
 
-import jakarta.servlet.http.HttpServletRequest;
+import java.util.Arrays;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -11,22 +12,22 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-
-import lombok.RequiredArgsConstructor;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
+
+import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
 import ureca.nolmung.business.oauth.OAuth2SucessHandler;
 import ureca.nolmung.business.oauth.OAuthUserServiceImplement;
+import ureca.nolmung.config.jwt.JWTUtil;
 import ureca.nolmung.config.jwt.JwtAuthenticationFilter;
-
-import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final JWTUtil jwtUtil;
     private final OAuthUserServiceImplement oAuth2UserService;
     private final OAuth2SucessHandler oAuth2SucessHandler;
 
@@ -60,7 +61,7 @@ public class SecurityConfig {
                 .anyRequest().authenticated()  // 그 외 URL은 인증 필요
             )
 
-            .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class) // JWT 필터
+            .addFilterBefore(new JwtAuthenticationFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class) // JWT 필터
 
             // OAuth2 로그인
             .oauth2Login(oauth2 -> oauth2
