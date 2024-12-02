@@ -2,75 +2,80 @@ package ureca.nolmung.config.jwt;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import jakarta.servlet.http.Cookie;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
+import ureca.nolmung.business.user.dto.response.CustomUserDetails;
+import ureca.nolmung.implementation.user.UserManager;
 import ureca.nolmung.jpa.user.Enum.UserRole;
+import ureca.nolmung.jpa.user.User;
 
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
 
+@Slf4j
 @Component
 public class JWTUtil {
 
-	private SecretKey secretKey;
-	private Long expiration;
+	private final SecretKey secretKey;
+	private final Long expiredMs;
+	private final UserManager userManager;
 
 
-	public JWTUtil(@Value("${jwt.secretKey}")String secret, @Value("${jwt.access.expiration}")Long expiredMs) {
+	public JWTUtil(@Value("${jwt.secretKey}")String secret, @Value("${jwt.access.expiration}")Long expiredMs, UserManager userManager) {
 		// Create the SecretKey from the secret string
-		this.secretKey = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8), SignatureAlgorithm.HS256.getJcaName());
-		this.expiration = expiredMs;
+		this.secretKey = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8), Jwts.SIG.HS256.key().build().getAlgorithm());
+		this.expiredMs = expiredMs;
+		this.userManager = userManager;
 	}
 
-	public String getEmail(String token) {
-		Claims claims = Jwts.parser()
-			.setSigningKey(secretKey)
+	private String getEmail(String token) {
+		return Jwts.parser()
+			.verifyWith(secretKey)
 			.build()
-			.parseClaimsJws(token)
-			.getBody();
-		return claims.get("email", String.class);
+			.parseSignedClaims(token)
+			.getPayload().get("email", String.class);
 	}
 
 
-	public UserRole getRole(String token) {
+	/*public UserRole getRole(String token) {
 		Claims claims = Jwts.parser()
 			.setSigningKey(secretKey)
 			.build()
 			.parseClaimsJws(token)
 			.getBody();
 		return UserRole.valueOf(claims.get("role", String.class));
-	}
+	}*/
 
 	public Long getUserId(String token) {
 		Claims claims = Jwts.parser()
-			.setSigningKey(secretKey)
+			.verifyWith(secretKey)
 			.build()
-			.parseClaimsJws(token)
-			.getBody();
-		return claims.get("userId", Long.class);  // "userId" claim을 Long 타입으로 반환
+			.parseSignedClaims(token)
+			.getPayload();
+		return claims.get("id", Long.class);  // "userId" claim을 Long 타입으로 반환
 	}
 
-	public Boolean isExpired(String token) {
-		Claims claims = Jwts.parser()
-			.setSigningKey(secretKey)
+	/*public Boolean isExpired(String token) {
+		return Jwts.parser()
+			.verifyWith(secretKey)
 			.build()
-			.parseClaimsJws(token)
-			.getBody();
-		return claims.getExpiration().before(new Date());
-	}
+			.parseSignedClaims(token)
+			.getPayload().getExpiration().before(new Date());
+	}*/
 
-	public String createJwt(String email, Long userId, UserRole role) {
+	public String createJwt(Long id, String email, UserRole role) {
 		return Jwts.builder()
+			.claim("id", id)
 			.claim("email", email)
-			.claim("userId", userId)
 			.claim("role", role.name())
-			//.claim("role", role)
-			.setIssuedAt(new Date())
-			.setExpiration(new Date(System.currentTimeMillis() + expiration))
+			.issuedAt(new Date())
+			.expiration(new Date(System.currentTimeMillis() + expiredMs))
 			.signWith(secretKey)
 			.compact();
 	}
@@ -84,5 +89,17 @@ public class JWTUtil {
 		cookie.setHttpOnly(true);
 
 		return cookie;
+	}
+
+	public Authentication getAuthentication(String accessToken) {
+		String email = getEmail(accessToken);
+		User user = userManager.findByEmail(email);
+		CustomUserDetails customUserDetails = new CustomUserDetails(user);
+		return new UsernamePasswordAuthenticationToken(customUserDetails, "", customUserDetails.getAuthorities());
+	}
+
+	public boolean validateToken(String accessToken) {
+		Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(accessToken);
+		return true;
 	}
 }

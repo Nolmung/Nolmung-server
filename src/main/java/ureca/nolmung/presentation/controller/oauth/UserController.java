@@ -1,5 +1,6 @@
 package ureca.nolmung.presentation.controller.oauth;
 
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -9,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import ureca.nolmung.business.user.UserService;
 import ureca.nolmung.business.user.UserUseCase;
 import ureca.nolmung.business.user.dto.request.UserReq;
+import ureca.nolmung.business.user.dto.response.CustomUserDetails;
 import ureca.nolmung.business.user.dto.response.UserResp;
 import ureca.nolmung.config.jwt.JWTUtil;
 import ureca.nolmung.config.response.ResponseDto;
@@ -46,16 +48,15 @@ public class UserController {
     }
 
     @Operation(summary = "회원 정보 수정")
-    @PutMapping("/{userId}")
-    public ResponseDto<UserResp> signUp(@PathVariable("userId") Long userId, @RequestBody UserReq req) {
-        return ResponseUtil.SUCCESS("회원 정보 수정에 성공했습니다.", userUseCase.updateUser(userId,req));
+    @PutMapping("")
+    public ResponseDto<UserResp> updateUser(@AuthenticationPrincipal CustomUserDetails userDetails, @RequestBody UserReq req) {
+        return ResponseUtil.SUCCESS("회원 정보 수정에 성공했습니다.", userUseCase.updateUser(userDetails.getUser(),req));
     }
 
     @Operation(summary = "회원 정보 조회")
-    @GetMapping("/{userId}")
-    public ResponseDto<UserResp> getDog(@PathVariable("userId") Long userId) {
-        UserResp userResp = userUseCase.getUser(userId);
-        return ResponseUtil.SUCCESS("회원 정보 조회에 성공하였습니다.", userResp);
+    @GetMapping("")
+    public ResponseDto<UserResp> getDog(@AuthenticationPrincipal CustomUserDetails userDetails) {
+        return ResponseUtil.SUCCESS("회원 정보 조회에 성공하였습니다.", userUseCase.getUser(userDetails.getUser()));
     }
 
 }

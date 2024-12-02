@@ -33,9 +33,9 @@ public class UserService implements UserUseCase{
 			.orElseThrow(() -> new UserException(UserExceptionType.USER_NOT_FOUND_EXCEPTION)); // 예외 처리
 
 		// 2. 입력받은 회원정보(나이, 성별, 거주지 등) 유저 정보 업데이트
-		user.setSignUpReq(req);
+		user.singUp(req);
 
-		String jwtToken = jwtUtil.createJwt(user.getEmail(), user.getId(), user.getRole()); // 예외 처리
+		String jwtToken = jwtUtil.createJwt(user.getId(), user.getEmail(), user.getRole()); // 예외 처리
 
 		if (jwtToken == null) {
 			throw new JwtException(JwtExceptionType.JWT_TOKEN_CREATION_FAILED_EXCEPTION);
@@ -75,17 +75,14 @@ public class UserService implements UserUseCase{
 
 	@Override
 	@Transactional
-	public UserResp updateUser(Long userId, UserReq req) {
+	public UserResp updateUser(User user, UserReq req) {
 
-		User currentUser = userManager.validateUserExistence(userId);
-		User updatedUser = userManager.updateUser(currentUser, req);
+		User updatedUser = userManager.updateUser(user, req);
 		return userDtoMapper.toUserResp(updatedUser);
 	}
 
 	@Override
-	@Transactional(readOnly = true)
-	public UserResp getUser(Long userId) {
-		User user = userManager.validateUserExistence(userId);
+	public UserResp getUser(User user) {
 		return userDtoMapper.toUserResp(user);
 	}
 }
