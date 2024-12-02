@@ -38,28 +38,27 @@ public class DogController {
 
     @Operation(summary = "반려견 프로필 수정")
     @PutMapping("")
-    public ResponseDto<DogResp> updateDog(@RequestParam("userId") Long userId,@RequestParam("dogId") Long dogId, @RequestBody DogReq req) {
-        return ResponseUtil.SUCCESS("반려견 프로필 수정에 성공하였습니다.",dogUseCase.updateDog(userId, dogId, req));
+    public ResponseDto<DogResp> updateDog(@AuthenticationPrincipal CustomUserDetails userDetails, @RequestParam("dogId") Long dogId, @RequestBody DogReq req) {
+        return ResponseUtil.SUCCESS("반려견 프로필 수정에 성공하였습니다.",dogUseCase.updateDog(userDetails.getUser().getId(), dogId, req));
     }
 
     @Operation(summary = "반려견 프로필 삭제")
     @DeleteMapping("")
-    public ResponseDto<DogResp> deleteDog(@RequestParam("userId") Long userId, @RequestParam("dogId") Long dogId) {
-        return ResponseUtil.SUCCESS("반려견 프로필 삭제에 성공하였습니다.", dogUseCase.deleteDog(userId, dogId));
+    public ResponseDto<DogResp> deleteDog(@AuthenticationPrincipal CustomUserDetails userDetails, @RequestParam("dogId") Long dogId) {
+        return ResponseUtil.SUCCESS("반려견 프로필 삭제에 성공하였습니다.", dogUseCase.deleteDog(userDetails.getUser().getId(), dogId));
     }
 
     @Operation(summary = "반려견 프로필 조회")
     @GetMapping("")
-    public ResponseDto<DogResp> getDog(@RequestParam("userId") Long userId, @RequestParam("dogId") Long dogId) {
-        DogResp dogResp = dogUseCase.getDog(userId, dogId);
+    public ResponseDto<DogResp> getDog(@AuthenticationPrincipal CustomUserDetails userDetails, @RequestParam("dogId") Long dogId) {
+        DogResp dogResp = dogUseCase.getDog(userDetails.getUser().getId(), dogId);
         return ResponseUtil.SUCCESS("반려견 프로필 조회에 성공하였습니다.", dogResp);
     }
 
     @Operation(summary = "반려견 프로필 목록 조회")
     @GetMapping("/list")
-    public ResponseDto<List<DogResp>> getDogList(@RequestParam("userId") Long userId) {
-        List<DogResp> dogRespList = dogUseCase.getDogList(userId);
-        return ResponseUtil.SUCCESS("반려견 프로필 목록 조회에 성공하였습니다.", dogRespList);
+    public ResponseDto<List<DogResp>> getDogList(@AuthenticationPrincipal CustomUserDetails userDetails) {
+        return ResponseUtil.SUCCESS("반려견 프로필 목록 조회에 성공하였습니다.", dogUseCase.getDogList(userDetails.getUser().getId()));
     }
 
 
