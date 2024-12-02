@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import ureca.nolmung.jpa.place.Enum.Category;
 import ureca.nolmung.jpa.place.Place;
 import ureca.nolmung.jpa.placeposition.PlacePosition;
+import ureca.nolmung.jpa.user.User;
 import ureca.nolmung.persistence.place.PlaceRepository;
 import ureca.nolmung.persistence.placeposition.PlacePositionRepository;
 
@@ -51,9 +52,9 @@ public class PlaceManager {
 		}
 	}
 
-	public List<Place> findBySearchOption(Long userId, Category category, String acceptSize, Double ratingAvg, Boolean isBookmarked, double latitude, double longitude, double maxLatitude, double maxLongitude) {
+	public List<Place> findBySearchOption(User user, Category category, String acceptSize, Double ratingAvg, Boolean isBookmarked, double latitude, double longitude, double maxLatitude, double maxLongitude) {
 		Polygon polygon = generatePolygon(latitude, longitude, maxLatitude, maxLongitude);
-		return placeRepository.findBySearchOption(userId, category, acceptSize, ratingAvg, isBookmarked, polygon);
+		return placeRepository.findBySearchOption(user, category, acceptSize, ratingAvg, isBookmarked, polygon);
 	}
 
 	public List<Place> findPlaceMapOn(double latitude, double longitude, double maxLatitude, double maxLongitude) {

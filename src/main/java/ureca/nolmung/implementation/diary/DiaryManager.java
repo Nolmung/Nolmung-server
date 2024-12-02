@@ -2,18 +2,22 @@ package ureca.nolmung.implementation.diary;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.springframework.stereotype.Component;
+
 import lombok.RequiredArgsConstructor;
+import ureca.nolmung.business.banword.BanWordUseCase;
 import ureca.nolmung.business.diary.dto.request.AddDiaryReq;
 import ureca.nolmung.business.diary.dto.request.UpdateDiaryReq;
 import ureca.nolmung.business.diary.dto.response.AddDiaryResp;
 import ureca.nolmung.business.diary.dto.response.DeleteDiaryResp;
 import ureca.nolmung.business.diary.dto.response.UpdateDiaryResp;
 import ureca.nolmung.business.diary.response.PlaceDiaryResponse;
-import ureca.nolmung.implementation.place.PlaceException;
-import ureca.nolmung.implementation.place.PlaceExceptionType;
 import ureca.nolmung.implementation.dog.DogException;
 import ureca.nolmung.implementation.dog.DogExceptionType;
+import ureca.nolmung.implementation.place.PlaceException;
+import ureca.nolmung.implementation.place.PlaceExceptionType;
+import ureca.nolmung.jpa.banword.trie.Trie;
 import ureca.nolmung.jpa.diary.Diary;
 import ureca.nolmung.jpa.diaryplace.DiaryPlace;
 import ureca.nolmung.jpa.dog.Dog;
@@ -40,7 +44,7 @@ public class DiaryManager {
 	private final PlaceRepository placeRepository;
 	private final DogDiaryRepository dogDiaryRepository;
 	private final DogRepository dogRepository;
-	private final UserRepository userRepository;
+	private final Trie trie;
 
 	public List<PlaceDiaryResponse> findDiaryByPlace(Place place) {
 		List<DiaryPlace> diaryPlaces = diaryPlaceRepository.findAllByPlaceOrderByCreatedAtDesc(place);
@@ -48,6 +52,9 @@ public class DiaryManager {
 		for (DiaryPlace diaryPlace : diaryPlaces) {
 			Diary diary = diaryRepository.findById(diaryPlace.getId())
 				.orElseThrow(() -> new DiaryException(DiaryExceptionType.DIARY_NOT_FOUND_EXCEPTION));
+			if (!diary.isPublicYn()) {
+				continue;
+			}
 			Media media = mediaRepository.findFirstByDiary(diary);
 			placeDiaryResponses.add(new PlaceDiaryResponse().of(diary, media.getMediaUrl()));
 		}
@@ -159,7 +166,14 @@ public class DiaryManager {
 				.build();
 	}
 
-	private static Diary createDiary(User loginUser, AddDiaryReq req) {
+	private Diary createDiary(User loginUser, AddDiaryReq req) {
+		if (trie.search(req.title())) {
+			throw new DiaryException(DiaryExceptionType.DIARY_TITLE_CONTAINS_BAN_WORD);
+		}
+		if (trie.search(req.content())) {
+			throw new DiaryException(DiaryExceptionType.DIARY_CONTENT_CONTAINS_BAN_WORD);
+		}
+
 		return ureca.nolmung.jpa.diary.Diary.builder()
 				.user(loginUser)
 				.title(req.title())
@@ -173,10 +187,11 @@ public class DiaryManager {
 				.orElseThrow(() -> new DiaryException(DiaryExceptionType.DIARY_NOT_FOUND_EXCEPTION));
 	}
 
-	public void checkDiaryWriter(Long userId, Long diaryId) {
+	public Diary checkDiaryWriter(Long userId, Long diaryId) {
 		Diary diary = diaryRepository.findById(diaryId).orElseThrow(() -> new DiaryException(DiaryExceptionType.DIARY_NOT_FOUND_EXCEPTION));
 		if (!diary.getUser().getId().equals(userId)) {
 			throw new DiaryException(DiaryExceptionType.DIARY_UNAUTHORIZED_EXCEPTION);
 		}
+		return diary;
 	}
 }

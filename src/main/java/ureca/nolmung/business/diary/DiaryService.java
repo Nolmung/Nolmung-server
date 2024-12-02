@@ -35,18 +35,16 @@ public class DiaryService implements DiaryUseCase {
 
     @Override
     @Transactional
-    public AddDiaryResp addDiary(Long userId, AddDiaryReq req) {
-        User user = userManager.validateUserExistence(userId);
-
-        return diaryManager.addDiary(user, req);
+    public AddDiaryResp addDiary(User user, AddDiaryReq req) {
+        User loginUser = userManager.validateUserExistence(user.getId());
+        return diaryManager.addDiary(loginUser, req);
     }
 
     @Override
-    public DiaryListResp getAllDiaries(Long userId) {
-        User user = userManager.validateUserExistence(userId);
-        List<Diary> diaryList = diaryManager.getDiaryList(userId);
-
-        return diaryDtoMapper.toAddDiaryResp(user, diaryList);
+    public DiaryListResp getAllDiaries(User user) {
+        User loginUser = userManager.validateUserExistence(user.getId());
+        List<Diary> diaryList = diaryManager.getDiaryList(loginUser.getId());
+        return diaryDtoMapper.toAddDiaryResp(loginUser, diaryList);
     }
 
 
@@ -54,27 +52,37 @@ public class DiaryService implements DiaryUseCase {
     @Transactional(readOnly = true)
     public DiaryDetailResp getDetailDiary(Long diaryId) {
         Diary diaryCheck = diaryManager.checkExistDiary(diaryId);
+        return getDiaryDetailResp(diaryCheck);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public DiaryDetailResp getDetailMyDiary(User user, Long diaryId) {
+        Diary diaryCheck = diaryManager.checkDiaryWriter(user.getId(), diaryId);
+        return getDiaryDetailResp(diaryCheck);
+    }
+
+    private DiaryDetailResp getDiaryDetailResp(Diary diaryCheck) {
         Diary diary = diaryManager.getDetailDiary(diaryCheck.getId());
         List<DogDiary> dogList = dogDiaryManager.getDogList(diaryCheck.getId());
         List<Place> placeList = diaryPlaceManager.getPlaceList(diaryCheck.getId());
-        List<Media> mediaList = diary.getMediaList() != null ? diary.getMediaList() : List.of();
+        List<Media> mediaList = diary.getMediaList();
 
         return diaryDtoMapper.toDiaryDetailResp(diary, dogList, placeList, mediaList);
     }
 
+
     @Override
     @Transactional
-    public DeleteDiaryResp deleteDiary(Long diaryId) {
-        Diary diaryCheck = diaryManager.checkExistDiary(diaryId);
+    public DeleteDiaryResp deleteDiary(User user, Long diaryId) {
+        Diary diaryCheck = diaryManager.checkDiaryWriter(user.getId(), diaryId);
         return diaryManager.deleteDiary(diaryCheck);
     }
 
     @Override
     @Transactional
-    public UpdateDiaryResp updateDiary(Long diaryId, UpdateDiaryReq req) {
-        diaryManager.checkDiaryWriter(req.userId(), diaryId);
-        Diary diary = diaryManager.checkExistDiary(diaryId);
-
-        return diaryManager.updateDiary(diary, req);
+    public UpdateDiaryResp updateDiary(User user, Long diaryId, UpdateDiaryReq req) {
+        Diary diaryCheck = diaryManager.checkDiaryWriter(user.getId(), diaryId);
+        return diaryManager.updateDiary(diaryCheck, req);
     }
 }
