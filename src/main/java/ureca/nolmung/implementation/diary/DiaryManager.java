@@ -190,10 +190,11 @@ public class DiaryManager {
 				.orElseThrow(() -> new DiaryException(DiaryExceptionType.DIARY_NOT_FOUND_EXCEPTION));
 	}
 
-	public void checkDiaryWriter(Long userId, Long diaryId) {
+	public Diary checkDiaryWriter(Long userId, Long diaryId) {
 		Diary diary = diaryRepository.findById(diaryId).orElseThrow(() -> new DiaryException(DiaryExceptionType.DIARY_NOT_FOUND_EXCEPTION));
 		if (!diary.getUser().getId().equals(userId)) {
 			throw new DiaryException(DiaryExceptionType.DIARY_UNAUTHORIZED_EXCEPTION);
 		}
+		return diary;
 	}
 }

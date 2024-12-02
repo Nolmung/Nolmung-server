@@ -10,7 +10,4 @@ import java.util.stream.Collectors;
 
 @Component
 public class ReviewDtoMapper {
-    public AddReviewResp toAddReviewResp(Review newReview) {
-        return new AddReviewResp( "성공적으로 " + newReview.getId() + "번 후기가 등록되었습니다.");
-    }
 }
