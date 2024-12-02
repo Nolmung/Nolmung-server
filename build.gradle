@@ -36,6 +36,9 @@ dependencies {
     // redis
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 
+    // spring batch
+    implementation 'org.springframework.boot:spring-boot-starter-batch'
+
     //AWS personalize, sdk
     dependencies {
         implementation 'software.amazon.awssdk:personalize:2.16.83'
