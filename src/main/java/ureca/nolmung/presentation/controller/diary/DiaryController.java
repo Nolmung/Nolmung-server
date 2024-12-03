@@ -1,21 +1,33 @@
 package ureca.nolmung.presentation.controller.diary;
 
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.*;
 import ureca.nolmung.business.diary.DiaryUseCase;
 import ureca.nolmung.business.diary.dto.request.AddDiaryReq;
 import ureca.nolmung.business.diary.dto.request.UpdateDiaryReq;
-import ureca.nolmung.business.diary.dto.response.*;
+import ureca.nolmung.business.diary.dto.response.AddDiaryResp;
+import ureca.nolmung.business.diary.dto.response.DeleteDiaryResp;
+import ureca.nolmung.business.diary.dto.response.DiaryDetailResp;
+import ureca.nolmung.business.diary.dto.response.DiaryListResp;
+import ureca.nolmung.business.diary.dto.response.UpdateDiaryResp;
 import ureca.nolmung.business.user.dto.response.CustomUserDetails;
 import ureca.nolmung.config.response.ResponseDto;
 import ureca.nolmung.config.response.ResponseUtil;
 
 @Tag(name = "일기")
 @RestController
-@RequestMapping("/api/v1/diary")
+@RequestMapping("/v1/diary")
 @RequiredArgsConstructor
 public class DiaryController {
 
