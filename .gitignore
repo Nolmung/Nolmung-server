@@ -35,3 +35,9 @@ out/
 
 ### VS Code ###
 .vscode/
+
+### Secret Config ###
+application.yml
+
+### Ignore everything in src/main/generated ###
+src/main/generated/*
