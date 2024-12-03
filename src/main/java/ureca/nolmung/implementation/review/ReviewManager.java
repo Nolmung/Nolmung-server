@@ -1,7 +1,13 @@
 package ureca.nolmung.implementation.review;
 
-import lombok.RequiredArgsConstructor;
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Component;
+
+import lombok.RequiredArgsConstructor;
 import ureca.nolmung.business.review.dto.request.AddReviewReq;
 import ureca.nolmung.business.review.dto.response.AddReviewResp;
 import ureca.nolmung.business.review.dto.response.DeleteReviewResp;
@@ -19,9 +25,6 @@ import ureca.nolmung.persistence.label.LabelRepository;
 import ureca.nolmung.persistence.place.PlaceRepository;
 import ureca.nolmung.persistence.review.ReviewRepository;
 import ureca.nolmung.persistence.reviewlabel.ReviewLabelRepository;
-
-import java.util.List;
-import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
@@ -140,5 +143,9 @@ public class ReviewManager {
         if(!review.getUser().getId().equals(userId)) {
             throw new ReviewException(ReviewExceptionType.REVIEW_UNAUTHORIZED_EXCEPTION);
         }
+    }
+
+    public Slice<Review> getReviews(Long userId, int page, int size) {
+        return reviewRepository.findByUserIdWithPlace(userId, PageRequest.of(page, size));
     }
 }

@@ -24,7 +24,7 @@ import ureca.nolmung.jpa.place.Enum.Category;
 @Tag(name = "장소")
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/v1/places")
+@RequestMapping("/v1/places")
 public class PlaceController {
 
 	private final PlaceUseCase placeUseCase;

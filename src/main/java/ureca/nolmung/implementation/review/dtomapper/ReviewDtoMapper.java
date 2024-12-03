@@ -1,13 +1,21 @@
 package ureca.nolmung.implementation.review.dtomapper;
 
-import org.springframework.stereotype.Component;
-import ureca.nolmung.business.review.dto.request.AddReviewReq;
-import ureca.nolmung.business.review.dto.response.AddReviewResp;
-import ureca.nolmung.jpa.review.Review;
-
 import java.util.List;
-import java.util.stream.Collectors;
+
+import org.springframework.stereotype.Component;
+
+import ureca.nolmung.business.review.dto.response.ReviewLabelResp;
+import ureca.nolmung.business.review.dto.response.ReviewResp;
+import ureca.nolmung.jpa.review.Review;
 
 @Component
 public class ReviewDtoMapper {
+    public ReviewResp toReviewResp(Review review, List<ReviewLabelResp> reviewLabel)
+    {
+        return new ReviewResp(review.getId(),
+                review.getPlace().getName(),
+                review.getPlace().getAddress(),
+                review.getRating(),
+                reviewLabel);
+    }
 }

@@ -24,7 +24,7 @@ import ureca.nolmung.config.response.ResponseUtil;
 
 @Tag(name = "반려견 프로필")
 @RestController
-@RequestMapping("/api/v1/dogs")
+@RequestMapping("/v1/dogs")
 @RequiredArgsConstructor
 public class DogController {
 

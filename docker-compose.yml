@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  springboot-app:
+    container_name: thirsty_robinson
+    image: hyewonbae/nolmung
+    ports:
+      - "443:8080"
+#    environment:
+#      SPRING_PROFILES_ACTIVE: prod
+    restart: always
+    networks:
+      - t4y
+
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    volumes:
+      - ./prometheus/config:/etc/prometheus
+      - prometheus-data:/prometheus
+    ports:
+      - "9090:9090"
+    command:
+      - '--storage.tsdb.path=/prometheus'
+      - '--config.file=/etc/prometheus/prometheus.yml'
+    restart: always
+    networks:
+      - t4y
+
+  grafana:
+    image: grafana/grafana:7.5.2
+    container_name: grafana
+    volumes:
+      - grafana-data:/var/lib/grafana
+#      - ./grafana/provisioning/:/etc/grafana/provisioning/
+    ports:
+      - "3000:3000"
+    environment:
+      GF_SECURITY_ADMIN_PASSWORD: "nolmung"
+    depends_on:
+      - prometheus
+    restart: always
+    networks:
+      - t4y
+
+networks:
+  t4y:
+    driver: bridge

@@ -61,23 +61,15 @@ jobs:
             sudo docker stop $(sudo docker ps -aq)
             echo "현재 실행 중인 모든 Docker 컨테이너 중지"
             sudo docker rm -f $(sudo docker ps -qa)
-            echo "모든 Docker 컨테이너 강제로 삭제"
+            echo "기존 Docker Compose 컨테이너 강제로 삭제"
             sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/nolmung
             echo "docker pull 성공"
-            sudo docker run -d -p 443:8080 ${{ secrets.DOCKERHUB_USERNAME }}/nolmung
+            sudo docker-compose -f docker-compose.yml up -d
+            echo "Docker Compose로 컨테이너 시작 완료"
             sudo docker image prune -f
             echo "사용하지 않는 Docker image 정리"
-    # NOTE: The Gradle Wrapper is the default and recommended way to run Gradle (https://docs.gradle.org/current/userguide/gradle_wrapper.html).
-    # If your project does not have the Gradle Wrapper configured, you can use the following configuration to run Gradle with a specified version.
-    #
-    # - name: Setup Gradle
-    #   uses: gradle/actions/setup-gradle@af1da67850ed9a4cedd57bfd976089dd991e2582 # v4.0.0
-    #   with:
-    #     gradle-version: '8.9'
-    #
-    # - name: Build with Gradle 8.9
-    #   run: gradle build
 
+#            sudo docker run -d -p 443:8080 ${{ secrets.DOCKERHUB_USERNAME }}/nolmung
   dependency-submission:
 
     runs-on: ubuntu-latest
