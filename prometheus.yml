@@ -1,0 +1,13 @@
+global:
+  scrape_interval: 1m
+  scrape_timeout: 15s
+
+scrape_configs:
+  - job_name: "prometheus"
+    static_configs:
+      - targets: ["43.200.74.132:9090"]
+
+  - job_name: "springboot-app"
+    metrics_path: "/actuator/prometheus"
+    static_configs:
+      - targets: ["43.200.74.132:8080"]
