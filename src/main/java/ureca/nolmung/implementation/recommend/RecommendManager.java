@@ -7,10 +7,9 @@ import ureca.nolmung.jpa.dog.Dog;
 import ureca.nolmung.jpa.place.Place;
 import ureca.nolmung.persistence.place.PlaceRepository;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.Random;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -23,26 +22,14 @@ public class RecommendManager {
     }
 
     public List<Place> getPlaceRecommendationsForDogs(List<Dog> dogs) {
-        List<Place> allPlaces = new ArrayList<>();
-        for (Dog dog : dogs) {
-            List<Place> places = placeRepository.findAllByDogSize(dog.getSize().name());
-            allPlaces.addAll(places);
-        }
-        return allPlaces;
+        Set<String> sizes = dogs.stream()
+                .map(dog -> dog.getSize().name())
+                .collect(Collectors.toSet());
+
+        return placeRepository.findAllByDogSizes(sizes);
     }
 
     public List<Place> getPlaceRecommendationsNearByUser(String addressProvince) {
         return placeRepository.findByUserAddress(addressProvince);
-    }
-
-    public List<Place> getRandomPlaces(List<Place> places, int count) {
-        Random random = new Random();
-        if (places.size() <= count) {
-            return new ArrayList<>(places);
-        }
-
-        Collections.shuffle(places, random);
-
-        return new ArrayList<>(places.subList(0, count));
     }
 }

@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import software.amazon.awssdk.services.personalizeruntime.model.PredictedItem;
 import ureca.nolmung.business.recommend.dto.response.RecommendResp;
 import ureca.nolmung.implementation.dog.DogManager;
@@ -29,29 +30,32 @@ public class RecommendService implements RecommendUseCase{
     private final RedisTemplate<String, List<Place>> redisTemplate;
 
     @Override
+    @Transactional(readOnly = true)
     public List<RecommendResp> getMostBookmarkedPlaces() {
         List<Place> places = recommendManager.getMostBookmarkedPlaces();
         return recommendDtoMapper.toGetPlaceRecommendations(places);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<RecommendResp> getPlaceRecommendationsForDogs(Long userId) {
+        userManager.validateUserExistence(userId);
         List<Dog> dogs = dogManager.getDogList(userId);
         List<Place> places = recommendManager.getPlaceRecommendationsForDogs(dogs);
-        List<Place> randomPlaces = recommendManager.getRandomPlaces(places, 5);
-        return recommendDtoMapper.toGetPlaceRecommendations(randomPlaces);
+        return recommendDtoMapper.toGetPlaceRecommendations(places);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<RecommendResp> getPlaceRecommendationsNearByUser(Long userId) {
         User user = userManager.validateUserExistence(userId);
         List<Place> places = recommendManager.getPlaceRecommendationsNearByUser(user.getAddressProvince());
-        List<Place> randomPlaces = recommendManager.getRandomPlaces(places, 5);
-        return recommendDtoMapper.toGetPlaceRecommendations(randomPlaces);
+        return recommendDtoMapper.toGetPlaceRecommendations(places);
     }
 
     @Override
     public List<RecommendResp> getPlaceRecommendationsFromPersonalize(Long userId) {
+
         // 유저 검증, 없으면 에러
         userManager.validateUserExistence(userId);
         // 유저 아이디로 레디스에 데이터 조회
@@ -74,13 +78,13 @@ public class RecommendService implements RecommendUseCase{
             // 레디스에 저장
             List<RecommendResp> recommendResps = awsPersonalizeManager.saveRedis(places, userId);
             log.info("레디스에 데이터를 새로 저장했습니다");
-
             return awsPersonalizeManager.getRandomRecommendResps(recommendResps, 5);
         }
         //TODO refactoring 필요
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<RecommendResp> getPlaceRecommendationsFromPersonalizeForBatch(Long userId) {
         List<PredictedItem> awsRecs = awsPersonalizeManager.getRecs(userId);
         List<Place> places = awsPersonalizeManager.getPlaces(awsRecs);
