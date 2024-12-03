@@ -10,4 +10,5 @@ import ureca.nolmung.jpa.badge.Badge;
 @Repository
 public interface BadgeRepository extends JpaRepository<Badge, Long> {
     List<Badge> findByUserId(Long userId);
+    boolean existsByBadgeCodeIdAndUserId(Long badgeCodeId, Long userId);
 }

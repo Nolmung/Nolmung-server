@@ -38,22 +38,18 @@ public class User extends BaseEntity {
     @Column(length = 30, nullable = false)
     private String name;
 
-    //@Column(length = 30, nullable = false)
     @Column(length = 30)
     private String nickname;
 
-    //@Column(length = 30, nullable = false)
     @Column(length = 30)
     private String addressProvince;    // 거주지 시군명
 
     @Column(columnDefinition = "TEXT")
     private String profileImageUrl;
 
-    //@Column(nullable = false)
     private Long age;
 
     @Enumerated(EnumType.STRING)
-    //@Column(nullable = false)
     private Gender gender;
 
     @Column(length = 50, nullable = false)
@@ -74,10 +70,12 @@ public class User extends BaseEntity {
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<Diary> diaries;
 
+    @Column(nullable = false)
+    private Long diaryCount = 0L;
+
 
     public void singUp(UserReq req)
     {
-        // 화면에서 사용자를 통해 입력 받는 정보들 설정
         this.nickname=req.userNickname();
         this.addressProvince=req.userAddressProvince();
         this.age = req.userAge();
@@ -100,5 +98,18 @@ public class User extends BaseEntity {
         this.provider = provider;
         this.role=UserRole.GUEST;
         this.status = UserStatus.ACTIVE;
+    }
+
+    public void incrementDiaryCount()
+    {
+        this.diaryCount++;
+    }
+
+    public void decrementDiaryCount()
+    {
+        if(this.diaryCount > 0)
+        {
+            this.diaryCount--;
+        }
     }
 }
