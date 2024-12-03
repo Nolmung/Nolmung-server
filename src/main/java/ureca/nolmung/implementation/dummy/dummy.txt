@@ -1,5 +1,0 @@
-공통 예외처리 사용 방법
-1. throw new DummyException(DummyExceptionType.DUMMY_NOT_FOUND_EXCEPTION);
-2. .orElseThrow(() -> new DummyException(DummyExceptionType.DUMMY_NOT_FOUND_EXCEPTION));
-
-이런식으로 사용하시면 됩니다.
