@@ -1,28 +1,29 @@
 package ureca.nolmung.business.diary;
 
-import lombok.RequiredArgsConstructor;
-import org.hibernate.Hibernate;
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import lombok.RequiredArgsConstructor;
 import ureca.nolmung.business.diary.dto.request.AddDiaryReq;
 import ureca.nolmung.business.diary.dto.request.UpdateDiaryReq;
-import ureca.nolmung.business.diary.dto.response.*;
+import ureca.nolmung.business.diary.dto.response.AddDiaryResp;
+import ureca.nolmung.business.diary.dto.response.DeleteDiaryResp;
+import ureca.nolmung.business.diary.dto.response.DiaryDetailResp;
+import ureca.nolmung.business.diary.dto.response.DiaryListResp;
+import ureca.nolmung.business.diary.dto.response.UpdateDiaryResp;
+import ureca.nolmung.implementation.badge.BadgeManager;
 import ureca.nolmung.implementation.diary.DiaryManager;
 import ureca.nolmung.implementation.diary.dtomapper.DiaryDtoMapper;
 import ureca.nolmung.implementation.diaryplace.DiaryPlaceManager;
 import ureca.nolmung.implementation.dogdiary.DogDiaryManager;
-import ureca.nolmung.implementation.media.MediaManager;
 import ureca.nolmung.implementation.user.UserManager;
 import ureca.nolmung.jpa.diary.Diary;
-import ureca.nolmung.jpa.diaryplace.DiaryPlace;
-import ureca.nolmung.jpa.dog.Dog;
 import ureca.nolmung.jpa.dogdiary.DogDiary;
 import ureca.nolmung.jpa.media.Media;
 import ureca.nolmung.jpa.place.Place;
 import ureca.nolmung.jpa.user.User;
-
-import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -32,11 +33,32 @@ public class DiaryService implements DiaryUseCase {
     private final DiaryDtoMapper diaryDtoMapper;
     private final DogDiaryManager dogDiaryManager;
     private final DiaryPlaceManager diaryPlaceManager;
+    private final BadgeManager badgeManager;
 
     @Override
     @Transactional
     public AddDiaryResp addDiary(User user, AddDiaryReq req) {
         User loginUser = userManager.validateUserExistence(user.getId());
+        loginUser.incrementDiaryCount();
+
+        // 첫 오늘멍 배지 있는지 확인
+        if(!badgeManager.checkFirstDiaryPostBadge(user.getId()))
+        {
+            if(loginUser.getDiaryCount() >= 1)
+            {
+                badgeManager.addFirstDiaryBadge(loginUser);
+            }
+        }
+
+        // 오늘멍 세번째 작성 배지 있는지 확인
+        if(!badgeManager.checkThirdDiaryPostBadge(user.getId()))
+        {
+            if(loginUser.getDiaryCount() >= 3)
+            {
+                badgeManager.addThirdDiaryBadge(loginUser);
+            }
+        }
+
         return diaryManager.addDiary(loginUser, req);
     }
 
@@ -75,7 +97,11 @@ public class DiaryService implements DiaryUseCase {
     @Override
     @Transactional
     public DeleteDiaryResp deleteDiary(User user, Long diaryId) {
+        User loginUser = userManager.validateUserExistence(user.getId());
         Diary diaryCheck = diaryManager.checkDiaryWriter(user.getId(), diaryId);
+
+        loginUser.decrementDiaryCount();
+
         return diaryManager.deleteDiary(diaryCheck);
     }
 
