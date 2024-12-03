@@ -32,7 +32,7 @@ import ureca.nolmung.config.response.ResponseUtil;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/v1/users")
+@RequestMapping("/v1/users")
 public class UserController {
 
     private final UserService userService;

@@ -1,20 +1,21 @@
 package ureca.nolmung.presentation.controller.recommend;
 
-import lombok.RequiredArgsConstructor;
+import java.util.List;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import lombok.RequiredArgsConstructor;
 import ureca.nolmung.business.recommend.RecommendUseCase;
 import ureca.nolmung.business.recommend.dto.response.RecommendResp;
 import ureca.nolmung.config.response.ResponseDto;
 import ureca.nolmung.config.response.ResponseUtil;
 
-import java.util.List;
-
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/v1/recommend")
+@RequestMapping("/v1/recommend")
 public class RecommendController {
 
     private final RecommendUseCase recommendUseCase;
