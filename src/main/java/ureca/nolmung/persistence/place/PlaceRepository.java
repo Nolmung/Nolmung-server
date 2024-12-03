@@ -19,10 +19,10 @@ public interface PlaceRepository extends JpaRepository<Place, Long>, PlaceReposi
 	@Query("SELECT p FROM Place p ORDER BY p.bookmarkCount DESC")
 	List<Place> findTopNPlaces(PageRequest pageRequest);
 
-	@Query("SELECT p FROM Place p WHERE p.acceptSize LIKE CONCAT('%', :size, '%')")
-	List<Place> findAllByDogSize(@Param("size") String size);
-
-	@Query("SELECT p FROM Place p WHERE p.address LIKE CONCAT('%', :addressProvince, '%')")
+	@Query(value = "SELECT * FROM place p " +
+			"WHERE p.address LIKE CONCAT('%', :addressProvince, '%') " +
+			"ORDER BY RAND() " +
+			"LIMIT 5", nativeQuery = true)
 	List<Place> findByUserAddress(@Param("addressProvince")String AddressProvince);
 
 }

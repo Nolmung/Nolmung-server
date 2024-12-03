@@ -1,4 +1,4 @@
-package ureca.nolmung.implementation.recommend;
+package ureca.nolmung.config.aws;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
