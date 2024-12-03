@@ -1,11 +1,12 @@
 package ureca.nolmung.implementation.badge;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
+import ureca.nolmung.implementation.dog.BadgeCodeException;
+import ureca.nolmung.implementation.dog.BadgeCodeExceptionType;
 import ureca.nolmung.jpa.badge.Badge;
 import ureca.nolmung.jpa.badgecode.BadgeCode;
 import ureca.nolmung.jpa.user.User;
@@ -16,65 +17,27 @@ import ureca.nolmung.persistence.badgecode.BadgeCodeRepository;
 @RequiredArgsConstructor
 public class BadgeManager {
 
-    public static final Long FIRST_DIARY_BADGE_CODE_ID = 1L;
-    public static final Long THIRD_DIARY_BADGE_CODE_ID = 2L;
-
     private final BadgeRepository badgeRepository;
     private final BadgeCodeRepository badgeCodeRepository;
 
+    public BadgeCode validateBadgeCodeExistence(Long badgeCodeId) {
+        return badgeCodeRepository.findById(badgeCodeId).orElseThrow(
+            () -> new BadgeCodeException(BadgeCodeExceptionType.BADGE_CODE_NOT_FOUND_EXCEPTION)
+        );
+    }
 
     public List<Badge> getBadgeList(Long userId) {
         return badgeRepository.findByUserId(userId);
     }
 
-    public void addFirstDiaryBadge(User user)
+    public void addDiaryBadge(User user, BadgeCode badgeCode)
     {
-        Optional<BadgeCode> badgeCode = badgeCodeRepository.findById(FIRST_DIARY_BADGE_CODE_ID);
-
-        if (badgeCode.isPresent())
-        {
-            Badge badge = new Badge(user, badgeCode.get());
-            badgeRepository.save(badge);
-        }
+        Badge badge = new Badge(user, badgeCode);
+        badgeRepository.save(badge);
     }
 
-    public void addThirdDiaryBadge(User user)
-    {
-        Optional<BadgeCode> badgeCode = badgeCodeRepository.findById(THIRD_DIARY_BADGE_CODE_ID);
-
-        if (badgeCode.isPresent())
-        {
-            Badge badge = new Badge(user, badgeCode.get());
-            badgeRepository.save(badge);
-        }
+    public boolean checkDiaryPostBadge(Long badgeCodeId, Long userId) {
+        return badgeRepository.existsByBadgeCodeIdAndUserId(badgeCodeId,userId);
     }
 
-    public boolean checkFirstDiaryPostBadge(Long userId) {
-
-        Optional<Badge> firstDiaryPostBadge = badgeRepository.findByBadgeCodeIdAndUserId(FIRST_DIARY_BADGE_CODE_ID,userId);
-
-        if(firstDiaryPostBadge.isPresent())
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-
-    }
-
-    public boolean checkThirdDiaryPostBadge(Long userId) {
-
-        Optional<Badge> thirdDiaryPostBadge = badgeRepository.findByBadgeCodeIdAndUserId(THIRD_DIARY_BADGE_CODE_ID,userId);
-
-        if(thirdDiaryPostBadge.isPresent())
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
 }

@@ -19,6 +19,7 @@ import ureca.nolmung.implementation.diary.dtomapper.DiaryDtoMapper;
 import ureca.nolmung.implementation.diaryplace.DiaryPlaceManager;
 import ureca.nolmung.implementation.dogdiary.DogDiaryManager;
 import ureca.nolmung.implementation.user.UserManager;
+import ureca.nolmung.jpa.badgecode.BadgeCode;
 import ureca.nolmung.jpa.diary.Diary;
 import ureca.nolmung.jpa.dogdiary.DogDiary;
 import ureca.nolmung.jpa.media.Media;
@@ -28,6 +29,7 @@ import ureca.nolmung.jpa.user.User;
 @Service
 @RequiredArgsConstructor
 public class DiaryService implements DiaryUseCase {
+
     private final DiaryManager diaryManager;
     private final UserManager userManager;
     private final DiaryDtoMapper diaryDtoMapper;
@@ -35,27 +37,31 @@ public class DiaryService implements DiaryUseCase {
     private final DiaryPlaceManager diaryPlaceManager;
     private final BadgeManager badgeManager;
 
+    public static final Long FIRST_DIARY_BADGE_CODE_ID = 1L;
+    public static final Long THIRD_DIARY_BADGE_CODE_ID = 2L;
+
+
     @Override
     @Transactional
     public AddDiaryResp addDiary(User user, AddDiaryReq req) {
         User loginUser = userManager.validateUserExistence(user.getId());
         loginUser.incrementDiaryCount();
 
-        // 첫 오늘멍 배지 있는지 확인
-        if(!badgeManager.checkFirstDiaryPostBadge(user.getId()))
+        if(!badgeManager.checkDiaryPostBadge(FIRST_DIARY_BADGE_CODE_ID, user.getId()))
         {
             if(loginUser.getDiaryCount() >= 1)
             {
-                badgeManager.addFirstDiaryBadge(loginUser);
+                BadgeCode badgeCode = badgeManager.validateBadgeCodeExistence(FIRST_DIARY_BADGE_CODE_ID);
+                badgeManager.addDiaryBadge(loginUser, badgeCode);
             }
         }
 
-        // 오늘멍 세번째 작성 배지 있는지 확인
-        if(!badgeManager.checkThirdDiaryPostBadge(user.getId()))
+        if(!badgeManager.checkDiaryPostBadge(THIRD_DIARY_BADGE_CODE_ID, user.getId()))
         {
             if(loginUser.getDiaryCount() >= 3)
             {
-                badgeManager.addThirdDiaryBadge(loginUser);
+                BadgeCode badgeCode = badgeManager.validateBadgeCodeExistence(THIRD_DIARY_BADGE_CODE_ID);
+                badgeManager.addDiaryBadge(loginUser, badgeCode);
             }
         }
 
