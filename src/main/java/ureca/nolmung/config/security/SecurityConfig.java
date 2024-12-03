@@ -56,7 +56,7 @@ public class SecurityConfig {
             .authorizeHttpRequests(request -> request
                 // .requestMatchers("/oauth2/**").permitAll()  // 카카오 소셜 로그인 URL
                 // .requestMatchers("/api/v1/users/signup/**").permitAll() // 회원가입 URL
-                // .requestMatchers("/swagger-resources/**", "/swagger-ui/**", "/v3/api-docs/**").permitAll() // swagger
+                // .requestMatchers("/swagger-resources/**", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
                 .requestMatchers("/**").permitAll()
                 .anyRequest().authenticated()  // 그 외 URL은 인증 필요
             )
