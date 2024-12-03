@@ -19,11 +19,7 @@ public class RecommendManager {
     private final PlaceRepository placeRepository;
 
     public List<Place> getMostBookmarkedPlaces() {
-        List<Place> places = placeRepository.findTopNPlaces(PageRequest.of(0, 5));
-        for (Place place : places) {
-            System.out.println(place);
-        }
-        return places;
+        return placeRepository.findTopNPlaces(PageRequest.of(0, 5));
     }
 
     public List<Place> getPlaceRecommendationsForDogs(List<Dog> dogs) {
