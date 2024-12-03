@@ -64,7 +64,7 @@ jobs:
             echo "모든 Docker 컨테이너 강제로 삭제"
             sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/nolmung
             echo "docker pull 성공"
-            sudo docker-compose -f docker-compose.yml up -d
+            sudo docker-compose up -d
             echo "Docker Compose로 컨테이너 시작 완료"
             sudo docker image prune -f
             echo "사용하지 않는 Docker image 정리"

@@ -32,7 +32,7 @@ services:
     container_name: grafana
     volumes:
       - grafana-data:/var/lib/grafana
-#      - ./grafana/provisioning/:/etc/grafana/provisioning/
+      - ./grafana/provisioning/:/etc/grafana/provisioning/
     ports:
       - "3000:3000"
     environment:
@@ -46,3 +46,7 @@ services:
 networks:
   t4y:
     driver: bridge
+
+volumes:
+  grafana-data:
+  prometheus-data:
