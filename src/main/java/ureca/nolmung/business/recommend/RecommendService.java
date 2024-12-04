@@ -38,49 +38,36 @@ public class RecommendService implements RecommendUseCase{
 
     @Override
     @Transactional(readOnly = true)
-    public List<RecommendResp> getPlaceRecommendationsForDogs(Long userId) {
-        userManager.validateUserExistence(userId);
-        List<Dog> dogs = dogManager.getDogList(userId);
+    public List<RecommendResp> getPlaceRecommendationsForDogs(User user) {
+        userManager.validateUserExistence(user.getId());
+        List<Dog> dogs = dogManager.getDogList(user.getId());
         List<Place> places = recommendManager.getPlaceRecommendationsForDogs(dogs);
         return recommendDtoMapper.toGetPlaceRecommendations(places);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<RecommendResp> getPlaceRecommendationsNearByUser(Long userId) {
-        User user = userManager.validateUserExistence(userId);
+    public List<RecommendResp> getPlaceRecommendationsNearByUser(User user) {
+        userManager.validateUserExistence(user.getId());
         List<Place> places = recommendManager.getPlaceRecommendationsNearByUser(user.getAddressProvince());
         return recommendDtoMapper.toGetPlaceRecommendations(places);
     }
 
     @Override
-    public List<RecommendResp> getPlaceRecommendationsFromPersonalize(Long userId) {
+    public List<RecommendResp> getPlaceRecommendationsFromPersonalize(User user) {
 
-        // 유저 검증, 없으면 에러
-        userManager.validateUserExistence(userId);
-        // 유저 아이디로 레디스에 데이터 조회
-        Boolean isKeyExists = redisTemplate.hasKey(String.valueOf(userId));
+        userManager.validateUserExistence(user.getId());
+        Boolean isKeyExists = redisTemplate.hasKey(String.valueOf(user.getId()));
 
-        // 레디스에 데이터가 있으면 ( ture )
         if (isKeyExists) {
-            log.info("레디스에 있는 데이터입니다.");
-            // 레디스에서 유저 아이디로 조회해서 밸류 가져오기
-            List<RecommendResp> recommendResps = awsPersonalizeManager.getRedis(userId);
-            log.info("성공적으로 레디스에서 데이터를 가져왔습니다.");
+            List<RecommendResp> recommendResps = awsPersonalizeManager.getRedis(user.getId());
             return awsPersonalizeManager.getRandomRecommendResps(recommendResps, 5);
         } else {
-            log.info("레디스에 없는 데이터입니다.");
-            // 데이터가 없으면
-            // personalize 호출해서 가져오기
-            List<PredictedItem> awsRecs = awsPersonalizeManager.getRecs(userId);
-            // 가공
+            List<PredictedItem> awsRecs = awsPersonalizeManager.getRecs(user.getId());
             List<Place> places = awsPersonalizeManager.getPlaces(awsRecs);
-            // 레디스에 저장
-            List<RecommendResp> recommendResps = awsPersonalizeManager.saveRedis(places, userId);
-            log.info("레디스에 데이터를 새로 저장했습니다");
+            List<RecommendResp> recommendResps = awsPersonalizeManager.saveRedis(places, user.getId());
             return awsPersonalizeManager.getRandomRecommendResps(recommendResps, 5);
         }
-        //TODO refactoring 필요
     }
 
     @Override

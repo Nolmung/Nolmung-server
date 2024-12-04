@@ -24,8 +24,7 @@ public class BatchScheduler {
                     .addLong("timestamp", System.currentTimeMillis())
                     .toJobParameters());
         } catch (Exception e) {
-            //TODO 공통 예외처리 필요
-            e.printStackTrace();
+            log.warn("배치 작업 중 오류 발생: {}", e.getMessage());
         }
     }
 }
