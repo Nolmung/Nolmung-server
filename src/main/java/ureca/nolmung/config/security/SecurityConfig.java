@@ -5,6 +5,7 @@ import java.util.Arrays;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -13,6 +14,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -24,54 +26,71 @@ import ureca.nolmung.config.jwt.JwtAuthenticationFilter;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final JWTUtil jwtUtil;
+	private final JWTUtil jwtUtil;
 
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
-            .cors(corsCustomizer -> corsCustomizer.configurationSource(new CorsConfigurationSource() {
-                @Override
-                public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
-                    CorsConfiguration config = new CorsConfiguration();
-                    config.setAllowedOrigins(Arrays.asList("*"));
-                    // config.setAllowedOrigins(Arrays.asList("http://localhost:8080", "https://api.nolmung.org", "http://localhost:3000", "https://dev.nolmung.org", "https://nolmung.org"));
-                    // config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-                    config.setAllowedMethods(Arrays.asList("*"));
-                    config.setAllowCredentials(true);
-                    // config.setAllowedHeaders(Arrays.asList("Authorization", "Authorization-refresh", "Cache-Control", "Content-Type", "X-Api-Key"));
-                    config.setAllowedHeaders(Arrays.asList("*"));
-                    config.setMaxAge(3600L);
-                    return config;
-                }
-            }))
-            .csrf(AbstractHttpConfigurer::disable)
-            .formLogin(AbstractHttpConfigurer::disable)
-            .httpBasic(AbstractHttpConfigurer::disable)
+	@Bean
+	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+		http
+			// .cors(corsCustomizer -> corsCustomizer.configurationSource(new CorsConfigurationSource() {
+			//     @Override
+			//     public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
+			//         CorsConfiguration config = new CorsConfiguration();
+			//         // config.setAllowedOrigins(Arrays.asList("*"));
+			//         config.setAllowedOrigins(Arrays.asList("http://localhost:8080", "https://api.nolmung.org", "http://localhost:3000", "https://dev.nolmung.org", "https://nolmung.org"));
+			//         config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
+			//         // config.setAllowedMethods(Arrays.asList("*"));
+			//         config.setAllowCredentials(true);
+			//         config.setAllowedHeaders(Arrays.asList("Authorization", "Authorization-refresh", "Cache-Control", "Content-Type", "X-Api-Key"));
+			//         // config.setAllowedHeaders(Arrays.asList("*"));
+			//         config.setMaxAge(3600L);
+			//         return config;
+			//     }
+			// }))
+			.cors(Customizer.withDefaults())
+			.csrf(AbstractHttpConfigurer::disable)
+			.formLogin(AbstractHttpConfigurer::disable)
+			.httpBasic(AbstractHttpConfigurer::disable)
 
+			.sessionManagement(
+				c -> c.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // 세션을 사용하지 않으므로 STATELESS로 설정
 
-            .sessionManagement(c -> c.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // 세션을 사용하지 않으므로 STATELESS로 설정
+			// URL별 권한 관리
+			.authorizeHttpRequests(request -> request
+				//.requestMatchers("/**").permitAll()
+				.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+				.requestMatchers("/swagger-resources/**", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
+				.requestMatchers("/v1/oauth/**").permitAll()
+				.requestMatchers("/v1/users/signup/**").permitAll()
+				.requestMatchers("/v1/places/**").permitAll()
+				.requestMatchers("/v1/recommend/bookmarks").permitAll()
+				.requestMatchers("/ban-words/upload").permitAll()
+				.requestMatchers("/v1/diary/public/**").permitAll()
+				.requestMatchers("/actuator/prometheus").permitAll()
+				.requestMatchers("/").permitAll()
+				.anyRequest().authenticated()  // 그 외 URL은 인증 필요
+			)
 
-            // URL별 권한 관리
-            .authorizeHttpRequests(request -> request
-                //.requestMatchers("/**").permitAll()
-                .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                .requestMatchers("/swagger-resources/**", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
-                .requestMatchers("/v1/oauth/**").permitAll()
-                .requestMatchers("/v1/users/signup/**").permitAll()
-                .requestMatchers("/v1/places/**").permitAll()
-                .requestMatchers("/v1/recommend/bookmarks").permitAll()
-                .requestMatchers("/ban-words/upload").permitAll()
-                .requestMatchers("/v1/diary/public/**").permitAll()
-                .requestMatchers("/actuator/prometheus").permitAll()
-                .requestMatchers("/").permitAll()
-                .anyRequest().authenticated()  // 그 외 URL은 인증 필요
-            )
+			.addFilterBefore(new JwtAuthenticationFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class) // JWT 필터
 
-            .addFilterBefore(new JwtAuthenticationFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class) // JWT 필터
+			// OAuth2 로그인
+			.oauth2Login(oauth2 -> {
+			});
 
-            // OAuth2 로그인
-            .oauth2Login(oauth2 -> {});
+		return http.build();
+	}
 
-        return http.build();
-    }
+	@Bean
+	public CorsConfigurationSource corsConfigurationSource() {
+		CorsConfiguration config = new CorsConfiguration();
+		config.setAllowedOrigins(
+			Arrays.asList("http://localhost:8080", "https://api.nolmung.org", "http://localhost:3000",
+				"https://dev.nolmung.org", "https://nolmung.org"));
+		config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
+		config.setAllowCredentials(true);
+		config.setAllowedHeaders(
+			Arrays.asList("Authorization", "Authorization-refresh", "Cache-Control", "Content-Type", "X-Api-Key"));
+		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+		source.registerCorsConfiguration("/**", config);
+		return source;
+	}
 }
