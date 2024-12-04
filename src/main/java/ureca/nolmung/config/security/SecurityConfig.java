@@ -58,6 +58,8 @@ public class SecurityConfig {
                 .requestMatchers("/v1/recommend/bookmarks").permitAll()
                 .requestMatchers("/ban-words/upload").permitAll()
                 .requestMatchers("/v1/diary/public/**").permitAll()
+                .requestMatchers("/actuator/prometheus").permitAll()
+                .requestMatchers("/").permitAll()
                 .anyRequest().authenticated()  // 그 외 URL은 인증 필요
             )
 
