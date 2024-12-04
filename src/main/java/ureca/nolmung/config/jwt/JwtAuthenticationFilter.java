@@ -30,7 +30,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 "/api/v1/users/signup",
                 "/swagger-resources",
                 "/swagger-ui",
-                "/v3/api-docs"
+                "/v3/api-docs",
+                "/v1/places"
         };
 
         for (String excludePath : excludePaths) {

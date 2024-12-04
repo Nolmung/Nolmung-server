@@ -41,8 +41,8 @@ public class SecurityConfig {
                 @Override
                 public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
                     CorsConfiguration config = new CorsConfiguration();
-                    //config.setAllowedOrigins(Arrays.asList("http://localhost:8080", "https://nolmung.org", "http://localhost:3000", "https://develop--nolmung.netlify.app"));
                     config.setAllowedOrigins(Arrays.asList("*"));
+                    // config.setAllowedOrigins(Arrays.asList("http://localhost:8080", "https://api.nolmung.org", "http://localhost:3000", "https://dev.nolmung.org", "https://nolmung.org"));
                     config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
                     config.setAllowCredentials(true);
                     config.setAllowedHeaders(Arrays.asList("Cache-Control", "Content-Type", "X-Api-Key"));
@@ -54,10 +54,11 @@ public class SecurityConfig {
 
             // URL별 권한 관리
             .authorizeHttpRequests(request -> request
-                // .requestMatchers("/oauth2/**").permitAll()  // 카카오 소셜 로그인 URL
-                // .requestMatchers("/api/v1/users/signup/**").permitAll() // 회원가입 URL
-                // .requestMatchers("/swagger-resources/**", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
-                .requestMatchers("/**").permitAll()
+                .requestMatchers("/oauth2/**").permitAll()  // 카카오 소셜 로그인 URL
+                .requestMatchers("/v1/users/signup/**").permitAll() // 회원가입 URL
+                .requestMatchers("/swagger-resources/**", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                .requestMatchers("/v1/places/**").permitAll()
+                // .requestMatchers("/**").permitAll()
                 .anyRequest().authenticated()  // 그 외 URL은 인증 필요
             )
 
