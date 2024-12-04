@@ -50,7 +50,7 @@ public class RecommendController {
     }
 
     @Operation(summary = "사용자 거주지 근처의 장소 추천")
-    @GetMapping("/users/nearby")
+    @GetMapping("/nearby")
     public ResponseDto<List<RecommendResp>> getNearbyRecommendations(@AuthenticationPrincipal CustomUserDetails userDetails) {
         return ResponseUtil.SUCCESS(
                 "사용자 근처의 장소 추천에 성공하였습니다.",
