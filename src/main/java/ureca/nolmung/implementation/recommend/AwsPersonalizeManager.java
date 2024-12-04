@@ -17,7 +17,6 @@ import ureca.nolmung.persistence.place.PlaceRepository;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 import java.util.stream.Collectors;
 
 @Component
@@ -30,7 +29,6 @@ public class AwsPersonalizeManager {
     private final RedisTemplate<String, List<RecommendResp>> redisTemplate;
     private static final int DEFAULT_NUM_RESULTS = 25; // 기본값 설정
 
-    //TODO List<String> 같은거로는 안되려나
     public List<PredictedItem> getRecs(Long userId) {
 
         List<PredictedItem> items = null;
@@ -66,18 +64,6 @@ public class AwsPersonalizeManager {
         return places;
     }
 
-    public List<PredictedItem> getRandomRecs(List<PredictedItem> recs, int count) {
-        Random random = new Random();
-        if (recs.size() <= count) {
-            return new ArrayList<>(recs);
-        }
-        List<PredictedItem> modifiableRecs = new ArrayList<>(recs);
-
-        Collections.shuffle(modifiableRecs, random);
-
-        return new ArrayList<>(modifiableRecs.subList(0, count));
-    }
-
     public List<RecommendResp> saveRedis(List<Place> places, Long userId) {
         List<RecommendResp> recommendResponses = places.stream()
                 .map(place -> new RecommendResp(
@@ -99,15 +85,10 @@ public class AwsPersonalizeManager {
 
     public List<RecommendResp> getRandomRecommendResps(List<RecommendResp> recommendResps, int count) {
         if (count >= recommendResps.size()) {
-            return recommendResps; // 요청 개수가 리스트 크기 이상이면 전체 반환
+            return recommendResps;
         }
-
-        // 원본 리스트를 복사하고 셔플
-        List<RecommendResp> shuffledList = new ArrayList<>(recommendResps); // 복사본 생성
-        Collections.shuffle(shuffledList); // 셔플
-
-        // 앞에서 count개 추출
-        return shuffledList.subList(0, count);
+        Collections.shuffle(recommendResps);
+        return recommendResps.subList(0, count);
     }
 
     public List<RecommendResp> getRedis(Long userId) {

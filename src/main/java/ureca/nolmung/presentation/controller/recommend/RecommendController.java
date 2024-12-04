@@ -40,7 +40,6 @@ public class RecommendController {
         );
     }
 
-    //TODO 나중에 토큰 어쩌구 JWT 어쩌구 인증된 사용자만 할 수 있게 처리 필요
     @Operation(summary = "반려견들의 크기에 맞는 장소 추천")
     @GetMapping("/weight")
     public ResponseDto<List<RecommendResp>> getWeightRecommendations(@AuthenticationPrincipal CustomUserDetails userDetails) {

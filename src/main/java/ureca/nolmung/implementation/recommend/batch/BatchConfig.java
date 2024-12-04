@@ -57,12 +57,11 @@ public class BatchConfig {
                 .build();
     }
 
-    //TODO 공부
     @Bean
     public JdbcCursorItemReader<Long> userJdbcReader() {
         JdbcCursorItemReader<Long> reader = new JdbcCursorItemReader<>();
         reader.setDataSource(dataSource);
-        reader.setSql("SELECT user_id FROM user"); // 사용자 ID를 조회하는 SQL
+        reader.setSql("SELECT user_id FROM user");
         reader.setRowMapper(new RowMapper<Long>() {
             @Override
             public Long mapRow(ResultSet rs, int rowNum) throws SQLException {
