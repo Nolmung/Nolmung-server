@@ -4,6 +4,7 @@ import java.util.List;
 
 public record ReviewResp (
         Long id,
+        Long placeId,
         String placeName,
         String address,
         int rating,

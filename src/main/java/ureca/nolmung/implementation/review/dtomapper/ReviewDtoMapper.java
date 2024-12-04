@@ -13,6 +13,7 @@ public class ReviewDtoMapper {
     public ReviewResp toReviewResp(Review review, List<ReviewLabelResp> reviewLabel)
     {
         return new ReviewResp(review.getId(),
+                review.getPlace().getId(),
                 review.getPlace().getName(),
                 review.getPlace().getAddress(),
                 review.getRating(),
