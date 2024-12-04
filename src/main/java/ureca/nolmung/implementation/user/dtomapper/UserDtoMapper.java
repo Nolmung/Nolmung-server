@@ -16,7 +16,8 @@ public class UserDtoMapper {
                 user.getAge(),
                 user.getGender(),
                 user.getProfileImageUrl(),
-                user.getEmail()
+                user.getEmail(),
+                user.getRole()
             );
     }
 }

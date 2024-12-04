@@ -1,9 +1,8 @@
-package ureca.nolmung.presentation.controller.oauth;
+package ureca.nolmung.presentation.controller.user;
 
 import java.util.List;
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,7 +27,8 @@ import ureca.nolmung.config.jwt.JWTUtil;
 import ureca.nolmung.config.response.ResponseDto;
 import ureca.nolmung.config.response.ResponseUtil;
 
-@Tag(name = "소셜로그인, 회원가입")
+
+@Tag(name = "회원관리")
 @Slf4j
 @RequiredArgsConstructor
 @RestController
@@ -42,21 +42,10 @@ public class UserController {
 
     @Operation(summary = "최초 소셜로그인 후 추가 정보 입력")
     @PostMapping("/signup/{userId}")
-    public ResponseDto<Long> signUp(@PathVariable("userId") Long userId, @RequestBody UserReq req, HttpServletResponse response) {
-
-        String token = userService.completeSignUp(userId, req);
-        response.addCookie(jwtUtil.createCookie("Authorization", token));
-        return ResponseUtil.SUCCESS("회원가입에 성공했습니다.",userId);
-    }
-
-    // 로그인 처리 함수 만들기
-    @Operation(summary = "소셜로그인")
-    @GetMapping("/login")
-    public ResponseDto<Long> login(@CookieValue(value = "Authorization") String token) {
-
-        Long loginUserId = userService.login(token);
-        return ResponseUtil.SUCCESS("로그인에 성공했습니다.", loginUserId);
-
+    public ResponseDto<UserResp> signUp(@PathVariable("userId") Long userId, @RequestBody UserReq req, HttpServletResponse response) {
+        UserResp user = userService.completeSignUp(userId, req);
+        jwtUtil.setAuthorizationHeader(response, user.userId(), user.userEmail(), user.userRole());
+        return ResponseUtil.SUCCESS("회원가입에 성공했습니다.", user);
     }
 
     @Operation(summary = "회원 정보 수정")
