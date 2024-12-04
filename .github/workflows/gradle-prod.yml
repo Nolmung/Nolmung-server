@@ -53,7 +53,7 @@ jobs:
         with:
           host: ${{ secrets.AWS_EC2_HOST }}
           username: ec2-user
-          key: ${{ secrets.AWS_EC2_SECRET_ACCESS_KEY }}
+          key: ${{ secrets.AWS_EC2_SECRET_ACCESS_KEY }}ｓｅ
           port: 22
           script: |
             sudo docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}
