@@ -45,7 +45,7 @@ public class ReviewController {
     }
 
     @Operation(summary = "내가 쓴 후기 목록 조회")
-    @GetMapping()
+    @GetMapping("")
     public ResponseDto<List<ReviewResp>> getReviews(@AuthenticationPrincipal CustomUserDetails userDetails,
                                                     @RequestParam(defaultValue = "0") int page,
                                                     @RequestParam(defaultValue = "5") int size)
