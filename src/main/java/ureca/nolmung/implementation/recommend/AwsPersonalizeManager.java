@@ -33,7 +33,7 @@ public class AwsPersonalizeManager {
 
     public List<PredictedItem> getRecs(Long userId) {
 
-        List<PredictedItem> items = null;
+        List<PredictedItem> items = new ArrayList<>();
         try {
             GetRecommendationsRequest recommendationsRequest = GetRecommendationsRequest.builder()
                     .campaignArn(campaignArn)
