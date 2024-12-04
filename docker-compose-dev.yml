@@ -11,7 +11,7 @@ services:
 
   spring-app:
     container_name: thirsty_robinson
-    image: hyewonbae/nolmung
+    image: hyewonbae/nolmung:dev
     ports:
       - "443:8080"
     environment:
