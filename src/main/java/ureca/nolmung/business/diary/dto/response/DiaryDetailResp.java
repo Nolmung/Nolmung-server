@@ -29,6 +29,7 @@ public record DiaryDetailResp(
     ) {}
     public record DogDiary(
             Long dogId,
+            String dogName,
             String dogProfileImageUrl
     ) {}
 }

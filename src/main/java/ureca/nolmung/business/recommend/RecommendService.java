@@ -1,7 +1,10 @@
 package ureca.nolmung.business.recommend;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import software.amazon.awssdk.services.personalizeruntime.model.PredictedItem;
 import ureca.nolmung.business.recommend.dto.response.RecommendResp;
 import ureca.nolmung.implementation.dog.DogManager;
@@ -15,43 +18,63 @@ import ureca.nolmung.jpa.user.User;
 
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class RecommendService implements RecommendUseCase{
     private final AwsPersonalizeManager awsPersonalizeManager;
     private final RecommendManager recommendManager;
-    private final RecommendDtoMapper recommendDtoMapper;
     private final DogManager dogManager;
     private final UserManager userManager;
-
-
-    @Override
-    public List<RecommendResp> getPlaceRecommendationsFromPersonalize(Long userId) {
-        List<PredictedItem> recs = awsPersonalizeManager.getRecs(userId);
-        List<PredictedItem> randomRecs = awsPersonalizeManager.getRandomRecs(recs, 5);
-        List<Place> places = awsPersonalizeManager.getPlaces(randomRecs);
-        return recommendDtoMapper.toGetPlaceRecommendations(places);
-    }
+    private final RecommendDtoMapper recommendDtoMapper;
+    private final RedisTemplate<String, List<Place>> redisTemplate;
 
     @Override
+    @Transactional(readOnly = true)
     public List<RecommendResp> getMostBookmarkedPlaces() {
         List<Place> places = recommendManager.getMostBookmarkedPlaces();
         return recommendDtoMapper.toGetPlaceRecommendations(places);
     }
 
     @Override
-    public List<RecommendResp> getPlaceRecommendationsForDogs(Long userId) {
-        List<Dog> dogs = dogManager.getDogList(userId);
+    @Transactional(readOnly = true)
+    public List<RecommendResp> getPlaceRecommendationsForDogs(User user) {
+        userManager.validateUserExistence(user.getId());
+        List<Dog> dogs = dogManager.getDogList(user.getId());
         List<Place> places = recommendManager.getPlaceRecommendationsForDogs(dogs);
-        List<Place> randomPlaces = recommendManager.getRandomPlaces(places, 5);
-        return recommendDtoMapper.toGetPlaceRecommendations(randomPlaces);
+        return recommendDtoMapper.toGetPlaceRecommendations(places);
     }
 
     @Override
-    public List<RecommendResp> getPlaceRecommendationsNearByUser(Long userId) {
-        User user = userManager.validateUserExistence(userId);
+    @Transactional(readOnly = true)
+    public List<RecommendResp> getPlaceRecommendationsNearByUser(User user) {
+        userManager.validateUserExistence(user.getId());
         List<Place> places = recommendManager.getPlaceRecommendationsNearByUser(user.getAddressProvince());
-        List<Place> randomPlaces = recommendManager.getRandomPlaces(places, 5);
-        return recommendDtoMapper.toGetPlaceRecommendations(randomPlaces);
+        return recommendDtoMapper.toGetPlaceRecommendations(places);
+    }
+
+    @Override
+    public List<RecommendResp> getPlaceRecommendationsFromPersonalize(User user) {
+
+        userManager.validateUserExistence(user.getId());
+        Boolean isKeyExists = redisTemplate.hasKey(String.valueOf(user.getId()));
+
+        if (isKeyExists) {
+            List<RecommendResp> recommendResps = awsPersonalizeManager.getRedis(user.getId());
+            return awsPersonalizeManager.getRandomRecommendResps(recommendResps, 5);
+        } else {
+            List<PredictedItem> awsRecs = awsPersonalizeManager.getRecs(user.getId());
+            List<Place> places = awsPersonalizeManager.getPlaces(awsRecs);
+            List<RecommendResp> recommendResps = awsPersonalizeManager.saveRedis(places, user.getId());
+            return awsPersonalizeManager.getRandomRecommendResps(recommendResps, 5);
+        }
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<RecommendResp> getPlaceRecommendationsFromPersonalizeForBatch(Long userId) {
+        List<PredictedItem> awsRecs = awsPersonalizeManager.getRecs(userId);
+        List<Place> places = awsPersonalizeManager.getPlaces(awsRecs);
+        return recommendDtoMapper.toGetPlaceRecommendations(places);
     }
 }

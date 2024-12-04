@@ -5,7 +5,9 @@ import static ureca.nolmung.jpa.place.Enum.Category.*;
 import static ureca.nolmung.jpa.place.QPlace.*;
 
 import java.util.List;
+import java.util.Set;
 
+import com.querydsl.core.BooleanBuilder;
 import org.locationtech.jts.geom.Polygon;
 import org.springframework.stereotype.Repository;
 
@@ -17,6 +19,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import ureca.nolmung.jpa.place.Enum.Category;
 import ureca.nolmung.jpa.place.Place;
+import ureca.nolmung.jpa.place.QPlace;
 import ureca.nolmung.jpa.user.User;
 
 @Repository
@@ -34,6 +37,23 @@ public class PlaceRepositoryImpl implements PlaceRepositoryCustom {
 				isBookmarked(user, isBookmarked),
 				isWithinPolygon(polygon))
 			.fetch();
+	}
+
+	public List<Place> findAllByDogSizes(Set<String> sizes) {
+		QPlace place = QPlace.place;
+
+		BooleanBuilder builder = new BooleanBuilder();
+
+		for (String size : sizes) {
+			builder.or(place.acceptSize.like("%" + size + "%"));
+		}
+		builder.or(place.acceptSize.eq("ALL"));
+
+		return queryFactory.selectFrom(place)
+				.where(builder)
+				.orderBy(Expressions.numberTemplate(Double.class, "function('rand')").asc())
+				.limit(5)
+				.fetch();
 	}
 
 	private BooleanExpression eqAcceptSize(String acceptSize) {

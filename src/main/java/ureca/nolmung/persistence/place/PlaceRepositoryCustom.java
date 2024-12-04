@@ -1,6 +1,7 @@
 package ureca.nolmung.persistence.place;
 
 import java.util.List;
+import java.util.Set;
 
 import org.locationtech.jts.geom.Polygon;
 
@@ -10,4 +11,5 @@ import ureca.nolmung.jpa.user.User;
 
 public interface PlaceRepositoryCustom {
 	List<Place> findBySearchOption(User user, Category category, String acceptSize, Double ratingAvg, Boolean isBookmarked, Polygon polygon);
+	List<Place> findAllByDogSizes(Set<String> sizes);
 }

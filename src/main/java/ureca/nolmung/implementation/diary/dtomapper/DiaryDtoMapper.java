@@ -66,6 +66,7 @@ public class DiaryDtoMapper {
         List<DiaryDetailResp.DogDiary> dogDTO = dogList.stream()
                 .map(dog -> new DiaryDetailResp.DogDiary(
                         dog.getDog().getId(),
+                        dog.getDog().getName(),
                         dog.getDog().getProfileImageUrl() == null ? "" : dog.getDog().getProfileImageUrl()
                 ))
                 .collect(Collectors.toList());
