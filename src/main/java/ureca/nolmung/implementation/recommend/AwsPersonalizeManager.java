@@ -1,6 +1,7 @@
 package ureca.nolmung.implementation.recommend;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import software.amazon.awssdk.awscore.exception.AwsServiceException;
@@ -19,6 +20,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class AwsPersonalizeManager {
@@ -44,9 +46,8 @@ public class AwsPersonalizeManager {
             items = recommendationsResponse.itemList();
 
         } catch (AwsServiceException e) {
-            //TODO 공통 예외처리 고민
-            System.err.println(e.awsErrorDetails().errorMessage());
-            System.exit(1);
+            log.error("Personalize에서 추천 목록을 가져오던 중 오류 발생: {}", e.awsErrorDetails().errorMessage());
+            return items;
         }
         return items;
     }
