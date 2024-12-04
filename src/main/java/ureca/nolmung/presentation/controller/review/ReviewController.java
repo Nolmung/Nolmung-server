@@ -45,10 +45,10 @@ public class ReviewController {
     }
 
     @Operation(summary = "내가 쓴 후기 목록 조회")
-    @GetMapping
+    @GetMapping("")
     public ResponseDto<List<ReviewResp>> getReviews(@AuthenticationPrincipal CustomUserDetails userDetails,
-                                                    @RequestParam(defaultValue = "0") int page,
-                                                    @RequestParam(defaultValue = "5") int size)
+        @RequestParam(defaultValue = "0") int page,
+        @RequestParam(defaultValue = "5") int size)
     {
         return ResponseUtil.SUCCESS("후기 조회에 성공하였습니다.", reviewUseCase.getReviews(userDetails.getUser().getId(), page, size));
     }
