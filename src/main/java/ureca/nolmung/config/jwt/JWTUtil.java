@@ -1,22 +1,26 @@
 package ureca.nolmung.config.jwt;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import jakarta.servlet.http.Cookie;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.stereotype.Component;
-import ureca.nolmung.business.user.dto.response.CustomUserDetails;
-import ureca.nolmung.implementation.user.UserManager;
-import ureca.nolmung.jpa.user.Enum.UserRole;
-import ureca.nolmung.jpa.user.User;
+import java.nio.charset.StandardCharsets;
+import java.util.Date;
 
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
-import java.nio.charset.StandardCharsets;
-import java.util.Date;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.stereotype.Component;
+
+import io.jsonwebtoken.Jwts;
+import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
+import ureca.nolmung.business.user.dto.response.CustomUserDetails;
+import ureca.nolmung.exception.jwt.JwtException;
+import ureca.nolmung.exception.jwt.JwtExceptionType;
+import ureca.nolmung.implementation.user.UserManager;
+import ureca.nolmung.jpa.user.Enum.UserRole;
+import ureca.nolmung.jpa.user.User;
 
 @Slf4j
 @Component
@@ -28,7 +32,6 @@ public class JWTUtil {
 
 
 	public JWTUtil(@Value("${jwt.secretKey}")String secret, @Value("${jwt.access.expiration}")Long expiredMs, UserManager userManager) {
-		// Create the SecretKey from the secret string
 		this.secretKey = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8), Jwts.SIG.HS256.key().build().getAlgorithm());
 		this.expiredMs = expiredMs;
 		this.userManager = userManager;
@@ -42,34 +45,7 @@ public class JWTUtil {
 			.getPayload().get("email", String.class);
 	}
 
-
-	/*public UserRole getRole(String token) {
-		Claims claims = Jwts.parser()
-			.setSigningKey(secretKey)
-			.build()
-			.parseClaimsJws(token)
-			.getBody();
-		return UserRole.valueOf(claims.get("role", String.class));
-	}*/
-
-	public Long getUserId(String token) {
-		Claims claims = Jwts.parser()
-			.verifyWith(secretKey)
-			.build()
-			.parseSignedClaims(token)
-			.getPayload();
-		return claims.get("id", Long.class);  // "userId" claim을 Long 타입으로 반환
-	}
-
-	/*public Boolean isExpired(String token) {
-		return Jwts.parser()
-			.verifyWith(secretKey)
-			.build()
-			.parseSignedClaims(token)
-			.getPayload().getExpiration().before(new Date());
-	}*/
-
-	public String createJwt(Long id, String email, UserRole role) {
+	private String createJwt(Long id, String email, UserRole role) {
 		return Jwts.builder()
 			.claim("id", id)
 			.claim("email", email)
@@ -78,17 +54,6 @@ public class JWTUtil {
 			.expiration(new Date(System.currentTimeMillis() + expiredMs))
 			.signWith(secretKey)
 			.compact();
-	}
-
-	public Cookie createCookie(String key, String value) {
-
-		Cookie cookie = new Cookie(key, value);
-		cookie.setMaxAge(60*60*60);
-		//cookie.setSecure(true);
-		cookie.setPath("/");
-		cookie.setHttpOnly(true);
-
-		return cookie;
 	}
 
 	public Authentication getAuthentication(String accessToken) {
@@ -101,5 +66,18 @@ public class JWTUtil {
 	public boolean validateToken(String accessToken) {
 		Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(accessToken);
 		return true;
+	}
+
+	public void setAuthorizationHeader(HttpServletResponse response, Long userId, String email, UserRole role)
+	{
+		String token = createJwt(userId,email,role);
+
+		if (token == null) {
+			throw new JwtException(JwtExceptionType.JWT_TOKEN_CREATION_FAILED_EXCEPTION);
+		}
+
+		response.setHeader(HttpHeaders.AUTHORIZATION, "Bearer " + token);
+
+		System.out.println("setAuthorizationHeader : " + token);
 	}
 }

@@ -8,6 +8,7 @@ public enum Status {
     NOT_FOUND,
     FORBIDDEN,
     UNAUTHORIZED,
-    BAD_REQUEST
+    BAD_REQUEST,
+    INTERNAL_SERVER_ERROR
 }
 
