@@ -61,8 +61,6 @@ services:
       - ./logs/backend:/logs
       - ./promtail-config.yml:/etc/promtail/config.yml
     command: -config.file=/etc/promtail/config.yml
-    depends_on:
-      - loki
     restart: always
     networks:
       - t4y

@@ -29,17 +29,19 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
             .cors(corsCustomizer -> corsCustomizer.configurationSource(new CorsConfigurationSource() {
-                    @Override
-                    public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
-                        CorsConfiguration config = new CorsConfiguration();
-                        //config.setAllowedOrigins(Arrays.asList("*"));
-                        config.setAllowedOrigins(Arrays.asList("http://localhost:8080", "https://api.nolmung.org", "http://localhost:3000", "https://dev.nolmung.org", "https://nolmung.org"));
-                        config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-                        config.setAllowCredentials(true);
-                        config.setAllowedHeaders(Arrays.asList("Authorization", "Authorization-refresh", "Cache-Control", "Content-Type", "X-Api-Key"));
-                        config.setMaxAge(3600L);
-                        return config;
-                    }
+                @Override
+                public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
+                    CorsConfiguration config = new CorsConfiguration();
+                    config.setAllowedOrigins(Arrays.asList("*"));
+                    // config.setAllowedOrigins(Arrays.asList("http://localhost:8080", "https://api.nolmung.org", "http://localhost:3000", "https://dev.nolmung.org", "https://nolmung.org"));
+                    // config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+                    config.setAllowedMethods(Arrays.asList("*"));
+                    config.setAllowCredentials(true);
+                    // config.setAllowedHeaders(Arrays.asList("Authorization", "Authorization-refresh", "Cache-Control", "Content-Type", "X-Api-Key"));
+                    config.setAllowedHeaders(Arrays.asList("*"));
+                    config.setMaxAge(3600L);
+                    return config;
+                }
             }))
             .csrf(AbstractHttpConfigurer::disable)
             .formLogin(AbstractHttpConfigurer::disable)
@@ -58,6 +60,8 @@ public class SecurityConfig {
                 .requestMatchers("/v1/recommend/bookmarks").permitAll()
                 .requestMatchers("/ban-words/upload").permitAll()
                 .requestMatchers("/v1/diary/public/**").permitAll()
+                .requestMatchers("/actuator/prometheus").permitAll()
+                .requestMatchers("/").permitAll()
                 .anyRequest().authenticated()  // 그 외 URL은 인증 필요
             )
 
