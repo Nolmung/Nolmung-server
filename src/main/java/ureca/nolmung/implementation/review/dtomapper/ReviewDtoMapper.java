@@ -4,19 +4,19 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
-import ureca.nolmung.business.review.dto.response.ReviewLabelResp;
+import ureca.nolmung.business.review.dto.response.LabelResp;
 import ureca.nolmung.business.review.dto.response.ReviewResp;
 import ureca.nolmung.jpa.review.Review;
 
 @Component
 public class ReviewDtoMapper {
-    public ReviewResp toReviewResp(Review review, List<ReviewLabelResp> reviewLabel)
+    public ReviewResp toReviewResp(Review review, List<LabelResp> labels)
     {
         return new ReviewResp(review.getId(),
                 review.getPlace().getId(),
                 review.getPlace().getName(),
                 review.getPlace().getAddress(),
                 review.getRating(),
-                reviewLabel);
+                labels);
     }
 }

@@ -8,6 +8,6 @@ public record ReviewResp (
         String placeName,
         String address,
         int rating,
-        List<ReviewLabelResp> reviewLabels
+        List<LabelResp> Labels
         )
 { }
