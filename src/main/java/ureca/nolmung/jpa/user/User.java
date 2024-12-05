@@ -42,7 +42,13 @@ public class User extends BaseEntity {
     private String nickname;
 
     @Column(length = 30)
-    private String addressProvince;    // 거주지 시군명
+    private String addressProvince; // 거주지
+
+    @Column(name = "mapx")
+    private double userLatitude;
+
+    @Column(name = "mapy")
+    private double userLongitude;
 
     @Column(columnDefinition = "TEXT")
     private String profileImageUrl;
