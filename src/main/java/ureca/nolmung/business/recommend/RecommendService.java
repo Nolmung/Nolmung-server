@@ -45,17 +45,7 @@ public class RecommendService implements RecommendUseCase{
     @Override
     @Transactional(readOnly = true)
     public List<RecommendResp> getPlaceRecommendationsNearByUser(User user) {
-        List<Place> places = recommendManager.getPlaceRecommendationsNearByUser(user.getAddressProvince());
-        return recommendDtoMapper.toGetPlaceRecommendations(places);
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public List<RecommendResp> getPlaceRecommendationsNearByUser1(User user) {
-        long startTime = System.currentTimeMillis();
         List<Place> nearbyPlaces = recommendManager.findNearbyPlaces(user.getUserLatitude(), user.getUserLongitude());
-        long executionTime = System.currentTimeMillis() - startTime;
-        System.out.println(" executed in " + executionTime + "ms");
         return recommendDtoMapper.toGetPlaceRecommendations(nearbyPlaces);
     }
 
