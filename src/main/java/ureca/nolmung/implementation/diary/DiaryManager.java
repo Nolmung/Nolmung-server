@@ -6,7 +6,6 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
-import ureca.nolmung.business.banword.BanWordUseCase;
 import ureca.nolmung.business.diary.dto.request.AddDiaryReq;
 import ureca.nolmung.business.diary.dto.request.UpdateDiaryReq;
 import ureca.nolmung.business.diary.dto.response.AddDiaryResp;
@@ -32,7 +31,6 @@ import ureca.nolmung.persistence.dog.DogRepository;
 import ureca.nolmung.persistence.dogdiary.DogDiaryRepository;
 import ureca.nolmung.persistence.media.MediaRepository;
 import ureca.nolmung.persistence.place.PlaceRepository;
-import ureca.nolmung.persistence.user.UserRepository;
 
 @Component
 @RequiredArgsConstructor
@@ -50,7 +48,7 @@ public class DiaryManager {
 		List<DiaryPlace> diaryPlaces = diaryPlaceRepository.findAllByPlaceOrderByCreatedAtDesc(place);
 		List<PlaceDiaryResponse> placeDiaryResponses = new ArrayList<>();
 		for (DiaryPlace diaryPlace : diaryPlaces) {
-			Diary diary = diaryRepository.findById(diaryPlace.getId())
+			Diary diary = diaryRepository.findById(diaryPlace.getDiary().getId())
 				.orElseThrow(() -> new DiaryException(DiaryExceptionType.DIARY_NOT_FOUND_EXCEPTION));
 			if (!diary.isPublicYn()) {
 				continue;
