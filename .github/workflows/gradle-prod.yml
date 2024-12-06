@@ -67,9 +67,6 @@ jobs:
             sudo docker-compose up  -d
             echo "Docker Compose로 컨테이너 시작 완료"
 
-    #            sudo docker image prune -f
-    #            echo "사용하지 않는 Docker image 정리"
-
     # NOTE: The Gradle Wrapper is the default and recommended way to run Gradle (https://docs.gradle.org/current/userguide/gradle_wrapper.html).
     # If your project does not have the Gradle Wrapper configured, you can use the following configuration to run Gradle with a specified version.
     #

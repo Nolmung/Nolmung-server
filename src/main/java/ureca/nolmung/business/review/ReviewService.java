@@ -1,22 +1,22 @@
 package ureca.nolmung.business.review;
 
+import java.util.List;
+import java.util.stream.Collectors;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import lombok.RequiredArgsConstructor;
 import ureca.nolmung.business.review.dto.request.AddReviewReq;
 import ureca.nolmung.business.review.dto.response.AddReviewResp;
 import ureca.nolmung.business.review.dto.response.DeleteReviewResp;
-import ureca.nolmung.business.review.dto.response.ReviewLabelResp;
+import ureca.nolmung.business.review.dto.response.LabelResp;
 import ureca.nolmung.business.review.dto.response.ReviewResp;
 import ureca.nolmung.implementation.review.ReviewManager;
 import ureca.nolmung.implementation.review.dtomapper.ReviewDtoMapper;
 import ureca.nolmung.implementation.user.UserManager;
 import ureca.nolmung.jpa.review.Review;
 import ureca.nolmung.jpa.user.User;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -46,10 +46,10 @@ public class ReviewService implements ReviewUseCase{
 
         return reviews.stream()
                 .map(review -> {
-                    List<ReviewLabelResp> labelRespList = review.getReviewLabels().stream()
-                            .map(label -> new ReviewLabelResp(label.getId(), label.getLabelName())) // ReviewLabelResp 객체로 변환
+                    List<LabelResp> labelList = review.getReviewLabels().stream()
+                            .map(label -> new LabelResp(label.getLabelId(), label.getLabelName())) // ReviewLabelResp 객체로 변환
                             .collect(Collectors.toList());
-                    return reviewDtoMapper.toReviewResp(review, labelRespList);
+                    return reviewDtoMapper.toReviewResp(review, labelList);
                 })
                 .collect(Collectors.toList());
     }
