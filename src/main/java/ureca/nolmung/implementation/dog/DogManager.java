@@ -7,8 +7,6 @@ import org.springframework.stereotype.Component;
 import lombok.RequiredArgsConstructor;
 import ureca.nolmung.business.dog.dto.request.DogReq;
 import ureca.nolmung.jpa.dog.Dog;
-import ureca.nolmung.jpa.dog.Enum.DogSize;
-import ureca.nolmung.jpa.dog.Enum.Gender;
 import ureca.nolmung.jpa.user.User;
 import ureca.nolmung.persistence.dog.DogRepository;
 
@@ -29,10 +27,10 @@ public class DogManager {
         Dog newDog = Dog.builder()
                 .user(user)
                 .name(req.dogName())
-                .gender(Gender.valueOf(req.gender()))
+                .gender(req.gender())
                 .neuteredYn(req.neuterYn())
                 .type(req.dogType())
-                .size(DogSize.valueOf(req.size()))
+                .size(req.size())
                 .birth(req.birth())
                 .profileImageUrl(req.profileUrl()).build();
 

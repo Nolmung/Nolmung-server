@@ -15,7 +15,7 @@ public interface PlaceUseCase {
 
 	Integer makePointData();
 
-	List<SearchedPlaceResponse> findBySearchOption(User user, Category category, String acceptSize, Double ratingAvg, Boolean isBookmarked, double latitude, double longitude, double maxLatitude, double maxLongitude);
+	List<SearchedPlaceResponse> findBySearchOption(User user, Category category, Boolean isVisited, Boolean isBookmarked, double latitude, double longitude, double maxLatitude, double maxLongitude);
 
 	List<SearchedPlaceResponse> findPlaceOnMap(double latitude, double longitude, double maxLatitude, double maxLongitude);
 }

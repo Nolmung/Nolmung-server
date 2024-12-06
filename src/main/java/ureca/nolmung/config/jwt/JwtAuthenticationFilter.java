@@ -14,18 +14,51 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 
+import ureca.nolmung.implementation.jwt.JwtTokenExceptionType;
+
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JWTUtil jwtUtil;
 
     @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+
+        String path = request.getRequestURI();
+
+        // 헬스체크 경로 확인
+        if (path.equals("/")) {
+            return true;
+        }
+
+        // 제외할 경로들
+        String[] excludePaths = {
+            "/swagger-resources", "/swagger-ui", "/v3/api-docs",
+            "/v1/oauth",
+            "/v1/users/signup",
+            "/v1/places",
+            "/v1/recommend/bookmarks",
+            "/ban-words/upload",
+            "/v1/diary/public",
+            "/actuator/prometheus",
+            "/favicon.ico"
+        };
+
+        for (String excludePath : excludePaths) {
+            if (path.startsWith(excludePath)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
+        System.out.println(request.getRequestURI());
         String token = getTokenFromHeader(request);
 
         if (token != null) {
-
             try
             {
                 if (jwtUtil.validateToken(token))
@@ -37,18 +70,21 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             catch (JwtException e)
             {
                 if (e instanceof ExpiredJwtException) {
-                    response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "JWT 토큰이 만료되었습니다.");
+                    request.setAttribute("exception", JwtTokenExceptionType.JWT_TOKEN_EXPIRED_EXCEPTION);
                 }
                 else {
-                    response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "JWT 토큰이 유효하지 않습니다.");
+                    request.setAttribute("exception", JwtTokenExceptionType.JWT_TOKEN_INVALID_EXCEPTION);
                 }
-                return;
             }
             catch (IllegalArgumentException e) {
-                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "JWT 토큰의 형식이 잘못되었습니다.");
-                return;
+                request.setAttribute("exception", JwtTokenExceptionType.JWT_TOKEN_INVALID_EXCEPTION);
             }
         }
+        else
+        {
+            request.setAttribute("exception", JwtTokenExceptionType.JWT_TOKEN_NOT_FOUND_EXCEPTION);
+        }
+
 
         filterChain.doFilter(request, response);
     }

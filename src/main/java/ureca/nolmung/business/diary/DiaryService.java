@@ -40,7 +40,6 @@ public class DiaryService implements DiaryUseCase {
     public static final Long FIRST_DIARY_BADGE_CODE_ID = 1L;
     public static final Long THIRD_DIARY_BADGE_CODE_ID = 2L;
 
-
     @Override
     @Transactional
     public AddDiaryResp addDiary(User user, AddDiaryReq req) {
@@ -64,11 +63,11 @@ public class DiaryService implements DiaryUseCase {
                 badgeManager.addDiaryBadge(loginUser, badgeCode);
             }
         }
-
         return diaryManager.addDiary(loginUser, req);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public DiaryListResp getAllDiaries(User user) {
         User loginUser = userManager.validateUserExistence(user.getId());
         List<Diary> diaryList = diaryManager.getDiaryList(loginUser.getId());
@@ -95,7 +94,6 @@ public class DiaryService implements DiaryUseCase {
         List<DogDiary> dogList = dogDiaryManager.getDogList(diaryCheck.getId());
         List<Place> placeList = diaryPlaceManager.getPlaceList(diaryCheck.getId());
         List<Media> mediaList = diary.getMediaList();
-
         return diaryDtoMapper.toDiaryDetailResp(diary, dogList, placeList, mediaList);
     }
 
