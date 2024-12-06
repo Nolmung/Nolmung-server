@@ -13,7 +13,7 @@ public class UserDtoMapper {
                 user.getName(),
                 user.getNickname(),
                 user.getAddressProvince(),
-                user.getAge(),
+                user.getBirth(),
                 user.getGender(),
                 user.getProfileImageUrl(),
                 user.getEmail(),

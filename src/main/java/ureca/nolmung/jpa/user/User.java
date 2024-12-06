@@ -1,5 +1,6 @@
 package ureca.nolmung.jpa.user;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import jakarta.persistence.Column;
@@ -53,7 +54,7 @@ public class User extends BaseEntity {
     @Column(columnDefinition = "TEXT")
     private String profileImageUrl;
 
-    private Long age;
+    private LocalDate birth;
 
     @Enumerated(EnumType.STRING)
     private Gender gender;
@@ -84,7 +85,9 @@ public class User extends BaseEntity {
     {
         this.nickname=req.userNickname();
         this.addressProvince=req.userAddressProvince();
-        this.age = req.userAge();
+        this.userLatitude=req.userLat();
+        this.userLongitude=req.userLong();
+        this.birth = req.userBirth();
         this.gender = req.userGender();
         this.role=UserRole.USER;
     }
@@ -92,7 +95,9 @@ public class User extends BaseEntity {
     public void updateUserInfo(UserReq req) {
         this.nickname = req.userNickname();
         this.addressProvince = req.userAddressProvince();
-        this.age = req.userAge();
+        this.userLatitude=req.userLat();
+        this.userLongitude=req.userLong();
+        this.birth = req.userBirth();
         this.gender = req.userGender();
     }
 
