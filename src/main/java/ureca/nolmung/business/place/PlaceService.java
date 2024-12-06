@@ -1,11 +1,14 @@
 package ureca.nolmung.business.place;
 
 import java.util.List;
+import java.util.logging.Logger;
 
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import ureca.nolmung.business.diary.response.PlaceDiaryResponse;
 import ureca.nolmung.business.labels.response.LabelResponse;
 import ureca.nolmung.business.place.response.PlaceDetailResponse;
@@ -18,6 +21,7 @@ import ureca.nolmung.jpa.place.Enum.Category;
 import ureca.nolmung.jpa.place.Place;
 import ureca.nolmung.jpa.user.User;
 
+@Slf4j
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 @Service
@@ -30,6 +34,8 @@ public class PlaceService implements PlaceUseCase {
 
 	@Override
 	public List<SearchedPlaceResponse> searchByKeyword(String keyword) {
+		System.out.println("keyword: " + keyword);
+		log.info("Searching for places with keyword: {}", keyword);  // 로그 추가
 		List<Place> places = placeManager.searchByKeyword(keyword);
 		return placeDtoMapper.toSearchedPlaceReponseList(places);
 	}
