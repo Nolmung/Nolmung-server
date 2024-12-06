@@ -50,14 +50,13 @@ public class PlaceController {
 	public ResponseDto<List<SearchedPlaceResponse>> findPlaceByFilter(
 		@AuthenticationPrincipal CustomUserDetails userDetails,
 		@RequestParam(required = false) Category category,
-		@RequestParam(required = false) String acceptSize,
-		@RequestParam(required = false) Double ratingAvg,
+		@RequestParam(required = false) Boolean isVisited,
 		@RequestParam(required = false) Boolean isBookmarked,
 		@RequestParam double latitude,
 		@RequestParam double longitude,
 		@RequestParam double maxLatitude,
 		@RequestParam double maxLongitude) {
-		return ResponseUtil.SUCCESS("장소 조회에 성공하였습니다.", placeUseCase.findBySearchOption(userDetails.getUser(), category, acceptSize, ratingAvg, isBookmarked, latitude, longitude, maxLatitude, maxLongitude));
+		return ResponseUtil.SUCCESS("장소 조회에 성공하였습니다.", placeUseCase.findBySearchOption(userDetails.getUser(), category, isVisited, isBookmarked, latitude, longitude, maxLatitude, maxLongitude));
 	}
 
 	@Operation(summary = "장소 상세 정보 조회")

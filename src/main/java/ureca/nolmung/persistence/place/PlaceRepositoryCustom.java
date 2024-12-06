@@ -10,6 +10,6 @@ import ureca.nolmung.jpa.place.Place;
 import ureca.nolmung.jpa.user.User;
 
 public interface PlaceRepositoryCustom {
-	List<Place> findBySearchOption(User user, Category category, String acceptSize, Double ratingAvg, Boolean isBookmarked, Polygon polygon);
+	List<Place> findBySearchOption(User user, Category category, Boolean isvisited, Boolean isBookmarked, Polygon polygon);
 	List<Place> findAllByDogSizes(Set<String> sizes);
 }

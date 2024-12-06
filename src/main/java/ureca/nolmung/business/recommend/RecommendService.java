@@ -11,7 +11,6 @@ import ureca.nolmung.implementation.dog.DogManager;
 import ureca.nolmung.implementation.recommend.AwsPersonalizeManager;
 import ureca.nolmung.implementation.recommend.RecommendManager;
 import ureca.nolmung.implementation.recommend.dtomapper.RecommendDtoMapper;
-import ureca.nolmung.implementation.user.UserManager;
 import ureca.nolmung.jpa.dog.Dog;
 import ureca.nolmung.jpa.place.Place;
 import ureca.nolmung.jpa.user.User;
@@ -25,7 +24,6 @@ public class RecommendService implements RecommendUseCase{
     private final AwsPersonalizeManager awsPersonalizeManager;
     private final RecommendManager recommendManager;
     private final DogManager dogManager;
-    private final UserManager userManager;
     private final RecommendDtoMapper recommendDtoMapper;
     private final RedisTemplate<String, List<Place>> redisTemplate;
 
@@ -39,7 +37,6 @@ public class RecommendService implements RecommendUseCase{
     @Override
     @Transactional(readOnly = true)
     public List<RecommendResp> getPlaceRecommendationsForDogs(User user) {
-        userManager.validateUserExistence(user.getId());
         List<Dog> dogs = dogManager.getDogList(user.getId());
         List<Place> places = recommendManager.getPlaceRecommendationsForDogs(dogs);
         return recommendDtoMapper.toGetPlaceRecommendations(places);
@@ -48,15 +45,13 @@ public class RecommendService implements RecommendUseCase{
     @Override
     @Transactional(readOnly = true)
     public List<RecommendResp> getPlaceRecommendationsNearByUser(User user) {
-        userManager.validateUserExistence(user.getId());
-        List<Place> places = recommendManager.getPlaceRecommendationsNearByUser(user.getAddressProvince());
-        return recommendDtoMapper.toGetPlaceRecommendations(places);
+        List<Place> nearbyPlaces = recommendManager.findNearbyPlaces(user.getUserLatitude(), user.getUserLongitude());
+        return recommendDtoMapper.toGetPlaceRecommendations(nearbyPlaces);
     }
 
     @Override
     public List<RecommendResp> getPlaceRecommendationsFromPersonalize(User user) {
 
-        userManager.validateUserExistence(user.getId());
         Boolean isKeyExists = redisTemplate.hasKey(String.valueOf(user.getId()));
 
         if (isKeyExists) {
