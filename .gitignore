@@ -43,3 +43,4 @@ application-prod.yml
 
 ### Ignore everything in src/main/generated ###
 src/main/generated/*
+logs/*
