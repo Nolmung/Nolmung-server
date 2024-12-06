@@ -87,10 +87,6 @@ dependencies {
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
-tasks.named('bootRun') {
-    environment 'LOG_PATH', '/home/ec2-user/logs'  // 환경 변수 설정
-}
-
 tasks.named('test') {
     useJUnitPlatform()
 }
