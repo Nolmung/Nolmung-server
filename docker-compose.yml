@@ -1,8 +1,7 @@
-version: '3.8'
-
+#version: '3.8'
 services:
   springboot-app:
-    container_name: thirsty_robinson
+    container_name: springboot-app
     image: hyewonbae/nolmung
     ports:
       - "443:8080"
@@ -28,7 +27,7 @@ services:
       - t4y
 
   grafana:
-    image: grafana/grafana:7.5.2
+    image: grafana/grafana:latest
     container_name: grafana
     volumes:
       - grafana-data:/var/lib/grafana
@@ -45,22 +44,23 @@ services:
       - t4y
 
   loki:
-    image: grafana/loki:latest
+    image: grafana/loki:2.9.2
     container_name: loki
     ports:
       - "3100:3100"
-    command: -config.file=/etc/loki/local-config.yaml
     restart: always
     networks:
       - t4y
 
   promtail:
-    image: grafana/promtail:latest
+    image: grafana/promtail:2.9.2
     container_name: promtail
     volumes:
-      - ./logs/backend:/logs
+      - ./logs:/logs
       - ./promtail-config.yml:/etc/promtail/config.yml
-    command: -config.file=/etc/promtail/config.yml
+    command:
+      - -config.file=/etc/promtail/config.yml
+      - -config.expand-env=true
     restart: always
     networks:
       - t4y
