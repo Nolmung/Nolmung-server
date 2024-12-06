@@ -32,28 +32,33 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         // 제외할 경로들
-        String[] excludePath = {
-            "/swagger-resources/**", "/swagger-ui/**", "/v3/api-docs/**",
-            "/v1/oauth/**",
-            "/v1/users/signup/**",
-            "/v1/places/**",
+        String[] excludePaths = {
+            "/swagger-resources", "/swagger-ui", "/v3/api-docs",
+            "/v1/oauth",
+            "/v1/users/signup",
+            "/v1/places",
             "/v1/recommend/bookmarks",
             "/ban-words/upload",
-            "/v1/diary/public/**",
-            "/actuator/prometheus"
+            "/v1/diary/public",
+            "/actuator/prometheus",
+            "/favicon.ico"
         };
 
-
-        return java.util.Arrays.stream(excludePath).anyMatch(path::startsWith);
+        for (String excludePath : excludePaths) {
+            if (path.startsWith(excludePath)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
+        System.out.println(request.getRequestURI());
         String token = getTokenFromHeader(request);
 
         if (token != null) {
-
             try
             {
                 if (jwtUtil.validateToken(token))
@@ -75,9 +80,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 request.setAttribute("exception", JwtTokenExceptionType.JWT_TOKEN_INVALID_EXCEPTION);
             }
         }
-        else {
+        else
+        {
             request.setAttribute("exception", JwtTokenExceptionType.JWT_TOKEN_NOT_FOUND_EXCEPTION);
         }
+
 
         filterChain.doFilter(request, response);
     }
