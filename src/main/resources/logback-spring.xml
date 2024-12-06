@@ -1,38 +1,57 @@
-<configuration>
-    <property resource="logback-variables.properties" />
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="30 seconds">
+    <!-- 30초마다 로그에 변경이 있는지 체크하는것 -->
 
-    <timestamp key="ToDay" datePattern="yyyyMMdd" />
+    <!-- springProfile 태그를 사용하여 profile 별 property 값 설정 -->
+    <springProfile name="dev">
+        <!-- local log file path -->
+        <property name="LOG_PATH" value="./logs"/>
+    </springProfile>
+    <springProfile name="prod">
+        <!-- prod log file path -->
+        <property name="LOG_PATH" value="/home/ec2-user/logs/info"/>
+    </springProfile>
 
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
-        <layout class="ch.qos.logback.classic.PatternLayout">
-            <Pattern>
-                ${LOG_PATTERN}
-            </Pattern>
-        </layout>
-    </appender>
-
-    <appender name="FILE1" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <filter class="ch.qos.logback.classic.filter.LevelFilter">
-            <level>info</level>
-            <onMatch>ACCEPT</onMatch>
-            <onMismatch>DENY</onMismatch>
-        </filter>
-        <file>${LOG_PATH}/info/${ToDay}_${LOG_FILE_NAME}.log</file>
-        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-            <fileNamePattern>
-                ${LOG_PATH}/info/%d{yyyyMMdd}_${LOG_FILE_NAME}_%i.log
-            </fileNamePattern>
-            <maxFileSize>10MB</maxFileSize>
-            <maxHistory>30</maxHistory>
-        </rollingPolicy>
         <encoder>
-            <pattern>${LOG_PATTERN}</pattern>
+            <!-- [시간][로그레벨][thread이름] logger이름 메시지 \n 의 형식으로 출력 -->
+            <pattern>[%d{yyyy-MM-dd HH:mm:ss.SSS}] [%-5level] [%thread] %logger %msg%n</pattern>
         </encoder>
     </appender>
 
-    <root level="INFO">
-        <appender-ref ref="FILE1" />
-        <appender-ref ref="CONSOLE" />
-    </root>
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_PATH}/application.log</file>
+        <encoder>
+            <pattern>[%d{yyyy-MM-dd HH:mm:ss:SSS}] [%-5level] [%thread] %logger %msg%n</pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_PATH}/marcket-%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>2</maxHistory>
+            <totalSizeCap>15MB</totalSizeCap>
+        </rollingPolicy>
+    </appender>
 
+    <appender name="ERROR" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>error</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <file>${LOG_PATH}/err_application.log</file>
+        <encoder>
+            <pattern>[%d{yyyy-MM-dd HH:mm:ss:SSS}] [%-5level] [%thread] %logger %msg%n</pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_PATH}/marcket-error-%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>2</maxHistory>
+            <totalSizeCap>15MB</totalSizeCap>
+        </rollingPolicy>
+    </appender>
+
+    <root level="INFO">
+        <!-- INFO단계 위로 모두 아래의 console 방식으로 출력하는것임 -->
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="FILE"/>
+        <appender-ref ref="ERROR"/>
+    </root>
 </configuration>
