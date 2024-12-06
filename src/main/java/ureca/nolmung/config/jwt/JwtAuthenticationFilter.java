@@ -80,6 +80,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 request.setAttribute("exception", JwtTokenExceptionType.JWT_TOKEN_INVALID_EXCEPTION);
             }
         }
+        else
+        {
+            request.setAttribute("exception", JwtTokenExceptionType.JWT_TOKEN_NOT_FOUND_EXCEPTION);
+        }
 
 
         filterChain.doFilter(request, response);
