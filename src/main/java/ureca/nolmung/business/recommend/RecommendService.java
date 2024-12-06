@@ -45,8 +45,9 @@ public class RecommendService implements RecommendUseCase{
     @Override
     @Transactional(readOnly = true)
     public List<RecommendResp> getPlaceRecommendationsNearByUser(User user) {
-        List<Place> nearbyPlaces = recommendManager.findNearbyPlaces(user.getUserLatitude(), user.getUserLongitude());
-        return recommendDtoMapper.toGetPlaceRecommendations(nearbyPlaces);
+        List<Place> nearByPlaces = recommendManager.findNearbyPlaces(user.getUserLatitude(), user.getUserLongitude());
+        List<Place> randomSelectNearByPlaces = recommendManager.randomSelectPlaces(nearByPlaces);
+        return recommendDtoMapper.toGetPlaceRecommendations(randomSelectNearByPlaces);
     }
 
     @Override
