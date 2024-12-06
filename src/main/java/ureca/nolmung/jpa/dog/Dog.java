@@ -1,6 +1,17 @@
 package ureca.nolmung.jpa.dog;
 
-import jakarta.persistence.*;
+import java.time.LocalDate;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -10,8 +21,6 @@ import ureca.nolmung.jpa.config.BaseEntity;
 import ureca.nolmung.jpa.dog.Enum.DogSize;
 import ureca.nolmung.jpa.dog.Enum.Gender;
 import ureca.nolmung.jpa.user.User;
-
-import java.time.LocalDate;
 
 @Getter
 @Builder
@@ -54,10 +63,10 @@ public class Dog extends BaseEntity {
 
     public void update(DogReq req) {
         this.name = req.dogName();
-        this.gender = Gender.valueOf(req.gender());
+        this.gender = req.gender();
         this.neuteredYn = req.neuterYn();
         this.type = req.dogType();
-        this.size = DogSize.valueOf(req.size());
+        this.size = req.size();
         this.birth = req.birth();
         this.profileImageUrl = req.profileUrl();
     }

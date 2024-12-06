@@ -73,11 +73,14 @@ dependencies {
     // OAuth2 Client
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 
-    //actuator
+    // actuator
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
 
-    //prometheus
+    // prometheus
     implementation 'io.micrometer:micrometer-registry-prometheus'
+
+    // logback
+    implementation 'ch.qos.logback:logback-classic:1.5.12'
 
     // test
     testImplementation 'org.springframework.boot:spring-boot-starter-test'

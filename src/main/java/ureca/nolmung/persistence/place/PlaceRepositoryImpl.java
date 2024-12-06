@@ -3,6 +3,7 @@ package ureca.nolmung.persistence.place;
 import static ureca.nolmung.jpa.bookmark.QBookmark.*;
 import static ureca.nolmung.jpa.place.Enum.Category.*;
 import static ureca.nolmung.jpa.place.QPlace.*;
+import static ureca.nolmung.jpa.review.QReview.*;
 
 import java.util.List;
 import java.util.Set;
@@ -20,6 +21,7 @@ import lombok.RequiredArgsConstructor;
 import ureca.nolmung.jpa.place.Enum.Category;
 import ureca.nolmung.jpa.place.Place;
 import ureca.nolmung.jpa.place.QPlace;
+import ureca.nolmung.jpa.review.QReview;
 import ureca.nolmung.jpa.user.User;
 
 @Repository
@@ -29,11 +31,10 @@ public class PlaceRepositoryImpl implements PlaceRepositoryCustom {
 	private final JPAQueryFactory queryFactory;
 
 	@Override
-	public List<Place> findBySearchOption(User user, Category category, String acceptSize, Double ratingAvg, Boolean isBookmarked, Polygon polygon) {
+	public List<Place> findBySearchOption(User user, Category category, Boolean isVisited, Boolean isBookmarked, Polygon polygon) {
 		return queryFactory.selectFrom(place)
 			.where(eqCategory(category),
-				eqAcceptSize(acceptSize),
-				eqRatingAvg(ratingAvg),
+				isVisited(user, isVisited),
 				isBookmarked(user, isBookmarked),
 				isWithinPolygon(polygon))
 			.fetch();
@@ -56,25 +57,23 @@ public class PlaceRepositoryImpl implements PlaceRepositoryCustom {
 				.fetch();
 	}
 
-	private BooleanExpression eqAcceptSize(String acceptSize) {
-		if (acceptSize == null || acceptSize.equals("ALL")) {
-			return null;
-		}
-		return place.acceptSize.eq(acceptSize).or(place.acceptSize.eq("ALL"));
-	}
-
-	private BooleanExpression eqRatingAvg(Double ratingAvg) {
-		if (ratingAvg == null) {
-			return null;
-		}
-		return place.ratingAvg.goe(3.0).or(place.ratingAvg.goe(4.0));
-	}
-
 	private BooleanExpression eqCategory(Category category) {
 		if (category == null || category.equals(ALL)) {
 			return null;
 		}
 		return place.category.eq(category);
+	}
+
+	private BooleanExpression isVisited(User user, Boolean isVisited) {
+		if (isVisited == null || !isVisited || user == null) {
+			return null;
+		}
+
+		return place.id.in(
+			JPAExpressions.select(review.place.id)
+				.from(review)
+				.where(review.user.eq(user))
+		);
 	}
 
 	private BooleanExpression isBookmarked(User user, Boolean isBookmarked) {

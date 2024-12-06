@@ -52,9 +52,9 @@ public class PlaceManager {
 		}
 	}
 
-	public List<Place> findBySearchOption(User user, Category category, String acceptSize, Double ratingAvg, Boolean isBookmarked, double latitude, double longitude, double maxLatitude, double maxLongitude) {
+	public List<Place> findBySearchOption(User user, Category category, Boolean isVisited, Boolean isBookmarked, double latitude, double longitude, double maxLatitude, double maxLongitude) {
 		Polygon polygon = generatePolygon(latitude, longitude, maxLatitude, maxLongitude);
-		return placeRepository.findBySearchOption(user, category, acceptSize, ratingAvg, isBookmarked, polygon);
+		return placeRepository.findBySearchOption(user, category, isVisited, isBookmarked, polygon);
 	}
 
 	public List<Place> findPlaceMapOn(double latitude, double longitude, double maxLatitude, double maxLongitude) {
