@@ -16,8 +16,8 @@ import io.jsonwebtoken.Jwts;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import ureca.nolmung.business.user.dto.response.CustomUserDetails;
-import ureca.nolmung.exception.jwt.JwtException;
-import ureca.nolmung.exception.jwt.JwtExceptionType;
+import ureca.nolmung.implementation.jwt.JwtTokenException;
+import ureca.nolmung.implementation.jwt.JwtTokenExceptionType;
 import ureca.nolmung.implementation.user.UserManager;
 import ureca.nolmung.jpa.user.Enum.UserRole;
 import ureca.nolmung.jpa.user.User;
@@ -73,7 +73,7 @@ public class JWTUtil {
 		String token = createJwt(userId,email,role);
 
 		if (token == null) {
-			throw new JwtException(JwtExceptionType.JWT_TOKEN_CREATION_FAILED_EXCEPTION);
+			throw new JwtTokenException(JwtTokenExceptionType.JWT_TOKEN_CREATION_FAILED_EXCEPTION);
 		}
 
 		response.setHeader(HttpHeaders.AUTHORIZATION, "Bearer " + token);
