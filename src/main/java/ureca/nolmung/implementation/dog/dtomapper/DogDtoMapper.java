@@ -9,6 +9,6 @@ public class DogDtoMapper {
 
     public DogResp toDogResp(Dog dog) {
         return new DogResp(dog.getId(), dog.getName(), dog.getType(), dog.getBirth(),
-                dog.getProfileImageUrl(), dog.getGender().toString(), dog.getSize().toString(), dog.isNeuteredYn());
+                dog.getProfileImageUrl(), dog.getGender(), dog.getSize(), dog.isNeuteredYn());
     }
 }
