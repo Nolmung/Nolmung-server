@@ -11,6 +11,7 @@ import ureca.nolmung.jpa.place.Place;
 import ureca.nolmung.persistence.place.PlaceRepository;
 import ureca.nolmung.persistence.placeposition.PlacePositionRepository;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -58,4 +59,12 @@ public class RecommendManager {
     }
 
 
+    public List<Place> randomSelectPlaces(List<Place> nearbyPlaces) {
+        if (nearbyPlaces.size() <= 5) {
+            return nearbyPlaces;
+        }
+        Collections.shuffle(nearbyPlaces);
+
+        return nearbyPlaces.subList(0, 5);
+    }
 }

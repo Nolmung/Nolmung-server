@@ -53,15 +53,13 @@ public class AwsPersonalizeManager {
     }
 
     public List<Place> getPlaces(List<PredictedItem> recs) {
-        List<Place> places = new ArrayList<>();
-
-        for (PredictedItem item : recs) {
-            Long id = Long.valueOf(item.itemId());
-            places.add(placeRepository
-                    .findById(id)
-                    .orElseThrow(() -> new PlaceException(PlaceExceptionType.PLACE_NOT_FOUND_EXCEPTION)));
+        List<Long> ids = recs.stream()
+                .map(item -> Long.valueOf(item.itemId()))
+                .collect(Collectors.toList());
+        List<Place> places = placeRepository.findAllById(ids);
+        if (places.size() != ids.size()) {
+            throw new PlaceException(PlaceExceptionType.PLACE_NOT_FOUND_EXCEPTION);
         }
-
         return places;
     }
 
