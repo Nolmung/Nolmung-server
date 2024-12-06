@@ -85,6 +85,8 @@ public class User extends BaseEntity {
     {
         this.nickname=req.userNickname();
         this.addressProvince=req.userAddressProvince();
+        this.userLatitude=req.userLat();
+        this.userLongitude=req.userLong();
         this.birth = req.userBirth();
         this.gender = req.userGender();
         this.role=UserRole.USER;
@@ -93,6 +95,8 @@ public class User extends BaseEntity {
     public void updateUserInfo(UserReq req) {
         this.nickname = req.userNickname();
         this.addressProvince = req.userAddressProvince();
+        this.userLatitude=req.userLat();
+        this.userLongitude=req.userLong();
         this.birth = req.userBirth();
         this.gender = req.userGender();
     }

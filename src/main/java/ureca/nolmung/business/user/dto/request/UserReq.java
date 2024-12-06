@@ -4,4 +4,4 @@ import java.time.LocalDate;
 
 import ureca.nolmung.jpa.user.Enum.Gender;
 
-public record UserReq (String userNickname, String userAddressProvince, LocalDate userBirth, Gender userGender) { }
+public record UserReq (String userNickname, String userAddressProvince, double userLat, double userLong, LocalDate userBirth, Gender userGender) { }
