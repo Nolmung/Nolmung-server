@@ -111,7 +111,7 @@ public class Place extends BaseEntity {
         if (ratingCount == 0) {
             this.ratingAvg = 0.0;
         } else {
-            this.ratingAvg = ratingTotal / ratingCount;
+            this.ratingAvg = Math.round((ratingTotal / ratingCount) * 10) / 10.0;
         }
     }
 
