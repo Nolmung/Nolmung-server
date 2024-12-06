@@ -87,10 +87,8 @@ dependencies {
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
-def logPath = System.getenv('LOG_PATH') ?: '/home/ec2-user/logs'
-
-tasks.withType(JavaCompile) {
-    options.compilerArgs += ["-DLOG_PATH=${logPath}"]
+tasks.named('bootRun') {
+    environment 'LOG_PATH', '/home/ec2-user/logs'  // 환경 변수 설정
 }
 
 tasks.named('test') {
