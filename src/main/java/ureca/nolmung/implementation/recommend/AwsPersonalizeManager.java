@@ -62,35 +62,4 @@ public class AwsPersonalizeManager {
         }
         return places;
     }
-
-    public List<RecommendResp> saveRedis(List<Place> places, Long userId) {
-        List<RecommendResp> recommendResponses = places.stream()
-                .map(place -> new RecommendResp(
-                        place.getId(),
-                        place.getName(),
-                        place.getCategory(),
-                        place.getRoadAddress(),
-                        place.getAddress(),
-                        place.getPlaceImageUrl(),
-                        place.getRatingAvg(),
-                        place.getRatingCount()
-                ))
-                .collect(Collectors.toList());
-
-        redisTemplate.opsForValue().set(String.valueOf(userId), recommendResponses);
-
-        return recommendResponses;
-    }
-
-    public List<RecommendResp> getRandomRecommendResps(List<RecommendResp> recommendResps, int count) {
-        if (count >= recommendResps.size()) {
-            return recommendResps;
-        }
-        Collections.shuffle(recommendResps);
-        return recommendResps.subList(0, count);
-    }
-
-    public List<RecommendResp> getRedis(Long userId) {
-        return redisTemplate.opsForValue().get(String.valueOf(userId));
-    }
 }
