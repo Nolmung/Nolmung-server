@@ -7,15 +7,11 @@
         <!-- loca1l log file path -->
         <property name="LOG_PATH" value="./app/logs"/>
     </springProfile>
-<!--    <springProfile name="dev">-->
-<!--        &lt;!&ndash; prod log file path &ndash;&gt;-->
-<!--        <property name="LOG_PATH" value="/home/ec2-user/logs/info"/>-->
-<!--    </springProfile>-->
 
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
             <!-- [시간][로그레벨][thread이름] logger이름 메시지 \n 의 형식으로 출력 -->
-            <pattern>[%d{yyyy-MM-dd HH:mm:ss.SSS}] [%-5level] [%thread] %logger %msg%n</pattern>
+            <pattern>%clr([%d{yyyy-MM-dd HH:mm:ss.SSS}] %highlight([%-5level]) [%thread] %logger{36} %msg%n)</pattern>
         </encoder>
     </appender>
 
