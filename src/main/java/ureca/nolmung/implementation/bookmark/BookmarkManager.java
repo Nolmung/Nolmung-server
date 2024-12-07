@@ -34,7 +34,7 @@ public class BookmarkManager {
 	}
 
 	public void validateUser(Bookmark bookmark, User user) {
-		if (!bookmark.getUser().equals(user)) {
+		if (bookmark.getUser().getId() != user.getId()) {
 			throw new BookmarkException(BookmarkExceptionType.NOT_USERS_BOOKMARK_EXCEPTION);
 		}
 	}
