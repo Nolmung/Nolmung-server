@@ -54,7 +54,11 @@ public class DiaryManager {
 				continue;
 			}
 			Media media = mediaRepository.findFirstByDiary(diary);
-			placeDiaryResponses.add(new PlaceDiaryResponse().of(diary, media.getMediaUrl()));
+			if (media == null) {
+				placeDiaryResponses.add(new PlaceDiaryResponse().of(diary, "이미지 없음"));
+			} else {
+				placeDiaryResponses.add(new PlaceDiaryResponse().of(diary, media.getMediaUrl()));
+			}
 		}
 		return placeDiaryResponses;
 	}
@@ -66,7 +70,7 @@ public class DiaryManager {
 
 		req.places().forEach(placeId -> {
 			Place place = placeRepository.findById(placeId)
-					.orElseThrow(() -> new PlaceException(PlaceExceptionType.PLACE_NOT_FOUND_EXCEPTION));
+				.orElseThrow(() -> new PlaceException(PlaceExceptionType.PLACE_NOT_FOUND_EXCEPTION));
 
 			DiaryPlace diaryPlace = createDiaryPlace(savedDiary, place);
 			diaryPlaceRepository.save(diaryPlace);
@@ -74,7 +78,7 @@ public class DiaryManager {
 
 		req.dogs().forEach(dogId -> {
 			Dog dog = dogRepository.findById(dogId)
-					.orElseThrow(() -> new DogException(DogExceptionType.DOG_NOT_FOUND_EXCEPTION));
+				.orElseThrow(() -> new DogException(DogExceptionType.DOG_NOT_FOUND_EXCEPTION));
 
 			DogDiary dogDiary = createDogDiary(savedDiary, dog);
 			dogDiaryRepository.save(dogDiary);
@@ -106,19 +110,19 @@ public class DiaryManager {
 	public UpdateDiaryResp updateDiary(Diary diary, UpdateDiaryReq req) {
 		List<Long> reqDogIds = req.dogs();
 		List<Long> existingDogIds = diary.getDogDiaries().stream()
-				.map(dogDiary -> dogDiary.getDog().getId())
-				.toList();
+			.map(dogDiary -> dogDiary.getDog().getId())
+			.toList();
 
-		for(Long reqDogId : reqDogIds) {
+		for (Long reqDogId : reqDogIds) {
 			if (!existingDogIds.contains(reqDogId)) {
 				Dog dog = dogRepository.findById(reqDogId)
-						.orElseThrow(() -> new DogException(DogExceptionType.DOG_NOT_FOUND_EXCEPTION));
+					.orElseThrow(() -> new DogException(DogExceptionType.DOG_NOT_FOUND_EXCEPTION));
 				DogDiary newDogDiary = createDogDiary(diary, dog);
 				diary.addDogDiary(newDogDiary);
 			}
 		}
 		diary.getDogDiaries().removeIf(dogDiary -> {
-			if(!reqDogIds.contains(dogDiary.getDog().getId())) {
+			if (!reqDogIds.contains(dogDiary.getDog().getId())) {
 				return true;
 			}
 			return false;
@@ -138,30 +142,30 @@ public class DiaryManager {
 
 	private static Media updateMedia(UpdateDiaryReq.MediaDto mediaReq) {
 		return Media.builder()
-				.mediaType(MediaType.valueOf(mediaReq.mediaType()))
-				.mediaUrl(mediaReq.mediaUrl())
-				.build();
+			.mediaType(MediaType.valueOf(mediaReq.mediaType()))
+			.mediaUrl(mediaReq.mediaUrl())
+			.build();
 	}
 
 	private static Media createMedia(AddDiaryReq.MediaDto mediaReq) {
 		return Media.builder()
-				.mediaType(MediaType.valueOf(mediaReq.mediaType()))
-				.mediaUrl(mediaReq.mediaUrl())
-				.build();
+			.mediaType(MediaType.valueOf(mediaReq.mediaType()))
+			.mediaUrl(mediaReq.mediaUrl())
+			.build();
 	}
 
 	private static DogDiary createDogDiary(Diary savedDiary, Dog dog) {
 		return DogDiary.builder()
-				.diary(savedDiary)
-				.dog(dog)
-				.build();
+			.diary(savedDiary)
+			.dog(dog)
+			.build();
 	}
 
 	private static DiaryPlace createDiaryPlace(Diary savedDiary, Place place) {
 		return DiaryPlace.builder()
-				.diary(savedDiary)
-				.place(place)
-				.build();
+			.diary(savedDiary)
+			.place(place)
+			.build();
 	}
 
 	private Diary createDiary(User loginUser, AddDiaryReq req) {
@@ -173,20 +177,21 @@ public class DiaryManager {
 		}
 
 		return ureca.nolmung.jpa.diary.Diary.builder()
-				.user(loginUser)
-				.title(req.title())
-				.content(req.content())
-				.publicYn(req.publicYn())
-				.build();
+			.user(loginUser)
+			.title(req.title())
+			.content(req.content())
+			.publicYn(req.publicYn())
+			.build();
 	}
 
 	public Diary checkExistDiary(Long diaryId) {
 		return diaryRepository.findById(diaryId)
-				.orElseThrow(() -> new DiaryException(DiaryExceptionType.DIARY_NOT_FOUND_EXCEPTION));
+			.orElseThrow(() -> new DiaryException(DiaryExceptionType.DIARY_NOT_FOUND_EXCEPTION));
 	}
 
 	public Diary checkDiaryWriter(Long userId, Long diaryId) {
-		Diary diary = diaryRepository.findById(diaryId).orElseThrow(() -> new DiaryException(DiaryExceptionType.DIARY_NOT_FOUND_EXCEPTION));
+		Diary diary = diaryRepository.findById(diaryId)
+			.orElseThrow(() -> new DiaryException(DiaryExceptionType.DIARY_NOT_FOUND_EXCEPTION));
 		if (!diary.getUser().getId().equals(userId)) {
 			throw new DiaryException(DiaryExceptionType.DIARY_UNAUTHORIZED_EXCEPTION);
 		}
