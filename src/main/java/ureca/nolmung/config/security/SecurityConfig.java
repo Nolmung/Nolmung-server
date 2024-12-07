@@ -64,6 +64,7 @@ public class SecurityConfig {
 				.requestMatchers("/v1/users/signup/**").permitAll()
 				.requestMatchers("/v1/recommend/bookmarks").permitAll()
 				.requestMatchers("/ban-words/upload").permitAll()
+				.requestMatchers("/v1/places/**").permitAll()
 				.requestMatchers("/v1/diary/public/**").permitAll()
 				.requestMatchers("/actuator/prometheus").permitAll()
 				.requestMatchers("/").permitAll()
