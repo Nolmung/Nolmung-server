@@ -37,7 +37,7 @@ public class BatchConfig {
     private final PlatformTransactionManager platformTransactionManager;
     private final DataSource dataSource;
     private final RecommendUseCase recommendUseCase;
-    private final RedisTemplate<String, Object> redisTemplate;
+    private final RedisTemplate<String, List<RecommendResp>> redisTemplate;
 
     @Bean
     public Job saveRecommendationsJob() {
