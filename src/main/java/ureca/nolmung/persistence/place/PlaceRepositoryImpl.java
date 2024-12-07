@@ -21,6 +21,7 @@ import lombok.RequiredArgsConstructor;
 import ureca.nolmung.jpa.place.Enum.Category;
 import ureca.nolmung.jpa.place.Place;
 import ureca.nolmung.jpa.place.QPlace;
+import ureca.nolmung.jpa.placeposition.QPlacePosition;
 import ureca.nolmung.jpa.review.QReview;
 import ureca.nolmung.jpa.user.User;
 
@@ -42,19 +43,12 @@ public class PlaceRepositoryImpl implements PlaceRepositoryCustom {
 
 	public List<Place> findAllByDogSizes(Set<String> sizes) {
 		QPlace place = QPlace.place;
+		QPlacePosition placePosition = QPlacePosition.placePosition;
 
-		BooleanBuilder builder = new BooleanBuilder();
-
-		for (String size : sizes) {
-			builder.or(place.acceptSize.like("%" + size + "%"));
-		}
-		builder.or(place.acceptSize.eq("ALL"));
-
-		return queryFactory.selectFrom(place)
-				.where(builder)
-				.orderBy(Expressions.numberTemplate(Double.class, "function('rand')").asc())
-				.limit(5)
-				.fetch();
+        return queryFactory.selectFrom(place)
+                .leftJoin(place.placePosition, placePosition).fetchJoin()
+                .where(place.acceptSize.in(sizes))
+                .fetch();
 	}
 
 	private BooleanExpression eqCategory(Category category) {
