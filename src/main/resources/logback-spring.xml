@@ -11,7 +11,7 @@
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
             <!-- [시간][로그레벨][thread이름] logger이름 메시지 \n 의 형식으로 출력 -->
-            <pattern>%clr([%d{yyyy-MM-dd HH:mm:ss.SSS}] %highlight([%-5level]) [%thread] %logger{36} %msg%n)</pattern>
+            <pattern>%green([%d{yyyy-MM-dd HH:mm:ss.SSS}]) %highlight([%-5level]) %magenta([%thread]) %cyan(%logger) %msg%n</pattern>
         </encoder>
     </appender>
 
