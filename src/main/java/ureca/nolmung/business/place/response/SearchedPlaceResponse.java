@@ -12,24 +12,28 @@ public class SearchedPlaceResponse {
 	private Long placeId;
 	private String placeName;
 	private Category category;
+	private String address;
 	private String roadAddress;
 	private String placeImgUrl;
 	private Double starRatingAvg;
 	private int reviewCount;
 	private double latitude;
 	private double longitude;
+	private Boolean isBookmarked;
 
-	public static SearchedPlaceResponse of(Place place) {
+	public static SearchedPlaceResponse of(Place place, Boolean isBookmarked) {
 		return SearchedPlaceResponse.builder()
 			.placeId(place.getId())
 			.placeName(place.getName())
 			.category(place.getCategory())
+			.address(place.getAddress())
 			.roadAddress(place.getRoadAddress())
 			.placeImgUrl(place.getPlaceImageUrl())
 			.starRatingAvg(place.getRatingAvg())
 			.reviewCount(place.getRatingCount())
 			.latitude(place.getLatitude())
 			.longitude(place.getLongitude())
+			.isBookmarked(isBookmarked)
 			.build();
 	}
 

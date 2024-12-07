@@ -37,8 +37,9 @@ public class PlaceDetailResponse {
 	private List<PlaceDiaryResponse> diaries;
 	private double latitude;
 	private double longitude;
+	private Boolean isBookmarked;
 
-	public static PlaceDetailResponse of(Place place, List<LabelResponse> labels, List<PlaceDiaryResponse> diaries) {
+	public static PlaceDetailResponse of(Place place, List<LabelResponse> labels, List<PlaceDiaryResponse> diaries, Boolean isBookmarked) {
 		return PlaceDetailResponse.builder()
 			.placeId(place.getId())
 			.placeName(place.getName())
@@ -59,6 +60,7 @@ public class PlaceDetailResponse {
 			.extraPrice(place.getExtraPrice())
 			.starRatingAvg(place.getRatingAvg())
 			.reviewCount(place.getRatingCount())
+			.isBookmarked(isBookmarked)
 			.latitude(place.getLatitude())
 			.longitude(place.getLongitude())
 			.labels(labels)
