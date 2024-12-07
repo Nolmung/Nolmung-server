@@ -44,17 +44,8 @@ public class BookmarkService implements BookmarkUseCase {
 		Bookmark bookmark = bookmarkRepository.findById(bookmarkId)
 			.orElseThrow(() -> new BookmarkException(BookmarkExceptionType.BOOKMARK_NOT_FOUND_EXCEPTION));
 
-		if (validateUserAndBookmark(user, bookmark)) {
-			bookmarkManager.delete(bookmark, user);
-		}
+		bookmarkManager.delete(bookmark, user);
 		return bookmarkId;
-	}
-
-	private boolean validateUserAndBookmark(User user, Bookmark bookmark) {
-		if (user.equals(bookmark.getUser())) {
-			return true;
-		}
-		return false;
 	}
 
 	@Override
