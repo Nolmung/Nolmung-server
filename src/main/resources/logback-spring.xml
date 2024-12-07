@@ -21,7 +21,7 @@
             <pattern>[%d{yyyy-MM-dd HH:mm:ss:SSS}] [%-5level] [%thread] %logger %msg%n</pattern>
         </encoder>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>${LOG_PATH}/marcket-%d{yyyy-MM-dd}.log</fileNamePattern>
+            <fileNamePattern>${LOG_PATH}/nolmung-%d{yyyy-MM-dd}.log</fileNamePattern>
             <maxHistory>2</maxHistory>
             <totalSizeCap>15MB</totalSizeCap>
         </rollingPolicy>
@@ -38,8 +38,8 @@
             <pattern>[%d{yyyy-MM-dd HH:mm:ss:SSS}] [%-5level] [%thread] %logger %msg%n</pattern>
         </encoder>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>${LOG_PATH}/marcket-error-%d{yyyy-MM-dd}.log</fileNamePattern>
-            <maxHistory>2</maxHistory>
+            <fileNamePattern>${LOG_PATH}/nolmung-error-%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>5</maxHistory>
             <totalSizeCap>15MB</totalSizeCap>
         </rollingPolicy>
     </appender>

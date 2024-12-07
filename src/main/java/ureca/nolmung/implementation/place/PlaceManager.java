@@ -1,6 +1,7 @@
 package ureca.nolmung.implementation.place;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.GeometryFactory;
@@ -9,10 +10,12 @@ import org.locationtech.jts.geom.Polygon;
 import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
+import ureca.nolmung.business.place.response.SearchedPlaceResponse;
+import ureca.nolmung.business.user.dto.response.CustomUserDetails;
 import ureca.nolmung.jpa.place.Enum.Category;
 import ureca.nolmung.jpa.place.Place;
 import ureca.nolmung.jpa.placeposition.PlacePosition;
-import ureca.nolmung.jpa.user.User;
+import ureca.nolmung.persistence.bookmark.BookmarkRepository;
 import ureca.nolmung.persistence.place.PlaceRepository;
 import ureca.nolmung.persistence.placeposition.PlacePositionRepository;
 
@@ -24,6 +27,7 @@ public class PlaceManager {
 
 	private final PlaceRepository placeRepository;
 	private final PlacePositionRepository placePositionRepository;
+	private final BookmarkRepository bookmarkRepository;
 
 	private final GeometryFactory geometryFactory = new GeometryFactory();
 
@@ -52,14 +56,24 @@ public class PlaceManager {
 		}
 	}
 
-	public List<Place> findBySearchOption(User user, Category category, Boolean isVisited, Boolean isBookmarked, double latitude, double longitude, double maxLatitude, double maxLongitude) {
+	public List<Place> findBySearchOption(CustomUserDetails userDetails, Category category, Boolean isVisited, Boolean isBookmarked, double latitude, double longitude, double maxLatitude, double maxLongitude) {
 		Polygon polygon = generatePolygon(latitude, longitude, maxLatitude, maxLongitude);
-		return placeRepository.findBySearchOption(user, category, isVisited, isBookmarked, polygon);
+		return placeRepository.findBySearchOption(userDetails, category, isVisited, isBookmarked, polygon);
 	}
 
 	public List<Place> findPlaceMapOn(double latitude, double longitude, double maxLatitude, double maxLongitude) {
 		Polygon polygon = generatePolygon(latitude, longitude, maxLatitude, maxLongitude);
 		return placePositionRepository.findPlaceByCoordinate(polygon);
+	}
+
+	public List<SearchedPlaceResponse> createSearchedPlaceResponse(CustomUserDetails userDetails, List<Place> places) {
+		boolean isUserDetailsNull = userDetails == null;
+		return places.stream()
+			.map(place -> {
+				boolean isBookmarked = isUserDetailsNull ? false : bookmarkRepository.existsByUserAndPlace(userDetails.getUser(), place);
+				return SearchedPlaceResponse.of(place, isBookmarked);
+			})
+			.collect(Collectors.toList());
 	}
 
 	private Polygon generatePolygon(double latitude, double longitude, double maxLatitude, double maxLongitude) {
@@ -93,4 +107,11 @@ public class PlaceManager {
 		return maxLongitude - longitude;
 	}
 
+	public Boolean isBookmarked(CustomUserDetails userDetails, Place place) {
+		if (userDetails == null) {
+			return false;
+		}
+
+		return bookmarkRepository.existsByUserAndPlace(userDetails.getUser(), place);
+	}
 }

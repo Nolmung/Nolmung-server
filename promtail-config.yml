@@ -15,28 +15,3 @@ scrape_configs:
         labels:
           job: logging
           __path__: /logs/*.log
-
-#scrape_configs:
-#  - job_name: info
-#    static_configs:
-#      - targets:
-#          - springboot-app
-#        labels:
-#          job: info_logs
-#          __path__: ./logs/info/*.log # info 폴더 내에 log 파일들 모두 수집
-#
-#  - job_name: warn
-#    static_configs:
-#      - targets:
-#          - springboot-app
-#        labels:
-#          job: warn_logs
-#          __path__: ./logs/warn/*.log # warn 폴더 내에 log 파일들 모두 수집
-#
-#  - job_name: error
-#    static_configs:
-#      - targets:
-#          - springboot-app
-#        labels:
-#          job: error_logs
-#          __path__: ./logs/error/*.log # error 폴더 내에 log 파일들 모두 수집

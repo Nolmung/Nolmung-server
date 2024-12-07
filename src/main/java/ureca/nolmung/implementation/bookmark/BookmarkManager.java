@@ -1,5 +1,6 @@
 package ureca.nolmung.implementation.bookmark;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -7,7 +8,9 @@ import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
 import ureca.nolmung.business.bookmark.response.BookmarkResponse;
+import ureca.nolmung.business.place.response.SearchedPlaceResponse;
 import ureca.nolmung.jpa.bookmark.Bookmark;
+import ureca.nolmung.jpa.place.Place;
 import ureca.nolmung.jpa.user.User;
 import ureca.nolmung.persistence.bookmark.BookmarkRepository;
 

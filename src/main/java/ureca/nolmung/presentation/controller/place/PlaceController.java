@@ -31,18 +31,22 @@ public class PlaceController {
 
 	@Operation(summary = "키워드로 장소 검색")
 	@GetMapping("/search")
-	public ResponseDto<List<SearchedPlaceResponse>> searchByKeyword(@RequestParam String keyword) {
-		return ResponseUtil.SUCCESS("장소 검색에 성공하였습니다.", placeUseCase.searchByKeyword(keyword));
+	public ResponseDto<List<SearchedPlaceResponse>> searchByKeyword(
+		@AuthenticationPrincipal CustomUserDetails userDetails,
+		@RequestParam String keyword) {
+		return ResponseUtil.SUCCESS("장소 검색에 성공하였습니다.", placeUseCase.searchByKeyword(userDetails, keyword));
 	}
 
 	@Operation(summary = "지도에서 장소 검색")
 	@GetMapping("/map")
 	public ResponseDto<List<SearchedPlaceResponse>> findPlaceOnMap(
+		@AuthenticationPrincipal CustomUserDetails userDetails,
 		@RequestParam double latitude,
 		@RequestParam double longitude,
 		@RequestParam double maxLatitude,
 		@RequestParam double maxLongitude) {
-		return ResponseUtil.SUCCESS("지도에서 장소 검색에 성공하였습니다.", placeUseCase.findPlaceOnMap(latitude, longitude, maxLatitude, maxLongitude));
+		System.out.println();
+		return ResponseUtil.SUCCESS("지도에서 장소 검색에 성공하였습니다.", placeUseCase.findPlaceOnMap(userDetails, latitude, longitude, maxLatitude, maxLongitude));
 	}
 
 	@Operation(summary = "장소 조회 필터링")
@@ -56,13 +60,15 @@ public class PlaceController {
 		@RequestParam double longitude,
 		@RequestParam double maxLatitude,
 		@RequestParam double maxLongitude) {
-		return ResponseUtil.SUCCESS("장소 조회에 성공하였습니다.", placeUseCase.findBySearchOption(userDetails.getUser(), category, isVisited, isBookmarked, latitude, longitude, maxLatitude, maxLongitude));
+		return ResponseUtil.SUCCESS("장소 조회에 성공하였습니다.", placeUseCase.findBySearchOption(userDetails, category, isVisited, isBookmarked, latitude, longitude, maxLatitude, maxLongitude));
 	}
 
 	@Operation(summary = "장소 상세 정보 조회")
 	@GetMapping("/details/{placeId}")
-	public ResponseDto<PlaceDetailResponse> findPlaceDetailByPlaceId(@PathVariable Long placeId) {
-		return ResponseUtil.SUCCESS("장소 상세 정보 조회에 성공하였습니다.", placeUseCase.findPlaceDetailById(placeId));
+	public ResponseDto<PlaceDetailResponse> findPlaceDetailByPlaceId(
+		@AuthenticationPrincipal CustomUserDetails userDetails,
+		@PathVariable Long placeId) {
+		return ResponseUtil.SUCCESS("장소 상세 정보 조회에 성공하였습니다.", placeUseCase.findPlaceDetailById(userDetails, placeId));
 	}
 
 	@Operation(summary = "공간 데이터 생성", description = "백엔드 정용 API")
