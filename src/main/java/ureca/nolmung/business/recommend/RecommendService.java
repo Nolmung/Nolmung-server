@@ -10,6 +10,7 @@ import ureca.nolmung.business.recommend.dto.response.RecommendResp;
 import ureca.nolmung.implementation.dog.DogManager;
 import ureca.nolmung.implementation.recommend.AwsPersonalizeManager;
 import ureca.nolmung.implementation.recommend.RecommendManager;
+import ureca.nolmung.implementation.recommend.RedisManager;
 import ureca.nolmung.implementation.recommend.dtomapper.RecommendDtoMapper;
 import ureca.nolmung.jpa.dog.Dog;
 import ureca.nolmung.jpa.place.Place;
@@ -26,6 +27,7 @@ public class RecommendService implements RecommendUseCase{
     private final DogManager dogManager;
     private final RecommendDtoMapper recommendDtoMapper;
     private final RedisTemplate<String, List<RecommendResp>> redisTemplate;
+    private final RedisManager redisManager;
 
     @Override
     @Transactional(readOnly = true)
@@ -37,14 +39,27 @@ public class RecommendService implements RecommendUseCase{
     @Override
     @Transactional(readOnly = true)
     public List<RecommendResp> getPlaceRecommendationsForDogs(User user) {
-        List<Dog> dogs = dogManager.getDogList(user.getId());
-        List<Place> places = recommendManager.getPlaceRecommendationsForDogs(dogs);
-        return recommendDtoMapper.toGetPlaceRecommendations(places);
+
+        Boolean isKeyExists = redisTemplate.hasKey("dog" + user.getId());
+
+        if (isKeyExists) {
+            List<RecommendResp> recommendResps = redisManager.getRedis("dog" + user.getId());
+            return recommendManager.getRandomRecommendResps(recommendResps, 5);
+
+        } else {
+            List<Dog> dogs = dogManager.getDogList(user.getId());
+            List<Place> places = recommendManager.getPlaceRecommendationsForDogs(dogs);
+            List<RecommendResp> recommendResps = redisManager.saveRedis(places, "dog" + user.getId());
+            return recommendManager.getRandomRecommendResps(recommendResps, 5);
+        }
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<RecommendResp> getPlaceRecommendationsNearByUser(User user) {
+
+//        Boolean isKeyExists = redisTemplate.hasKey("near" + user.getId());
+
         List<Place> nearByPlaces = recommendManager.findNearbyPlaces(user.getUserLatitude(), user.getUserLongitude());
         List<Place> randomSelectNearByPlaces = recommendManager.randomSelectPlaces(nearByPlaces);
         return recommendDtoMapper.toGetPlaceRecommendations(randomSelectNearByPlaces);
@@ -53,16 +68,17 @@ public class RecommendService implements RecommendUseCase{
     @Override
     public List<RecommendResp> getPlaceRecommendationsFromPersonalize(User user) {
 
-        Boolean isKeyExists = redisTemplate.hasKey(String.valueOf(user.getId()));
+//        Boolean isKeyExists = redisTemplate.hasKey(String.valueOf(user.getId()));
+        Boolean isKeyExists = redisTemplate.hasKey("personalize" + user.getId());
 
         if (isKeyExists) {
-            List<RecommendResp> recommendResps = awsPersonalizeManager.getRedis(user.getId());
-            return awsPersonalizeManager.getRandomRecommendResps(recommendResps, 5);
+            List<RecommendResp> recommendResps = redisManager.getRedis("personalize" + user.getId());
+            return recommendManager.getRandomRecommendResps(recommendResps, 5);
         } else {
             List<PredictedItem> awsRecs = awsPersonalizeManager.getRecs(user.getId());
             List<Place> places = awsPersonalizeManager.getPlaces(awsRecs);
-            List<RecommendResp> recommendResps = awsPersonalizeManager.saveRedis(places, user.getId());
-            return awsPersonalizeManager.getRandomRecommendResps(recommendResps, 5);
+            List<RecommendResp> recommendResps = redisManager.saveRedis(places, "personalize" + user.getId());
+            return recommendManager.getRandomRecommendResps(recommendResps, 5);
         }
     }
 

@@ -6,6 +6,7 @@ import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.Polygon;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
+import ureca.nolmung.business.recommend.dto.response.RecommendResp;
 import ureca.nolmung.jpa.dog.Dog;
 import ureca.nolmung.jpa.place.Place;
 import ureca.nolmung.persistence.place.PlaceRepository;
@@ -34,7 +35,7 @@ public class RecommendManager {
         Set<String> sizes = dogs.stream()
                 .map(dog -> dog.getSize().name())
                 .collect(Collectors.toSet());
-
+        sizes.add("ALL");
         return placeRepository.findAllByDogSizes(sizes);
     }
 
@@ -58,7 +59,6 @@ public class RecommendManager {
         return polygon;
     }
 
-
     public List<Place> randomSelectPlaces(List<Place> nearbyPlaces) {
         if (nearbyPlaces.size() <= 5) {
             return nearbyPlaces;
@@ -66,5 +66,13 @@ public class RecommendManager {
         Collections.shuffle(nearbyPlaces);
 
         return nearbyPlaces.subList(0, 5);
+    }
+
+    public List<RecommendResp> getRandomRecommendResps(List<RecommendResp> recommendResps, int count) {
+        if (count >= recommendResps.size()) {
+            return recommendResps;
+        }
+        Collections.shuffle(recommendResps);
+        return recommendResps.subList(0, count);
     }
 }
