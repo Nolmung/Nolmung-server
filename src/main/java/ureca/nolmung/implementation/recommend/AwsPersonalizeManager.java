@@ -29,7 +29,7 @@ public class AwsPersonalizeManager {
     private final PersonalizeRuntimeClient personalizeRuntimeClient;
     private final PlaceRepository placeRepository;
     private final RedisTemplate<String, List<RecommendResp>> redisTemplate;
-    private static final int DEFAULT_NUM_RESULTS = 25; // 기본값 설정
+    private static final int DEFAULT_NUM_RESULTS = 25;
 
     public List<PredictedItem> getRecs(Long userId) {
 

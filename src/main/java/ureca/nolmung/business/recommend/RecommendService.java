@@ -25,7 +25,7 @@ public class RecommendService implements RecommendUseCase{
     private final RecommendManager recommendManager;
     private final DogManager dogManager;
     private final RecommendDtoMapper recommendDtoMapper;
-    private final RedisTemplate<String, List<Place>> redisTemplate;
+    private final RedisTemplate<String, List<RecommendResp>> redisTemplate;
 
     @Override
     @Transactional(readOnly = true)
