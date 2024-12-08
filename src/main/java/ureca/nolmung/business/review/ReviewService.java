@@ -27,7 +27,7 @@ public class ReviewService implements ReviewUseCase{
 
     @Override
     @Transactional
-    public AddReviewResp addReview(User user, AddReviewReq req) {
+    public List<AddReviewResp> addReview(User user, AddReviewReq req) {
         User loginUser = userManager.validateUserExistence(user.getId());
         return reviewManager.addReview(loginUser, req);
     }
