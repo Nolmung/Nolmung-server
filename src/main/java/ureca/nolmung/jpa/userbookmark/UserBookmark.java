@@ -18,9 +18,20 @@ public class UserBookmark {
     @Column(name = "user_bookmark_id")
     private Long id;
 
-    @Column(name = "user_id")
+    @Column(nullable = false, name = "user_id")
     private Long userId;
 
-    @Column(name = "bookmark_count")
+    @Column(nullable = false, name = "bookmark_count")
     private int bookmarkCount;
+
+    public static UserBookmark createUserBookmark(Long userId, int userBookmarkCount) {
+        UserBookmark userBookmark = new UserBookmark();
+        userBookmark.userId = userId;
+        userBookmark.bookmarkCount = userBookmarkCount;
+        return userBookmark;
+    }
+
+    public void updateBookmarkCount(int userBookmarkCount) {
+        this.bookmarkCount = userBookmarkCount;
+    }
 }
