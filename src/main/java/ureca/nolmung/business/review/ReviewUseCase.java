@@ -9,7 +9,7 @@ import ureca.nolmung.jpa.user.User;
 import java.util.List;
 
 public interface ReviewUseCase {
-    AddReviewResp addReview(User user, AddReviewReq req);
+    List<AddReviewResp> addReview(User user, AddReviewReq req);
     DeleteReviewResp deleteReview(User user, Long reviewId);
     List<ReviewResp> getReviews(Long userId, int page, int size);
 }

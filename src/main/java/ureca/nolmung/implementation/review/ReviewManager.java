@@ -1,5 +1,6 @@
 package ureca.nolmung.implementation.review;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,34 +36,39 @@ public class ReviewManager {
     private final ReviewLabelRepository reviewLabelRepository;
     private final LabelRepository labelRepository;
 
-    public AddReviewResp addReview(User user, AddReviewReq req) {
+    public List<AddReviewResp> addReview(User user, AddReviewReq req) {
 
-        Place place = placeRepository.findById(req.placeId())
-                .orElseThrow(() -> new PlaceException(PlaceExceptionType.PLACE_NOT_FOUND_EXCEPTION));
+        List<AddReviewResp> responses = new ArrayList<>();
 
-        Review newReview = createReview(user, req, place);
-        reviewRepository.save(newReview);
+        for (AddReviewReq.ReviewDto reviewDto : req.reviews()){
 
-        place.addRating(req.rating());
-        placeRepository.save(place);
+            Place place = placeRepository.findById(reviewDto.placeId())
+                    .orElseThrow(() -> new PlaceException(PlaceExceptionType.PLACE_NOT_FOUND_EXCEPTION));
+            Review newReview = createReview(user, reviewDto, place);
+            reviewRepository.save(newReview);
 
-        for (AddReviewReq.LabelDto labelDto : req.labels()) {
-            ReviewLabel newReviewLabel = createReviewLabel(labelDto, newReview);
-            reviewLabelRepository.save(newReviewLabel);
+            place.addRating(reviewDto.rating());
+            placeRepository.save(place);
 
-            Optional<Label> existLabelOpt = labelRepository.findById_LabelIdAndId_PlaceId(labelDto.labelId(), place.getId());
+            for (AddReviewReq.ReviewDto.LabelDto labelDto : reviewDto.labels()) {
+                ReviewLabel newReviewLabel = createReviewLabel(labelDto, newReview);
+                reviewLabelRepository.save(newReviewLabel);
 
-            if (existLabelOpt.isPresent()) {
-                Label existingLabel = existLabelOpt.get();
-                existingLabel.addLabelCount();
-                labelRepository.save(existingLabel);
-            } else {
-                LabelId newLabelId = new LabelId(labelDto.labelId(), place.getId());
-                Label newLabel = createLabelCount(newLabelId, place);
-                labelRepository.save(newLabel);
+                Optional<Label> existLabelOpt = labelRepository.findById_LabelIdAndId_PlaceId(labelDto.labelId(), place.getId());
+
+                if (existLabelOpt.isPresent()) {
+                    Label existingLabel = existLabelOpt.get();
+                    existingLabel.addLabelCount();
+                    labelRepository.save(existingLabel);
+                } else {
+                    LabelId newLabelId = new LabelId(labelDto.labelId(), place.getId());
+                    Label newLabel = createLabelCount(newLabelId, place);
+                    labelRepository.save(newLabel);
+                }
             }
+            responses.add(new AddReviewResp(newReview.getId()));
         }
-        return new AddReviewResp(newReview.getId());
+        return responses;
     }
 
 
@@ -94,7 +100,7 @@ public class ReviewManager {
         return new DeleteReviewResp(reviewId);
     }
 
-    private Review createReview(User user, AddReviewReq req, Place place) {
+    private Review createReview(User user, AddReviewReq.ReviewDto req, Place place) {
         return Review.builder()
                 .user(user)
                 .place(place)
@@ -102,7 +108,7 @@ public class ReviewManager {
                 .build();
     }
 
-    private ReviewLabel createReviewLabel(AddReviewReq.LabelDto labelDto, Review newReview) {
+    private ReviewLabel createReviewLabel(AddReviewReq.ReviewDto.LabelDto labelDto, Review newReview) {
         return ReviewLabel.builder()
                 .review(newReview)
                 .labelId(labelDto.labelId())
