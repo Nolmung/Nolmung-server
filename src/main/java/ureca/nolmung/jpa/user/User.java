@@ -17,6 +17,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import ureca.nolmung.business.user.dto.request.UserReq;
+import ureca.nolmung.implementation.user.UserException;
+import ureca.nolmung.implementation.user.UserExceptionType;
 import ureca.nolmung.jpa.config.BaseEntity;
 import ureca.nolmung.jpa.diary.Diary;
 import ureca.nolmung.jpa.user.Enum.Gender;
@@ -80,6 +82,8 @@ public class User extends BaseEntity {
     @Column(nullable = false)
     private Long diaryCount = 0L;
 
+    @Column(nullable = false, name = "bookmark_count")
+    private int bookmarkCount;
 
     public void singUp(UserReq req)
     {
@@ -121,6 +125,18 @@ public class User extends BaseEntity {
         if(this.diaryCount > 0)
         {
             this.diaryCount--;
+        }
+    }
+
+    public void addBookmarkCount() {
+        this.bookmarkCount++;
+    }
+
+    public void subtractBookmarkCount() {
+        if (this.bookmarkCount > 0) {
+            this.bookmarkCount--;
+        } else {
+            throw new UserException(UserExceptionType.BOOKMARK_COUNT_CANNOT_BE_NEGATIVE);
         }
     }
 }
