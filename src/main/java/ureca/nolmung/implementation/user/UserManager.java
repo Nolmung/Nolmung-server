@@ -63,4 +63,14 @@ public class UserManager {
 
         userBookmarkRepository.save(userBookmark);
     }
+
+    public void addBookmarkCount(User user) {
+        user.addBookmarkCount();
+        userRepository.save(user);
+    }
+
+    public void subtractBookmarkCount(User user) {
+        user.subtractBookmarkCount();
+        userRepository.save(user);
+    }
 }
