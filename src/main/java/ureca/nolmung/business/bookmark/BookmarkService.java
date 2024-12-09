@@ -31,7 +31,6 @@ public class BookmarkService implements BookmarkUseCase {
 	private final UserManager userManager;
 	private final PlaceRepository placeRepository;
 	private final BookmarkRepository bookmarkRepository;
-	private final UserRepository userRepository;
 
 	@Transactional
 	@Override
