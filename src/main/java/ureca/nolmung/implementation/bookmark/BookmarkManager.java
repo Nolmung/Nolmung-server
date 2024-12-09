@@ -22,6 +22,8 @@ public class BookmarkManager {
 
 	public Long save(Bookmark bookmark) {
 		checkIfBookmarkExists(bookmark);
+		Place place = bookmark.getPlace();
+		place.addBookmarkCount();
 		return bookmarkRepository.save(bookmark).getId();
 	}
 
@@ -34,6 +36,8 @@ public class BookmarkManager {
 	public void delete(Bookmark bookmark, User user) {
 		validateUser(bookmark, user);
 		bookmarkRepository.delete(bookmark);
+		Place place = bookmark.getPlace();
+		place.minusBookmarkCount();
 	}
 
 	public void validateUser(Bookmark bookmark, User user) {

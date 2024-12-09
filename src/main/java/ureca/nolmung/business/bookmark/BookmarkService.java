@@ -34,7 +34,6 @@ public class BookmarkService implements BookmarkUseCase {
 	public Long createBookmark(User user, BookmarkServiceRequest serviceRequest) {
 		Place place = placeRepository.findById(serviceRequest.getPlaceId())
 			.orElseThrow(() -> new PlaceException(PlaceExceptionType.PLACE_NOT_FOUND_EXCEPTION));
-		place.addBookmarkCount();
 		return bookmarkManager.save(serviceRequest.toEntity(user, place));
 	}
 
@@ -43,7 +42,6 @@ public class BookmarkService implements BookmarkUseCase {
 	public Long deleteBookmark(User user, Long bookmarkId) {
 		Bookmark bookmark = bookmarkRepository.findById(bookmarkId)
 			.orElseThrow(() -> new BookmarkException(BookmarkExceptionType.BOOKMARK_NOT_FOUND_EXCEPTION));
-
 		bookmarkManager.delete(bookmark, user);
 		return bookmarkId;
 	}

@@ -119,4 +119,8 @@ public class Place extends BaseEntity {
         this.bookmarkCount++;
     }
 
+    public void minusBookmarkCount() {
+        this.bookmarkCount--;
+    }
+
 }
