@@ -47,20 +47,32 @@ public class DiaryManager {
 	public List<PlaceDiaryResponse> findDiaryByPlace(Place place) {
 		List<DiaryPlace> diaryPlaces = diaryPlaceRepository.findAllByPlaceOrderByCreatedAtDesc(place);
 		List<PlaceDiaryResponse> placeDiaryResponses = new ArrayList<>();
+
 		for (DiaryPlace diaryPlace : diaryPlaces) {
-			Diary diary = diaryRepository.findById(diaryPlace.getDiary().getId())
-				.orElseThrow(() -> new DiaryException(DiaryExceptionType.DIARY_NOT_FOUND_EXCEPTION));
-			if (!diary.isPublicYn()) {
+			Diary diary = findDiaryById(diaryPlace.getId());
+
+			if (!isDiaryPublic(diary)) {
 				continue;
 			}
-			Media media = mediaRepository.findFirstByDiary(diary);
-			if (media == null) {
-				placeDiaryResponses.add(new PlaceDiaryResponse().of(diary, "이미지 없음"));
-			} else {
-				placeDiaryResponses.add(new PlaceDiaryResponse().of(diary, media.getMediaUrl()));
-			}
+
+			String mediaUrl = getMediaUrl(diary);
+			placeDiaryResponses.add(new PlaceDiaryResponse().of(diary, mediaUrl));
 		}
 		return placeDiaryResponses;
+	}
+
+	public Diary findDiaryById(Long diaryId) {
+		return diaryRepository.findById(diaryId)
+			.orElseThrow(() -> new DiaryException(DiaryExceptionType.DIARY_NOT_FOUND_EXCEPTION));
+	}
+
+	private boolean isDiaryPublic(Diary diary) {
+		return diary.isPublicYn();
+	}
+
+	private String getMediaUrl(Diary diary) {
+		Media media = mediaRepository.findFirstByDiary(diary);
+		return (media != null) ? media.getMediaUrl() : "이미지 없음";
 	}
 
 	public AddDiaryResp addDiary(User user, AddDiaryReq req) {
