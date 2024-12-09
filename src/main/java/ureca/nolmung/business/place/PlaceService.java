@@ -17,7 +17,6 @@ import ureca.nolmung.implementation.label.LabelManager;
 import ureca.nolmung.implementation.place.PlaceManager;
 import ureca.nolmung.jpa.place.Enum.Category;
 import ureca.nolmung.jpa.place.Place;
-import ureca.nolmung.persistence.bookmark.BookmarkRepository;
 
 @Slf4j
 @Transactional(readOnly = true)
@@ -28,7 +27,6 @@ public class PlaceService implements PlaceUseCase {
 	private final PlaceManager placeManager;
 	private final LabelManager labelManager;
 	private final DiaryManager diaryManager;
-	private final BookmarkRepository bookmarkRepository;
 
 	@Override
 	public List<SearchedPlaceResponse> searchByKeyword(CustomUserDetails userDetails, String keyword) {

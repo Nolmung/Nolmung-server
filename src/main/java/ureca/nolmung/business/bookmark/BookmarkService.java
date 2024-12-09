@@ -9,7 +9,10 @@ import lombok.RequiredArgsConstructor;
 import ureca.nolmung.business.bookmark.request.BookmarkServiceRequest;
 import ureca.nolmung.business.bookmark.response.BookmarkResponse;
 import ureca.nolmung.implementation.bookmark.BookmarkManager;
+import ureca.nolmung.implementation.place.PlaceManager;
+import ureca.nolmung.jpa.bookmark.Bookmark;
 import ureca.nolmung.jpa.place.Enum.Category;
+import ureca.nolmung.jpa.place.Place;
 import ureca.nolmung.jpa.user.User;
 
 @Transactional(readOnly = true)
@@ -18,17 +21,21 @@ import ureca.nolmung.jpa.user.User;
 public class BookmarkService implements BookmarkUseCase {
 
 	private final BookmarkManager bookmarkManager;
+	private final PlaceManager placeManager;
 
 	@Transactional
 	@Override
 	public Long createBookmark(User user, BookmarkServiceRequest serviceRequest) {
-		return bookmarkManager.save(user, serviceRequest);
+		Place place = placeManager.findPlaceById(serviceRequest.getPlaceId());
+		Bookmark bookmark = serviceRequest.toEntity(user, place);
+		return bookmarkManager.save(bookmark, place);
 	}
 
 	@Transactional
 	@Override
 	public Long deleteBookmark(User user, Long bookmarkId) {
-		bookmarkManager.delete(bookmarkId, user);
+		Bookmark bookmark = bookmarkManager.findBookmarkById(bookmarkId);
+		bookmarkManager.delete(bookmark, user);
 		return bookmarkId;
 	}
 
