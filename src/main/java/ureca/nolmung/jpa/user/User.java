@@ -133,10 +133,9 @@ public class User extends BaseEntity {
     }
 
     public void subtractBookmarkCount() {
-        if (this.bookmarkCount > 0) {
-            this.bookmarkCount--;
-        } else {
+        if (this.bookmarkCount <= 0) {
             throw new UserException(UserExceptionType.BOOKMARK_COUNT_CANNOT_BE_NEGATIVE);
         }
+        this.bookmarkCount--;
     }
 }
