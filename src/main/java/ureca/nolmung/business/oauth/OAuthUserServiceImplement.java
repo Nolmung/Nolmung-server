@@ -22,16 +22,14 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import lombok.RequiredArgsConstructor;
-import ureca.nolmung.business.oauth.dto.response.LoginStatus;
-import ureca.nolmung.business.oauth.dto.response.OauthLoginRes;
 import ureca.nolmung.business.user.dto.response.CustomUserDetails;
+import ureca.nolmung.config.jwt.JWTUtil;
 import ureca.nolmung.implementation.oauth.OauthException;
 import ureca.nolmung.implementation.oauth.OauthExceptionType;
 import ureca.nolmung.implementation.user.UserException;
 import ureca.nolmung.implementation.user.UserExceptionType;
 import ureca.nolmung.implementation.user.UserManager;
 import ureca.nolmung.jpa.user.Enum.Provider;
-import ureca.nolmung.jpa.user.Enum.UserRole;
 import ureca.nolmung.jpa.user.User;
 
 @Service
@@ -40,6 +38,7 @@ public class OAuthUserServiceImplement extends DefaultOAuth2UserService {
 
     private final UserManager userManager;
     private final ClientRegistrationRepository clientRegistrationRepository;
+    private final JWTUtil jwtUtil;
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest request) throws OAuth2AuthenticationException
@@ -140,15 +139,9 @@ public class OAuthUserServiceImplement extends DefaultOAuth2UserService {
         );
     }
 
-    public OauthLoginRes kakaoOauthLogin(String code)
+    public Long kakaoOauthLogin(String code)
     {
         CustomUserDetails userDetails = (CustomUserDetails)getOAuth2User(code);
-
-        if(userDetails.getUser().getRole() == UserRole.GUEST) {
-            return new OauthLoginRes(LoginStatus.SIGN_UP_REQUIRED, userDetails.getUser().getId(), userDetails.getUser().getEmail(), userDetails.getUser().getRole(), userDetails.getUser().getProvider());
-        }
-        else {
-            return new OauthLoginRes(LoginStatus.LOGIN_SUCCESS, userDetails.getUser().getId(), userDetails.getUser().getEmail(), userDetails.getUser().getRole(), userDetails.getUser().getProvider());
-        }
+        return userDetails.getUser().getId();
     }
 }
