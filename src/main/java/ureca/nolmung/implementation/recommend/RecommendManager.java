@@ -59,12 +59,12 @@ public class RecommendManager {
     }
 
 
-    public List<Place> randomSelectPlaces(List<Place> nearbyPlaces) {
-        if (nearbyPlaces.size() <= 5) {
+    public List<Place> randomSelectPlaces(List<Place> nearbyPlaces, int count) {
+        if (nearbyPlaces.size() <= count) {
             return nearbyPlaces;
         }
         Collections.shuffle(nearbyPlaces);
 
-        return nearbyPlaces.subList(0, 5);
+        return nearbyPlaces.subList(0, count);
     }
 }
