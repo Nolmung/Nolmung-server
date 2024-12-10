@@ -19,8 +19,8 @@ public class BookmarkManager {
 
 	private final BookmarkRepository bookmarkRepository;
 
-	public Bookmark findBookmarkById(long bookmarkId) {
-		return bookmarkRepository.findById(bookmarkId)
+	public Bookmark findBookmarkByUserAndPlace(User user, Place place) {
+		return bookmarkRepository.findByUserAndPlace(user, place)
 			.orElseThrow(() -> new BookmarkException(BookmarkExceptionType.BOOKMARK_NOT_FOUND_EXCEPTION));
 	}
 
@@ -36,11 +36,12 @@ public class BookmarkManager {
 		}
 	}
 
-	public void delete(Bookmark bookmark, User user) {
+	public long delete(Bookmark bookmark, User user) {
 		validateUser(bookmark, user);
 		bookmarkRepository.delete(bookmark);
 		Place place = bookmark.getPlace();
 		place.minusBookmarkCount();
+		return bookmark.getId();
 	}
 
 	public void validateUser(Bookmark bookmark, User user) {
