@@ -26,18 +26,24 @@
   - 반려견 정보 관리 시스템
   - 즐겨찾기 시스템 
 
-### 🛠️ 시스템 아키텍쳐
+### 🛠️ 시스템 아키텍쳐(개발)
 <kbd>
-<img width="600" height="300" src="https://github.com/user-attachments/assets/67086b43-b2ee-4965-8355-2a770d129fa7" alt="nolmung_architecture" style="border:1px solid black;">
+<img width="600" height="300" src="https://github.com/user-attachments/assets/fe598b0f-16a8-43f0-9ac7-73ff3dff7c52" alt="nolmung_architecture" style="border:1px solid black;">
+</kbd>
+
+### 🛠️ 시스템 아키텍쳐(운영)
+<kbd>
+<img width="600" height="300" src="https://github.com/user-attachments/assets/81b46d91-97ac-4a2b-a0df-cbfbdd024cd4" alt="nolmung_architecture" style="border:1px solid black;">
 </kbd>
 
 ### 📌 ERD
 <kbd>
-<img width="600" height="300" src="https://github.com/user-attachments/assets/aeb08556-58b0-4001-b0ed-7fc5a3107fd4" alt="nolmung_erd" style="border:1px solid black;">
+<img width="600" height="300" src="https://github.com/user-attachments/assets/530b465d-729f-4645-98fb-8a7906ece0cc" alt="nolmung_erd" style="border:1px solid black;">
 </kbd>
 <p>
   🔗 <a href="https://www.erdcloud.com/d/i8uWGycunfcGahQYE" rel="nofollow">ERDCloud</a>  
 </p>
+
 
 ### 📋 Git 브랜치 전략
 > Github-Flow
@@ -69,13 +75,9 @@
       <img width="600" height="200" src="https://github.com/user-attachments/assets/307aa836-668e-48bb-8a39-266ec626a6e1" alt="nolmung_schedule" style="border:1px solid black;">
   </kbd>
 
-- 현재 진행 사항 (2주차)
-  - 기능 설계 (완료)
-  - 데이터베이스 설계 (완료)
-  - API 설계 (완료)
-  - UI/UX 디자인 (진행중)
-  - 인프라 (진행 예정) : AWS RDS 구축
-  - API Server 개발 (진행 예정)
-  - 프론트 컴포넌트 개발 (진행중)
+- 현재 진행 사항 (5주차)
+  - 프론트 컴포넌트 (완료)
+  - API 연동 (완료)
+  - QA (진행 예정)
     
 <!--### 🤔 고민한 이야기-->
