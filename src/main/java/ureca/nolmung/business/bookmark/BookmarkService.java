@@ -10,10 +10,16 @@ import ureca.nolmung.business.bookmark.request.BookmarkServiceRequest;
 import ureca.nolmung.business.bookmark.response.BookmarkResponse;
 import ureca.nolmung.implementation.bookmark.BookmarkManager;
 import ureca.nolmung.implementation.place.PlaceManager;
+import ureca.nolmung.implementation.place.PlaceException;
+import ureca.nolmung.implementation.place.PlaceExceptionType;
+import ureca.nolmung.implementation.user.UserManager;
 import ureca.nolmung.jpa.bookmark.Bookmark;
 import ureca.nolmung.jpa.place.Enum.Category;
 import ureca.nolmung.jpa.place.Place;
 import ureca.nolmung.jpa.user.User;
+import ureca.nolmung.persistence.bookmark.BookmarkRepository;
+import ureca.nolmung.persistence.place.PlaceRepository;
+import ureca.nolmung.persistence.user.UserRepository;
 
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -22,10 +28,12 @@ public class BookmarkService implements BookmarkUseCase {
 
 	private final BookmarkManager bookmarkManager;
 	private final PlaceManager placeManager;
+	private final UserManager userManager;
 
 	@Transactional
 	@Override
 	public Long createBookmark(User user, BookmarkServiceRequest serviceRequest) {
+        userManager.addBookmarkCount(user);
 		Place place = placeManager.findPlaceById(serviceRequest.getPlaceId());
 		Bookmark bookmark = serviceRequest.toEntity(user, place);
 		return bookmarkManager.save(bookmark, place);
@@ -34,6 +42,7 @@ public class BookmarkService implements BookmarkUseCase {
 	@Transactional
 	@Override
 	public Long deleteBookmark(User user, Long placeId) {
+        userManager.subtractBookmarkCount(user);
 		Place place = placeManager.findPlaceById(placeId);
 		Bookmark bookmark = bookmarkManager.findBookmarkByUserAndPlace(user, place);
 		return bookmarkManager.delete(bookmark, user);

@@ -53,8 +53,6 @@ public class PlaceRepositoryImpl implements PlaceRepositoryCustom {
 
 		return queryFactory.selectFrom(place)
 			.where(builder)
-			.orderBy(Expressions.numberTemplate(Double.class, "function('rand')").asc())
-			.limit(5)
 			.fetch();
 	}
 

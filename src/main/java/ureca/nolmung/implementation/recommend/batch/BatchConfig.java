@@ -15,17 +15,21 @@ import org.springframework.batch.item.database.JdbcCursorItemReader;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.transaction.PlatformTransactionManager;
-import ureca.nolmung.business.recommend.RecommendUseCase;
+import software.amazon.awssdk.services.personalizeruntime.model.PredictedItem;
 import ureca.nolmung.business.recommend.dto.response.RecommendResp;
+import ureca.nolmung.implementation.recommend.AwsPersonalizeManager;
+import ureca.nolmung.implementation.recommend.RedisManager;
+import ureca.nolmung.implementation.recommend.dtomapper.RecommendDtoMapper;
+import ureca.nolmung.implementation.user.UserManager;
+import ureca.nolmung.jpa.place.Place;
 
 import javax.sql.DataSource;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.AbstractMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @Configuration
@@ -33,11 +37,15 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class BatchConfig {
 
+    private final DataSource dataSource;
     private final JobRepository jobRepository;
     private final PlatformTransactionManager platformTransactionManager;
-    private final DataSource dataSource;
-    private final RecommendUseCase recommendUseCase;
-    private final RedisTemplate<String, Object> redisTemplate;
+    private final UserManager userManager;
+    private final AwsPersonalizeManager awsPersonalizeManager;
+    private final RedisManager redisManager;
+    private final RecommendDtoMapper recommendDtoMapper;
+
+    private static final int TIME_TO_LIVE = 48;
 
     @Bean
     public Job saveRecommendationsJob() {
@@ -53,7 +61,7 @@ public class BatchConfig {
                 .<Long, Map.Entry<Long, List<RecommendResp>>>chunk(100, platformTransactionManager)
                 .reader(userJdbcReader())
                 .processor(recommendationProcessor())
-                .writer(redisWriter())
+                .writer(combinedWriter())
                 .build();
     }
 
@@ -61,32 +69,39 @@ public class BatchConfig {
     public JdbcCursorItemReader<Long> userJdbcReader() {
         JdbcCursorItemReader<Long> reader = new JdbcCursorItemReader<>();
         reader.setDataSource(dataSource);
-        reader.setSql("SELECT user_id FROM user");
-        reader.setRowMapper(new RowMapper<Long>() {
-            @Override
-            public Long mapRow(ResultSet rs, int rowNum) throws SQLException {
-                return rs.getLong("user_id");
-            }
-        });
+
+        reader.setSql(
+                "SELECT u.user_id " +
+                        "FROM user u " +
+                        "LEFT JOIN user_bookmark ub " +
+                        "ON u.user_id = ub.user_id " +
+                        "WHERE ABS(COALESCE(ub.bookmark_count, 0) - u.bookmark_count) >= 10"
+        );
+
+        reader.setRowMapper((ResultSet rs, int rowNum) -> rs.getLong("user_id"));
         return reader;
     }
+
 
     @Bean
     public ItemProcessor<Long, Map.Entry<Long, List<RecommendResp>>> recommendationProcessor() {
         return userId -> {
-            List<RecommendResp> recommendations = recommendUseCase.getPlaceRecommendationsFromPersonalizeForBatch(userId);
-            return new AbstractMap.SimpleEntry<>(userId, recommendations);
+            List<PredictedItem> awsRecs = awsPersonalizeManager.getRecs(userId);
+            List<Place> places = awsPersonalizeManager.getPlaces(awsRecs);
+            List<RecommendResp> recommendResponses = recommendDtoMapper.toGetPlaceRecommendations(places);
+            return new AbstractMap.SimpleEntry<>(userId, recommendResponses);
         };
     }
 
     @Bean
-    public ItemWriter<Map.Entry<Long, List<RecommendResp>>> redisWriter() {
-        return items -> {
-            for (Map.Entry<Long, List<RecommendResp>> entry : items) {
-                Long userId = entry.getKey();
-                List<RecommendResp> recommendations = entry.getValue();
-                redisTemplate.opsForValue().set(String.valueOf(userId), recommendations);
-            }
-        };
+    public ItemWriter<Map.Entry<Long, List<RecommendResp>>> combinedWriter() {
+        return items -> items.forEach(entry -> {
+            Long userId = entry.getKey();
+            List<RecommendResp> recommendResps = entry.getValue();
+
+            redisManager.boundValueOps(String.valueOf(userId), recommendResps, TIME_TO_LIVE, TimeUnit.HOURS);
+
+            userManager.updateBookmarkCount(userId);
+        });
     }
 }
