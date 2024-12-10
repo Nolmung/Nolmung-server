@@ -42,8 +42,8 @@ public class RecommendService implements RecommendUseCase {
         log.info("반려견 크기 기반 추천");
         List<Dog> dogs = dogManager.getDogList(user.getId());
         List<Place> places = recommendManager.getPlaceRecommendationsForDogs(dogs);
-        //TODO 랜덤하게 5개 뽑는 부분 추가
-        return recommendDtoMapper.toGetPlaceRecommendations(places);
+        List<Place> randomSelectNearByPlaces = recommendManager.randomSelectPlaces(places, 5);
+        return recommendDtoMapper.toGetPlaceRecommendations(randomSelectNearByPlaces);
     }
 
     @Override
