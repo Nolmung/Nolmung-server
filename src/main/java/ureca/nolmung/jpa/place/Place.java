@@ -94,9 +94,6 @@ public class Place extends BaseEntity {
     @Column(nullable = false)
     private Integer bookmarkCount = 0;
 
-    @OneToOne(mappedBy = "place", cascade = CascadeType.ALL)
-    private PlacePosition placePosition;
-
     public void addRating(double newRating) {
         this.ratingTotal += newRating;
         this.ratingCount++;
