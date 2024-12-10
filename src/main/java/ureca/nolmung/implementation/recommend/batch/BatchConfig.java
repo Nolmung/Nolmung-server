@@ -44,7 +44,8 @@ public class BatchConfig {
     private final AwsPersonalizeManager awsPersonalizeManager;
     private final RedisManager redisManager;
     private final RecommendDtoMapper recommendDtoMapper;
-    private final RedisTemplate<String, List<RecommendResp>> redisTemplate;
+
+    private static final int TIME_TO_LIVE = 48;
 
     @Bean
     public Job saveRecommendationsJob() {
@@ -98,7 +99,7 @@ public class BatchConfig {
             Long userId = entry.getKey();
             List<RecommendResp> recommendResps = entry.getValue();
 
-            redisManager.boundValueOps(String.valueOf(userId), recommendResps, 48, TimeUnit.HOURS);
+            redisManager.boundValueOps(String.valueOf(userId), recommendResps, TIME_TO_LIVE, TimeUnit.HOURS);
 
             userManager.updateBookmarkCount(userId);
         });

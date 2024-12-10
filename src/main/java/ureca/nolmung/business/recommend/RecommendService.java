@@ -28,6 +28,10 @@ public class RecommendService implements RecommendUseCase {
     private final RecommendDtoMapper recommendDtoMapper;
     private final RedisManager redisManager;
 
+    private static final int RANDOM_SELECTION_COUNT = 5;
+    private static final int TIME_TO_LIVE = 48;
+    private static final int MIN_TTL_THRESHOLD = 600;
+
     @Override
     @Transactional(readOnly = true)
     public List<RecommendResp> getMostBookmarkedPlaces() {
@@ -42,7 +46,7 @@ public class RecommendService implements RecommendUseCase {
         log.info("반려견 크기 기반 추천");
         List<Dog> dogs = dogManager.getDogList(user.getId());
         List<Place> places = recommendManager.getPlaceRecommendationsForDogs(dogs);
-        List<Place> randomSelectNearByPlaces = recommendManager.randomSelectPlaces(places, 5);
+        List<Place> randomSelectNearByPlaces = recommendManager.randomSelectPlaces(places, RANDOM_SELECTION_COUNT);
         return recommendDtoMapper.toGetPlaceRecommendations(randomSelectNearByPlaces);
     }
 
@@ -51,7 +55,7 @@ public class RecommendService implements RecommendUseCase {
     public List<RecommendResp> getPlaceRecommendationsNearByUser(User user) {
         log.info("근처 추천");
         List<Place> nearByPlaces = recommendManager.findNearbyPlaces(user.getUserLatitude(), user.getUserLongitude());
-        List<Place> randomSelectNearByPlaces = recommendManager.randomSelectPlaces(nearByPlaces, 5);
+        List<Place> randomSelectNearByPlaces = recommendManager.randomSelectPlaces(nearByPlaces, RANDOM_SELECTION_COUNT);
         return recommendDtoMapper.toGetPlaceRecommendations(randomSelectNearByPlaces);
     }
 
@@ -60,16 +64,16 @@ public class RecommendService implements RecommendUseCase {
         String key = String.valueOf(user.getId());
         Long ttl = redisManager.getExpire(key, TimeUnit.SECONDS);
 
-        if (ttl != null && ttl > 600) {
+        if (ttl != null && ttl > MIN_TTL_THRESHOLD) {
             log.info("레디스에 있습니다");
-            redisManager.addExpire(key, 48, TimeUnit.HOURS);
+            redisManager.addExpire(key, TIME_TO_LIVE, TimeUnit.HOURS);
             List<RecommendResp> recommendResps = redisManager.getRedis(user.getId());
-            return awsPersonalizeManager.getRandomRecommendResps(recommendResps, 5);
+            return awsPersonalizeManager.getRandomRecommendResps(recommendResps, RANDOM_SELECTION_COUNT);
         }
         log.info("레디스에 없습니다");
         List<PredictedItem> awsRecs = awsPersonalizeManager.getRecs(user.getId());
         List<Place> places = awsPersonalizeManager.getPlaces(awsRecs);
         List<RecommendResp> recommendResps = redisManager.saveRedis(places, key);
-        return awsPersonalizeManager.getRandomRecommendResps(recommendResps, 5);
+        return awsPersonalizeManager.getRandomRecommendResps(recommendResps, RANDOM_SELECTION_COUNT);
     }
 }
