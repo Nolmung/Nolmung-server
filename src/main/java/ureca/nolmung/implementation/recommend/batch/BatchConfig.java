@@ -16,15 +16,20 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.transaction.PlatformTransactionManager;
-import ureca.nolmung.business.recommend.RecommendUseCase;
+import software.amazon.awssdk.services.personalizeruntime.model.PredictedItem;
 import ureca.nolmung.business.recommend.dto.response.RecommendResp;
+import ureca.nolmung.implementation.recommend.AwsPersonalizeManager;
+import ureca.nolmung.implementation.recommend.RedisManager;
+import ureca.nolmung.implementation.recommend.dtomapper.RecommendDtoMapper;
 import ureca.nolmung.implementation.user.UserManager;
+import ureca.nolmung.jpa.place.Place;
 
 import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.util.AbstractMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @Configuration
@@ -32,11 +37,13 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class BatchConfig {
 
+    private final DataSource dataSource;
     private final JobRepository jobRepository;
     private final PlatformTransactionManager platformTransactionManager;
     private final UserManager userManager;
-    private final DataSource dataSource;
-    private final RecommendUseCase recommendUseCase;
+    private final AwsPersonalizeManager awsPersonalizeManager;
+    private final RedisManager redisManager;
+    private final RecommendDtoMapper recommendDtoMapper;
     private final RedisTemplate<String, List<RecommendResp>> redisTemplate;
 
     @Bean
@@ -78,8 +85,10 @@ public class BatchConfig {
     @Bean
     public ItemProcessor<Long, Map.Entry<Long, List<RecommendResp>>> recommendationProcessor() {
         return userId -> {
-            List<RecommendResp> recommendations = recommendUseCase.getPlaceRecommendationsFromPersonalizeForBatch(userId);
-            return new AbstractMap.SimpleEntry<>(userId, recommendations);
+            List<PredictedItem> awsRecs = awsPersonalizeManager.getRecs(userId);
+            List<Place> places = awsPersonalizeManager.getPlaces(awsRecs);
+            List<RecommendResp> recommendResponses = recommendDtoMapper.toGetPlaceRecommendations(places);
+            return new AbstractMap.SimpleEntry<>(userId, recommendResponses);
         };
     }
 
@@ -87,9 +96,9 @@ public class BatchConfig {
     public ItemWriter<Map.Entry<Long, List<RecommendResp>>> combinedWriter() {
         return items -> items.forEach(entry -> {
             Long userId = entry.getKey();
-            List<RecommendResp> recommendations = entry.getValue();
+            List<RecommendResp> recommendResps = entry.getValue();
 
-            redisTemplate.opsForValue().set(String.valueOf(userId), recommendations);
+            redisManager.boundValueOps(String.valueOf(userId), recommendResps, 48, TimeUnit.HOURS);
 
             userManager.updateBookmarkCount(userId);
         });
