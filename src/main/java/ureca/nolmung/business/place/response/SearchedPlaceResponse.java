@@ -15,6 +15,7 @@ public class SearchedPlaceResponse {
 	private String address;
 	private String roadAddress;
 	private String placeImgUrl;
+	private String acceptSize;
 	private Double starRatingAvg;
 	private int reviewCount;
 	private double latitude;
@@ -31,6 +32,7 @@ public class SearchedPlaceResponse {
 			.placeImgUrl(place.getPlaceImageUrl())
 			.starRatingAvg(place.getRatingAvg())
 			.reviewCount(place.getRatingCount())
+			.acceptSize(place.getAcceptSize())
 			.latitude(place.getLatitude())
 			.longitude(place.getLongitude())
 			.isBookmarked(isBookmarked)
