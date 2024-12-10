@@ -45,7 +45,6 @@ public class PlaceController {
 		@RequestParam double longitude,
 		@RequestParam double maxLatitude,
 		@RequestParam double maxLongitude) {
-		System.out.println();
 		return ResponseUtil.SUCCESS("지도에서 장소 검색에 성공하였습니다.", placeUseCase.findPlaceOnMap(userDetails, latitude, longitude, maxLatitude, maxLongitude));
 	}
 

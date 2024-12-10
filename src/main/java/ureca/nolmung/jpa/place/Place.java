@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import ureca.nolmung.implementation.place.PlaceException;
+import ureca.nolmung.implementation.place.PlaceExceptionType;
 import ureca.nolmung.jpa.config.BaseEntity;
 import ureca.nolmung.jpa.place.Enum.Category;
 import ureca.nolmung.jpa.placeposition.PlacePosition;
@@ -117,6 +119,13 @@ public class Place extends BaseEntity {
 
     public void addBookmarkCount() {
         this.bookmarkCount++;
+    }
+
+    public void minusBookmarkCount() {
+        if (bookmarkCount <= 0) {
+            throw new PlaceException(PlaceExceptionType.BOOKMARK_COUNT_CANNOT_BE_NEGATIVE);
+        }
+        this.bookmarkCount--;
     }
 
 }

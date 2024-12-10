@@ -34,7 +34,7 @@ public class ReviewController {
 
     @Operation(summary = "후기 등록")
     @PostMapping("")
-    public ResponseDto<AddReviewResp> addReview(@AuthenticationPrincipal CustomUserDetails userDetails, @RequestBody AddReviewReq req) {
+    public ResponseDto<List<AddReviewResp>> addReview(@AuthenticationPrincipal CustomUserDetails userDetails, @RequestBody AddReviewReq req) {
         return ResponseUtil.SUCCESS("후기 생성에 성공하였습니다.",reviewUseCase.addReview(userDetails.getUser(), req));
     }
 

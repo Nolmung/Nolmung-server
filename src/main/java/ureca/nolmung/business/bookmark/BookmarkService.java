@@ -8,9 +8,8 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import ureca.nolmung.business.bookmark.request.BookmarkServiceRequest;
 import ureca.nolmung.business.bookmark.response.BookmarkResponse;
-import ureca.nolmung.implementation.bookmark.BookmarkException;
-import ureca.nolmung.implementation.bookmark.BookmarkExceptionType;
 import ureca.nolmung.implementation.bookmark.BookmarkManager;
+import ureca.nolmung.implementation.place.PlaceManager;
 import ureca.nolmung.implementation.place.PlaceException;
 import ureca.nolmung.implementation.place.PlaceExceptionType;
 import ureca.nolmung.implementation.user.UserManager;
@@ -28,39 +27,29 @@ import ureca.nolmung.persistence.user.UserRepository;
 public class BookmarkService implements BookmarkUseCase {
 
 	private final BookmarkManager bookmarkManager;
+	private final PlaceManager placeManager;
 	private final UserManager userManager;
-	private final PlaceRepository placeRepository;
-	private final BookmarkRepository bookmarkRepository;
 
 	@Transactional
 	@Override
 	public Long createBookmark(User user, BookmarkServiceRequest serviceRequest) {
-		userManager.addBookmarkCount(user);
-
-		Place place = placeRepository.findById(serviceRequest.getPlaceId())
-			.orElseThrow(() -> new PlaceException(PlaceExceptionType.PLACE_NOT_FOUND_EXCEPTION));
-
-		place.addBookmarkCount();
-
-		return bookmarkManager.save(serviceRequest.toEntity(user, place));
+        userManager.addBookmarkCount(user);
+		Place place = placeManager.findPlaceById(serviceRequest.getPlaceId());
+		Bookmark bookmark = serviceRequest.toEntity(user, place);
+		return bookmarkManager.save(bookmark, place);
 	}
 
 	@Transactional
 	@Override
 	public Long deleteBookmark(User user, Long bookmarkId) {
-		userManager.subtractBookmarkCount(user);
-
-		Bookmark bookmark = bookmarkRepository.findById(bookmarkId)
-			.orElseThrow(() -> new BookmarkException(BookmarkExceptionType.BOOKMARK_NOT_FOUND_EXCEPTION));
-
+        userManager.subtractBookmarkCount(user);
+		Bookmark bookmark = bookmarkManager.findBookmarkById(bookmarkId);
 		bookmarkManager.delete(bookmark, user);
-
 		return bookmarkId;
 	}
 
 	@Override
 	public List<BookmarkResponse> findAllBookmarks(User user, Category category) {
-		List<Bookmark> bookmarks = bookmarkRepository.findByUserAndCategory(user, category);
-		return bookmarkManager.findAllBookmarks(bookmarks);
+		return bookmarkManager.findAllBookmarks(user, category);
 	}
 }

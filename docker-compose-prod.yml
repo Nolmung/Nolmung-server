@@ -1,0 +1,29 @@
+#version: '3.8'
+services:
+  springboot-app:
+    container_name: springboot-app
+    image: hyewonbae/nolmung
+    ports:
+      - "443:8080"
+    volumes:
+      - /home/ec2-user/logs/info:/app/logs
+    restart: always
+    networks:
+      - t4y
+
+  promtail:
+    image: grafana/promtail:2.9.2
+    container_name: promtail
+    volumes:
+      - ./logs:/logs
+      - ./promtail-config.yml:/etc/promtail/config.yml
+    command:
+      - -config.file=/etc/promtail/config.yml
+      - -config.expand-env=true
+    restart: always
+    networks:
+      - t4y
+
+networks:
+  t4y:
+    driver: bridge
