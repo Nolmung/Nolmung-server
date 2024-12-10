@@ -1,7 +1,5 @@
 package ureca.nolmung.presentation.controller.user;
 
-import static ureca.nolmung.business.oauth.dto.response.LoginStatus.*;
-
 import java.io.IOException;
 
 import org.springframework.web.bind.annotation.GetMapping;
@@ -37,14 +35,14 @@ public class OauthController {
     @GetMapping("/kakao/callback")
     public void kakaoLogin(@RequestParam("code") String code, HttpServletResponse response) throws IOException {
 
-        OauthLoginRes res = oAuthUserService.kakaoOauthLogin(code);
+        Long userId = oAuthUserService.kakaoOauthLogin(code);
 
-        if(res.loginStatus() == LOGIN_SUCCESS)
+        /*if(res.loginStatus() == LOGIN_SUCCESS)
         {
             jwtUtil.setAuthorizationHeader(response, res.id(), res.email(), res.role());
-        }
+        }*/
 
-        response.sendRedirect("http://localhost:3000/oauth/kakao/callback?id="+res.id());
+        response.sendRedirect("http://localhost:3000/oauth/kakao/callback?id="+userId);
     }
 
     @Operation(summary = "카카오 소셜 로그인 결과 반환")
@@ -56,10 +54,11 @@ public class OauthController {
         OauthLoginRes res;
 
         if(user.getRole() == UserRole.GUEST) {
-            res = new OauthLoginRes(LoginStatus.SIGN_UP_REQUIRED, user.getId(), user.getEmail(), user.getRole(), user.getProvider());
+            res = new OauthLoginRes(LoginStatus.SIGN_UP_REQUIRED, user.getId(), user.getEmail(), user.getRole(), user.getProvider(), "");
         }
         else {
-            res = new OauthLoginRes(LoginStatus.LOGIN_SUCCESS, user.getId(), user.getEmail(), user.getRole(), user.getProvider());
+            String accessToken = jwtUtil.createJwt(user.getId(), user.getEmail(), user.getRole());
+            res = new OauthLoginRes(LoginStatus.LOGIN_SUCCESS, user.getId(), user.getEmail(), user.getRole(), user.getProvider(), accessToken);
         }
 
         return ResponseUtil.SUCCESS("카카오 소셜 로그인에 성공하였습니다.", res);
