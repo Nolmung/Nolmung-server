@@ -2,7 +2,6 @@ package ureca.nolmung.implementation.recommend;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import software.amazon.awssdk.awscore.exception.AwsServiceException;
 import software.amazon.awssdk.services.personalizeruntime.PersonalizeRuntimeClient;
@@ -28,7 +27,6 @@ public class AwsPersonalizeManager {
     private final String campaignArn;
     private final PersonalizeRuntimeClient personalizeRuntimeClient;
     private final PlaceRepository placeRepository;
-    private final RedisTemplate<String, List<RecommendResp>> redisTemplate;
     private static final int DEFAULT_NUM_RESULTS = 25;
 
     public List<PredictedItem> getRecs(Long userId) {
@@ -63,34 +61,11 @@ public class AwsPersonalizeManager {
         return places;
     }
 
-    public List<RecommendResp> saveRedis(List<Place> places, Long userId) {
-        List<RecommendResp> recommendResponses = places.stream()
-                .map(place -> new RecommendResp(
-                        place.getId(),
-                        place.getName(),
-                        place.getCategory(),
-                        place.getRoadAddress(),
-                        place.getAddress(),
-                        place.getPlaceImageUrl(),
-                        place.getRatingAvg(),
-                        place.getRatingCount()
-                ))
-                .collect(Collectors.toList());
-
-        redisTemplate.opsForValue().set(String.valueOf(userId), recommendResponses);
-
-        return recommendResponses;
-    }
-
     public List<RecommendResp> getRandomRecommendResps(List<RecommendResp> recommendResps, int count) {
         if (count >= recommendResps.size()) {
             return recommendResps;
         }
         Collections.shuffle(recommendResps);
         return recommendResps.subList(0, count);
-    }
-
-    public List<RecommendResp> getRedis(Long userId) {
-        return redisTemplate.opsForValue().get(String.valueOf(userId));
     }
 }
