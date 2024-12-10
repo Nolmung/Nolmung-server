@@ -51,8 +51,8 @@ public class BookmarkController {
 	@DeleteMapping("")
 	public ResponseDto<Long> deleteBookmark(
 		@AuthenticationPrincipal CustomUserDetails userDetails,
-		@RequestParam Long bookmarkId) {
-		return ResponseUtil.SUCCESS("즐겨찾기 삭제에 성공하였습니다.", bookmarkUseCase.deleteBookmark(userDetails.getUser(), bookmarkId));
+		@RequestParam Long placeId) {
+		return ResponseUtil.SUCCESS("즐겨찾기 삭제에 성공하였습니다.", bookmarkUseCase.deleteBookmark(userDetails.getUser(), placeId));
 	}
 
 }

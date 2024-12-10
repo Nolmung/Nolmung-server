@@ -11,7 +11,7 @@ public interface BookmarkUseCase {
 
 	Long createBookmark(User user, BookmarkServiceRequest serviceRequest);
 
-	Long deleteBookmark(User user, Long bookmarkId);
+	Long deleteBookmark(User user, Long placeId);
 
 	List<BookmarkResponse> findAllBookmarks(User user, Category category);
 }

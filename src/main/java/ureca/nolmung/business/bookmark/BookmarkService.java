@@ -41,11 +41,11 @@ public class BookmarkService implements BookmarkUseCase {
 
 	@Transactional
 	@Override
-	public Long deleteBookmark(User user, Long bookmarkId) {
+	public Long deleteBookmark(User user, Long placeId) {
         userManager.subtractBookmarkCount(user);
-		Bookmark bookmark = bookmarkManager.findBookmarkById(bookmarkId);
-		bookmarkManager.delete(bookmark, user);
-		return bookmarkId;
+		Place place = placeManager.findPlaceById(placeId);
+		Bookmark bookmark = bookmarkManager.findBookmarkByUserAndPlace(user, place);
+		return bookmarkManager.delete(bookmark, user);
 	}
 
 	@Override

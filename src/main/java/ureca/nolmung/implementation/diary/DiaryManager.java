@@ -49,7 +49,7 @@ public class DiaryManager {
 		List<PlaceDiaryResponse> placeDiaryResponses = new ArrayList<>();
 
 		for (DiaryPlace diaryPlace : diaryPlaces) {
-			Diary diary = findDiaryById(diaryPlace.getId());
+			Diary diary = findDiaryById(diaryPlace.getDiary().getId());
 
 			if (!isDiaryPublic(diary)) {
 				continue;
