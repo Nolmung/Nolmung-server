@@ -67,6 +67,7 @@ public class SecurityConfig {
 				.requestMatchers("/v1/places/**").permitAll()
 				.requestMatchers("/v1/diary/public/**").permitAll()
 				.requestMatchers("/actuator/prometheus").permitAll()
+				.requestMatchers("/error").permitAll()
 				.requestMatchers("/").permitAll()
 				.anyRequest().authenticated()  // 그 외 URL은 인증 필요
 			)
