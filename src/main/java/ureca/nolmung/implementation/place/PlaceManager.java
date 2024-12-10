@@ -35,7 +35,7 @@ public class PlaceManager {
 		return placeRepository.searchByKeyword(keyword);
 	}
 
-	public Place findPlaceById(long placeId) {
+	public Place findPlaceById(Long placeId) {
 		return placeRepository.findById(placeId)
 			.orElseThrow(() -> new PlaceException(PlaceExceptionType.PLACE_NOT_FOUND_EXCEPTION));
 	}
