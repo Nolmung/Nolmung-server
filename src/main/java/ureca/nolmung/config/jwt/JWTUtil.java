@@ -45,7 +45,7 @@ public class JWTUtil {
 			.getPayload().get("email", String.class);
 	}
 
-	private String createJwt(Long id, String email, UserRole role) {
+	public String createJwt(Long id, String email, UserRole role) {
 		return Jwts.builder()
 			.claim("id", id)
 			.claim("email", email)
