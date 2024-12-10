@@ -2,6 +2,7 @@ package ureca.nolmung.presentation.controller.user;
 
 import java.io.IOException;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -30,6 +31,8 @@ public class OauthController {
     private final OAuthUserServiceImplement oAuthUserService;
     private final JWTUtil jwtUtil;
     private final UserManager userManager;
+    @Value("${spring.application.frontend-url}")
+    private String frontendUrl;
 
     @Operation(summary = "카카오 소셜 로그인")
     @GetMapping("/kakao/callback")
@@ -42,7 +45,9 @@ public class OauthController {
             jwtUtil.setAuthorizationHeader(response, res.id(), res.email(), res.role());
         }*/
 
-        response.sendRedirect("http://localhost:3000/oauth/kakao/callback?id="+userId);
+        //response.sendRedirect("http://localhost:3000/oauth/kakao/callback?id="+userId);
+
+        response.sendRedirect(frontendUrl+"/oauth/kakao/callback?id="+userId);
     }
 
     @Operation(summary = "카카오 소셜 로그인 결과 반환")
