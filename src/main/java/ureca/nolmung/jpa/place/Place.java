@@ -1,13 +1,20 @@
 package ureca.nolmung.jpa.place;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import ureca.nolmung.implementation.place.PlaceException;
+import ureca.nolmung.implementation.place.PlaceExceptionType;
 import ureca.nolmung.jpa.config.BaseEntity;
 import ureca.nolmung.jpa.place.Enum.Category;
-import ureca.nolmung.jpa.placeposition.PlacePosition;
 
 @Getter
 @Builder
@@ -92,9 +99,6 @@ public class Place extends BaseEntity {
     @Column(nullable = false)
     private Integer bookmarkCount = 0;
 
-    @OneToOne(mappedBy = "place", cascade = CascadeType.ALL)
-    private PlacePosition placePosition;
-
     public void addRating(double newRating) {
         this.ratingTotal += newRating;
         this.ratingCount++;
@@ -117,6 +121,13 @@ public class Place extends BaseEntity {
 
     public void addBookmarkCount() {
         this.bookmarkCount++;
+    }
+
+    public void minusBookmarkCount() {
+        if (bookmarkCount <= 0) {
+            throw new PlaceException(PlaceExceptionType.BOOKMARK_COUNT_CANNOT_BE_NEGATIVE);
+        }
+        this.bookmarkCount--;
     }
 
 }

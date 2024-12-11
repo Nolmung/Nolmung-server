@@ -1,20 +1,6 @@
 #version: '3.8'
-services:
-  springboot-app:
-    container_name: springboot-app
-    image: hyewonbae/nolmung
-    ports:
-      - "443:8080"
-    volumes:
-      - /home/ec2-user/logs/info:/app/logs
-    environment:
-      SPRING_LOGGING_FILE_PATH: /app/logs/application.log
-    #    environment:
-    #      SPRING_PROFILES_ACTIVE: prod
-    restart: always
-    networks:
-      - t4y
 
+services:
   prometheus:
     image: prom/prometheus
     container_name: prometheus
@@ -48,19 +34,6 @@ services:
     container_name: loki
     ports:
       - "3100:3100"
-    restart: always
-    networks:
-      - t4y
-
-  promtail:
-    image: grafana/promtail:2.9.2
-    container_name: promtail
-    volumes:
-      - ./logs:/logs
-      - ./promtail-config.yml:/etc/promtail/config.yml
-    command:
-      - -config.file=/etc/promtail/config.yml
-      - -config.expand-env=true
     restart: always
     networks:
       - t4y

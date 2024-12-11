@@ -1,5 +1,7 @@
 package ureca.nolmung.persistence.bookmark;
 
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -11,5 +13,7 @@ import ureca.nolmung.jpa.user.User;
 public interface BookmarkRepository extends JpaRepository<Bookmark, Long>, BookmarkRepositoryCustom {
 
 	Boolean existsByUserAndPlace(User user, Place place);
+
+	Optional<Bookmark> findByUserAndPlace(User user, Place place);
 
 }

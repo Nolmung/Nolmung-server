@@ -11,6 +11,7 @@ import ureca.nolmung.jpa.place.Place;
 public class BookmarkResponse {
 
 	private Long bookmarkId;
+	private Long placeId;
 	private Category category;
 	private String placeImageUrl;
 	private String roadAddress;
@@ -21,6 +22,7 @@ public class BookmarkResponse {
 	public static BookmarkResponse of (Bookmark bookmark, Place place) {
 		return BookmarkResponse.builder()
 			.bookmarkId(bookmark.getId())
+			.placeId(place.getId())
 			.category(place.getCategory())
 			.placeImageUrl(place.getPlaceImageUrl())
 			.roadAddress(place.getRoadAddress())

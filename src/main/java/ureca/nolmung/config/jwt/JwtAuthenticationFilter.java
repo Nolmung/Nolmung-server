@@ -36,10 +36,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             "/swagger-resources", "/swagger-ui", "/v3/api-docs",
             "/v1/oauth",
             "/v1/users/signup",
-            //"/v1/oauth/kakao/login",
-            "/v1/places/search",
-            "/v1/places/map",
-            "/v1/places/details",
             "/v1/places/point-data",
             "/v1/recommend/bookmarks",
             "/ban-words/upload",
@@ -59,7 +55,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
-        System.out.println(request.getRequestURI());
         String token = getTokenFromHeader(request);
 
         if (token != null) {

@@ -44,3 +44,4 @@ application-prod.yml
 ### Ignore everything in src/main/generated ###
 src/main/generated/*
 /app/logs/*
+LOG_PATH_IS_UNDEFINED

@@ -6,7 +6,9 @@ import lombok.RequiredArgsConstructor;
 import ureca.nolmung.business.user.dto.request.UserReq;
 import ureca.nolmung.jpa.user.Enum.Provider;
 import ureca.nolmung.jpa.user.User;
+import ureca.nolmung.jpa.userbookmark.UserBookmark;
 import ureca.nolmung.persistence.user.UserRepository;
+import ureca.nolmung.persistence.userbookmark.UserBookmarkRepository;
 
 import java.util.Optional;
 
@@ -15,6 +17,7 @@ import java.util.Optional;
 public class UserManager {
 
     private final UserRepository userRepository;
+    private final UserBookmarkRepository userBookmarkRepository;
 
     // 사용자 유효성 검증 메서드
     public User validateUserExistence(Long userId) {
@@ -45,5 +48,29 @@ public class UserManager {
         user.setSocialLoginInfo(name, profileImageUrl, email, provider);
 
         return userRepository.save(user);
+    }
+
+    public void updateBookmarkCount(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserException(UserExceptionType.USER_NOT_FOUND_EXCEPTION));
+
+        int userBookmarkCount = user.getBookmarkCount();
+
+        UserBookmark userBookmark = userBookmarkRepository.findById(userId)
+                .orElseGet(() -> UserBookmark.createUserBookmark(userId, userBookmarkCount));
+
+        userBookmark.updateBookmarkCount(userBookmarkCount);
+
+        userBookmarkRepository.save(userBookmark);
+    }
+
+    public void addBookmarkCount(User user) {
+        user.addBookmarkCount();
+        userRepository.save(user);
+    }
+
+    public void subtractBookmarkCount(User user) {
+        user.subtractBookmarkCount();
+        userRepository.save(user);
     }
 }

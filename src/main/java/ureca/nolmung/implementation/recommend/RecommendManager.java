@@ -24,7 +24,7 @@ public class RecommendManager {
     private final PlacePositionRepository placePositionRepository;
 
     private final int SRID = 4326;
-    private static final double radius = 5.0;
+    private static final double RADIUS = 5.0;
     private final GeometryFactory geometryFactory = new GeometryFactory();
     public List<Place> getMostBookmarkedPlaces() {
         return placeRepository.findTopNPlaces(PageRequest.of(0, 5));
@@ -39,7 +39,7 @@ public class RecommendManager {
     }
 
     public List<Place> findNearbyPlaces(double userLatitude, double userLongitude) {
-        Polygon polygon = generateCirclePolygon(userLatitude, userLongitude, radius);
+        Polygon polygon = generateCirclePolygon(userLatitude, userLongitude, RADIUS);
         return placePositionRepository.findPlaceByCoordinate(polygon);
     }
 
@@ -59,12 +59,12 @@ public class RecommendManager {
     }
 
 
-    public List<Place> randomSelectPlaces(List<Place> nearbyPlaces) {
-        if (nearbyPlaces.size() <= 5) {
+    public List<Place> randomSelectPlaces(List<Place> nearbyPlaces, int count) {
+        if (nearbyPlaces.size() <= count) {
             return nearbyPlaces;
         }
         Collections.shuffle(nearbyPlaces);
 
-        return nearbyPlaces.subList(0, 5);
+        return nearbyPlaces.subList(0, count);
     }
 }

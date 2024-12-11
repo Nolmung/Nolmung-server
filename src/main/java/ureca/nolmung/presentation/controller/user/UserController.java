@@ -22,6 +22,7 @@ import ureca.nolmung.business.user.UserService;
 import ureca.nolmung.business.user.UserUseCase;
 import ureca.nolmung.business.user.dto.request.UserReq;
 import ureca.nolmung.business.user.dto.response.CustomUserDetails;
+import ureca.nolmung.business.user.dto.response.SignUpResp;
 import ureca.nolmung.business.user.dto.response.UserResp;
 import ureca.nolmung.config.jwt.JWTUtil;
 import ureca.nolmung.config.response.ResponseDto;
@@ -42,10 +43,14 @@ public class UserController {
 
     @Operation(summary = "최초 소셜로그인 후 추가 정보 입력")
     @PostMapping("/signup/{userId}")
-    public ResponseDto<UserResp> signUp(@PathVariable("userId") Long userId, @RequestBody UserReq req, HttpServletResponse response) {
+    public ResponseDto<SignUpResp> signUp(@PathVariable("userId") Long userId, @RequestBody UserReq req, HttpServletResponse response) {
+
         UserResp user = userService.completeSignUp(userId, req);
-        jwtUtil.setAuthorizationHeader(response, user.userId(), user.userEmail(), user.userRole());
-        return ResponseUtil.SUCCESS("회원가입에 성공했습니다.", user);
+        String accessToken = jwtUtil.createJwt(user.userId(),user.userEmail(),user.userRole());
+        SignUpResp res = new SignUpResp(user,accessToken);
+
+        //jwtUtil.setAuthorizationHeader(response, user.userId(), user.userEmail(), user.userRole());
+        return ResponseUtil.SUCCESS("회원가입에 성공했습니다.", res);
     }
 
     @Operation(summary = "회원 정보 수정")

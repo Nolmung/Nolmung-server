@@ -1,8 +1,5 @@
 package ureca.nolmung.business.diary.dto.response;
 
-import ureca.nolmung.jpa.dogdiary.DogDiary;
-
-import java.time.LocalDateTime;
 import java.util.List;
 
 public record DiaryDetailResp(
