@@ -1,5 +1,7 @@
 package ureca.nolmung.persistence.diary;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,4 +26,7 @@ public interface DiaryRepository extends JpaRepository<Diary, Long> {
 
     @Query("SELECT d FROM Diary d LEFT JOIN FETCH d.mediaList WHERE d.id = :diaryId")
     Diary findWithMediaById(@Param("diaryId") Long diaryId);
+
+    @Query("SELECT COUNT(d) > 0 FROM Diary d WHERE d.user.id = :userId AND DATE(d.createdAt) = :date")
+    boolean existsByUserIdAndCreatedAt(Long userId, LocalDate date);
 }

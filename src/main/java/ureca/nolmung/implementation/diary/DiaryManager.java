@@ -1,5 +1,7 @@
 package ureca.nolmung.implementation.diary;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -208,5 +210,13 @@ public class DiaryManager {
 			throw new DiaryException(DiaryExceptionType.DIARY_UNAUTHORIZED_EXCEPTION);
 		}
 		return diary;
+	}
+
+	public void checkTodayDiary(Long userId, LocalDate date) {
+		boolean hasTodayDiary = diaryRepository.existsByUserIdAndCreatedAt(userId, date);
+
+		if(hasTodayDiary) {
+			throw new DiaryException(DiaryExceptionType.DIARY_EXITST_TODAY_EXCEPTION);
+		}
 	}
 }
