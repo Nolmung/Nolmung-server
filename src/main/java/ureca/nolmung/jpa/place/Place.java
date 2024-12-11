@@ -1,6 +1,12 @@
 package ureca.nolmung.jpa.place;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -9,7 +15,6 @@ import ureca.nolmung.implementation.place.PlaceException;
 import ureca.nolmung.implementation.place.PlaceExceptionType;
 import ureca.nolmung.jpa.config.BaseEntity;
 import ureca.nolmung.jpa.place.Enum.Category;
-import ureca.nolmung.jpa.placeposition.PlacePosition;
 
 @Getter
 @Builder
