@@ -26,6 +26,9 @@ import ureca.nolmung.jpa.media.Media;
 import ureca.nolmung.jpa.place.Place;
 import ureca.nolmung.jpa.user.User;
 
+import static java.time.LocalDate.now;
+
+
 @Service
 @RequiredArgsConstructor
 public class DiaryService implements DiaryUseCase {
@@ -63,6 +66,8 @@ public class DiaryService implements DiaryUseCase {
                 badgeManager.addDiaryBadge(loginUser, badgeCode);
             }
         }
+        diaryManager.checkTodayDiary(user.getId(),now());
+
         return diaryManager.addDiary(loginUser, req);
     }
 
