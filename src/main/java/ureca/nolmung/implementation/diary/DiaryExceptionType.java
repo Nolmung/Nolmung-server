@@ -11,6 +11,7 @@ public enum DiaryExceptionType implements ExceptionType {
     DIARY_UNAUTHORIZED_EXCEPTION(Status.UNAUTHORIZED, "접근 권한이 없습니다."),
     DIARY_TITLE_CONTAINS_BAN_WORD(Status.BAD_REQUEST, "제목에 금칙어가 있습니다."),
     DIARY_CONTENT_CONTAINS_BAN_WORD(Status.BAD_REQUEST, "내용에 금칙어가 있습니다."),
+    DIARY_EXITST_TODAY_EXCEPTION(Status.BAD_REQUEST, "오늘 작성한 일기가 존재합니다."),
     ;
 
     private final Status status;

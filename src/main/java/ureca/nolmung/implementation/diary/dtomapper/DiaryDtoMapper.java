@@ -72,6 +72,7 @@ public class DiaryDtoMapper {
                 .collect(Collectors.toList());
 
         return new DiaryDetailResp(
+                diary.getUser().getId(),
                 diary.getId(),
                 diary.getTitle(),
                 diary.getContent(),

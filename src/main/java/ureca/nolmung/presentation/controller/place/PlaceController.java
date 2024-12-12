@@ -70,7 +70,7 @@ public class PlaceController {
 		return ResponseUtil.SUCCESS("장소 상세 정보 조회에 성공하였습니다.", placeUseCase.findPlaceDetailById(userDetails, placeId));
 	}
 
-	@Operation(summary = "공간 데이터 생성", description = "백엔드 정용 API")
+	@Operation(summary = "공간 데이터 생성", description = "백엔드 전용 API")
 	@PostMapping("/point-data")
 	public ResponseDto<Integer> makePointData() {
 		return ResponseUtil.SUCCESS("공간 데이터 생성에 성공하였습니다.", placeUseCase.makePointData());
