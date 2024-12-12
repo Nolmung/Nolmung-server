@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import ureca.nolmung.business.review.dto.request.AddReviewReq;
 import ureca.nolmung.business.review.dto.response.AddReviewResp;
 import ureca.nolmung.business.review.dto.response.DeleteReviewResp;
+import ureca.nolmung.business.review.dto.response.ReviewResp;
 import ureca.nolmung.implementation.label.LabelException;
 import ureca.nolmung.implementation.label.LabelExceptionType;
 import ureca.nolmung.implementation.place.PlaceException;
@@ -26,6 +27,8 @@ import ureca.nolmung.persistence.label.LabelRepository;
 import ureca.nolmung.persistence.place.PlaceRepository;
 import ureca.nolmung.persistence.review.ReviewRepository;
 import ureca.nolmung.persistence.reviewlabel.ReviewLabelRepository;
+
+import static java.time.LocalDate.now;
 
 @Component
 @RequiredArgsConstructor
@@ -134,5 +137,9 @@ public class ReviewManager {
 
     public Slice<Review> getReviews(Long userId, int page, int size) {
         return reviewRepository.findByUserIdWithPlace(userId, PageRequest.of(page, size));
+    }
+
+    public List<Review> getTodayMyReviews(Long userId) {
+        return reviewRepository.findByUserIdAndCreatedAt(userId, now());
     }
 }

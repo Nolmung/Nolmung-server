@@ -52,4 +52,12 @@ public class ReviewController {
     {
         return ResponseUtil.SUCCESS("후기 조회에 성공하였습니다.", reviewUseCase.getReviews(userDetails.getUser().getId(), page, size));
     }
+
+    @Operation(summary = "오늘 쓴 후기 목록 조회")
+    @GetMapping("/today")
+    public ResponseDto<List<ReviewResp>> getTodayReviews(@AuthenticationPrincipal CustomUserDetails userDetails)
+    {
+        return ResponseUtil.SUCCESS("오늘 쓴 후기 조회에 성공하였습니다.", reviewUseCase.getTodayMyReviews(userDetails.getUser().getId()));
+    }
+
 }

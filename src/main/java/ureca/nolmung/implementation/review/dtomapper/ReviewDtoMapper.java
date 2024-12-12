@@ -1,6 +1,7 @@
 package ureca.nolmung.implementation.review.dtomapper;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Component;
 
@@ -19,4 +20,13 @@ public class ReviewDtoMapper {
                 review.getRating(),
                 labels);
     }
+
+    public ReviewResp toReviewResp(Review review) {
+        List<LabelResp> labelList = review.getReviewLabels().stream()
+                .map(label -> new LabelResp(label.getLabelId(), label.getLabelName()))
+                .collect(Collectors.toList());
+
+        return toReviewResp(review, labelList);
+    }
+
 }

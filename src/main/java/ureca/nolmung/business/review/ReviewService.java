@@ -53,4 +53,12 @@ public class ReviewService implements ReviewUseCase{
                 })
                 .collect(Collectors.toList());
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<ReviewResp> getTodayMyReviews(Long userId) {
+        userManager.validateUserExistence(userId);
+        List<Review> reviews = reviewManager.getTodayMyReviews(userId);
+        return reviews.stream().map(reviewDtoMapper::toReviewResp).collect(Collectors.toList());
+    }
 }
