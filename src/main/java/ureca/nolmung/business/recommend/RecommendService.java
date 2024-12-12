@@ -28,7 +28,7 @@ public class RecommendService implements RecommendUseCase {
     private final RecommendDtoMapper recommendDtoMapper;
     private final RedisManager redisManager;
 
-    private static final int RANDOM_SELECTION_COUNT = 5;
+    private static final int RANDOM_SELECTION_COUNT = 10;
     private static final int TIME_TO_LIVE = 48;
     private static final int MIN_TTL_THRESHOLD = 600;
 
@@ -36,7 +36,7 @@ public class RecommendService implements RecommendUseCase {
     @Transactional(readOnly = true)
     public List<RecommendResp> getMostBookmarkedPlaces() {
         log.info("좋아요 수 기반 추천");
-        List<Place> places = recommendManager.getMostBookmarkedPlaces();
+        List<Place> places = recommendManager.getMostBookmarkedPlaces(RANDOM_SELECTION_COUNT);
         return recommendDtoMapper.toGetPlaceRecommendations(places);
     }
 
