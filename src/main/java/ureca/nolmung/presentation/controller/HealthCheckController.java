@@ -21,7 +21,7 @@ public class HealthCheckController {
 	@Operation(summary = "Error Log 발생")
 	@GetMapping("/errors/logs")
 	public String errorLogs() {
-		log.error("Error Log 발생!!(Test)");
+		log.error("에러 로그 발생!!(Test)");
 		return "에러 로그 발생시켰습니다";
 	}
 
