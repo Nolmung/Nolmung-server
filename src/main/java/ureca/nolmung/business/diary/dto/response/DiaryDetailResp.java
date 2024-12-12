@@ -3,6 +3,7 @@ package ureca.nolmung.business.diary.dto.response;
 import java.util.List;
 
 public record DiaryDetailResp(
+        Long userId,
         Long diaryId,
         String title,
         String content,
