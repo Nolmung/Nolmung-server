@@ -36,7 +36,7 @@ public class RecommendService implements RecommendUseCase {
     @Transactional(readOnly = true)
     public List<RecommendResp> getMostBookmarkedPlaces() {
         log.info("좋아요 수 기반 추천");
-        List<Place> places = recommendManager.getMostBookmarkedPlaces(10);
+        List<Place> places = recommendManager.getMostBookmarkedPlaces(RANDOM_SELECTION_COUNT);
         return recommendDtoMapper.toGetPlaceRecommendations(places);
     }
 
