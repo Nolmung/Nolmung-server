@@ -1,5 +1,7 @@
 package ureca.nolmung.persistence.review;
 
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Pageable;
@@ -9,6 +11,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import ureca.nolmung.business.review.dto.response.ReviewResp;
 import ureca.nolmung.jpa.review.Review;
 
 @Repository
@@ -19,4 +22,6 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
     @Query("SELECT r FROM Review r LEFT JOIN FETCH r.place WHERE r.user.id = :userId ORDER BY r.createdAt DESC")
     Slice<Review> findByUserIdWithPlace(@Param("userId") Long userId, Pageable pageable);
 
+    @Query("SELECT r FROM Review r WHERE r.user.id = :userId AND DATE(r.createdAt) = :date")
+    List<Review> findByUserIdAndCreatedAt(Long userId, LocalDate date);
 }
