@@ -37,7 +37,7 @@ public class SecurityConfig {
 				@Override
 				public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
 					CorsConfiguration config = new CorsConfiguration();
-					config.setAllowedOrigins(Arrays.asList("http://localhost:8080", "https://api.nolmung.org", "http://localhost:3000", "https://dev.nolmung.org", "https://nolmung.org", "https://nolmung.netlify.app/")); //리소스를 허용할 URL 지정
+					config.setAllowedOrigins(Arrays.asList("http://localhost:8080", "https://api.nolmung.org", "http://localhost:3000", "https://dev.nolmung.org", "https://nolmung.org", "https://nolmung.netlify.app/", "https://initially-game-chamois.ngrok-free.app/", "https://d2ce-115-161-21-211.ngrok-free.app/")); //리소스를 허용할 URL 지정
 					config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")); //허용하는 HTTP METHOD 지정
 					config.setAllowCredentials(true); // 인증, 인가를 위한 credentials 를 TRUE로 설정 - TRUE로 설정 시, setAllowedOrigins에 "*" 설정 불가
 					config.setAllowedHeaders(Arrays.asList("Authorization", "Authorization-refresh", "Cache-Control", "Content-Type", "X-Api-Key"));
@@ -68,6 +68,7 @@ public class SecurityConfig {
 				.requestMatchers("/v1/diary/public/**").permitAll()
 				.requestMatchers("/actuator/prometheus").permitAll()
 				.requestMatchers("/error").permitAll()
+				.requestMatchers("/errors/logs").permitAll()
 				.requestMatchers("/").permitAll()
 				.anyRequest().authenticated()  // 그 외 URL은 인증 필요
 			)

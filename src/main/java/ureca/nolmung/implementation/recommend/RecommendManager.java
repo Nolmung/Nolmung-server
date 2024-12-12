@@ -26,8 +26,8 @@ public class RecommendManager {
     private final int SRID = 4326;
     private static final double RADIUS = 5.0;
     private final GeometryFactory geometryFactory = new GeometryFactory();
-    public List<Place> getMostBookmarkedPlaces() {
-        return placeRepository.findTopNPlaces(PageRequest.of(0, 5));
+    public List<Place> getMostBookmarkedPlaces(int count) {
+        return placeRepository.findTopNPlaces(PageRequest.of(0, count));
     }
 
     public List<Place> getPlaceRecommendationsForDogs(List<Dog> dogs) {
@@ -39,20 +39,20 @@ public class RecommendManager {
     }
 
     public List<Place> findNearbyPlaces(double userLatitude, double userLongitude) {
-        Polygon polygon = generateCirclePolygon(userLatitude, userLongitude, RADIUS);
+        Polygon polygon = generateCirclePolygon(userLatitude, userLongitude);
         return placePositionRepository.findPlaceByCoordinate(polygon);
     }
 
-    private Polygon generateCirclePolygon(double userLatitude, double userLongitude, double radius) {
+    private Polygon generateCirclePolygon(double userLatitude, double userLongitude) {
         int numPoints = 100;
         Coordinate[] coordinates = new Coordinate[numPoints + 1];
         for (int i = 0; i <= numPoints; i++) {
             double angle = 2 * Math.PI * i / numPoints;
-            double latOffset = radius / 111.0 * Math.sin(angle);
-            double lonOffset = radius / (111.0 * Math.cos(Math.toRadians(userLatitude))) * Math.cos(angle);
+            double latOffset = RecommendManager.RADIUS / 111.0 * Math.sin(angle);
+            double lonOffset = RecommendManager.RADIUS / (111.0 * Math.cos(Math.toRadians(userLatitude))) * Math.cos(angle);
             coordinates[i] = new Coordinate(userLongitude + lonOffset, userLatitude + latOffset);
         }
-        coordinates[numPoints] = coordinates[0]; // 원을 닫기 위해 첫 점을 마지막에 추가
+        coordinates[numPoints] = coordinates[0];
         Polygon polygon = geometryFactory.createPolygon(coordinates);
         polygon.setSRID(SRID);
         return polygon;

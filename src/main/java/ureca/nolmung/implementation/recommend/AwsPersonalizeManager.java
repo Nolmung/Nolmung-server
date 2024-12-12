@@ -27,7 +27,7 @@ public class AwsPersonalizeManager {
     private final String campaignArn;
     private final PersonalizeRuntimeClient personalizeRuntimeClient;
     private final PlaceRepository placeRepository;
-    private static final int DEFAULT_NUM_RESULTS = 25;
+    private static final int DEFAULT_NUM_RESULTS = 50;
 
     public List<PredictedItem> getRecs(Long userId) {
 
