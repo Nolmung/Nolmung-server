@@ -15,6 +15,7 @@ public class ReviewDtoMapper {
     {
         return new ReviewResp(review.getId(),
                 review.getPlace().getId(),
+                review.getPlace().getCategory(),
                 review.getPlace().getName(),
                 review.getPlace().getAddress(),
                 review.getRating(),
