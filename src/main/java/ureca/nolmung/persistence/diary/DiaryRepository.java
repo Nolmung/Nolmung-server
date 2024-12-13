@@ -20,7 +20,6 @@ public interface DiaryRepository extends JpaRepository<Diary, Long> {
             "JOIN FETCH d.user u " +
             "LEFT JOIN FETCH d.mediaList m " +
             "WHERE d.user.id = :userId " +
-            "AND (m.mediaType = 'IMAGE' OR m IS NULL) " +
             "ORDER BY d.createdAt DESC")
     List<Diary> findDiariesWithFirstMediaByUser(@Param("userId") Long userId);
 

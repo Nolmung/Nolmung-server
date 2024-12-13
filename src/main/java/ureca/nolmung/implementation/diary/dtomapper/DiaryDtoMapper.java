@@ -31,15 +31,20 @@ public class DiaryDtoMapper {
 
     private DiaryListResp.Diary mapDiaryToDiaryListResp(Diary diary) {
         String formattedDate = diary.getCreatedAt().format(DATE_FORMATTER);
-        String mediaUrl = diary.getMediaList().isEmpty() ? "" : diary.getMediaList().get(0).getMediaUrl();
-
+        List<DiaryListResp.Media> mediaList = diary.getMediaList().stream()
+                .map(media -> new DiaryListResp.Media(
+                        media.getId(),
+                        media.getMediaType(),
+                        media.getMediaUrl()
+                ))
+                .collect(Collectors.toList());
         return new DiaryListResp.Diary(
                 diary.getId(),
                 diary.getTitle(),
                 diary.getContent(),
                 diary.isPublicYn(),
                 formattedDate,
-                mediaUrl
+                mediaList
         );
     }
 
