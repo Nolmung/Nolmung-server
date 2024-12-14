@@ -2,6 +2,7 @@ package ureca.nolmung.business.diary.dto.response;
 
 import ureca.nolmung.jpa.media.Enum.MediaType;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public record DiaryListResp(User user,List<Diary> diaries) {
@@ -16,7 +17,7 @@ public record DiaryListResp(User user,List<Diary> diaries) {
             String title,
             String content,
             Boolean publicYn,
-            String createdAt,
+            LocalDateTime createdAt,
             List<Media> mediaList
     ) {}
 

@@ -4,19 +4,15 @@ import org.springframework.stereotype.Component;
 import ureca.nolmung.business.diary.dto.response.DiaryDetailResp;
 import ureca.nolmung.business.diary.dto.response.DiaryListResp;
 import ureca.nolmung.jpa.diary.Diary;
-import ureca.nolmung.jpa.diaryplace.DiaryPlace;
 import ureca.nolmung.jpa.dogdiary.DogDiary;
 import ureca.nolmung.jpa.media.Media;
 import ureca.nolmung.jpa.place.Place;
 import ureca.nolmung.jpa.user.User;
-
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
 public class DiaryDtoMapper {
-    private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy.MM.dd");
 
     public DiaryListResp toAddDiaryResp(User user, List<Diary> diaryList) {
         List<DiaryListResp.Diary> diaries = diaryList.stream()
@@ -30,7 +26,6 @@ public class DiaryDtoMapper {
     }
 
     private DiaryListResp.Diary mapDiaryToDiaryListResp(Diary diary) {
-        String formattedDate = diary.getCreatedAt().format(DATE_FORMATTER);
         List<DiaryListResp.Media> mediaList = diary.getMediaList().stream()
                 .map(media -> new DiaryListResp.Media(
                         media.getId(),
@@ -43,13 +38,12 @@ public class DiaryDtoMapper {
                 diary.getTitle(),
                 diary.getContent(),
                 diary.isPublicYn(),
-                formattedDate,
+                diary.getCreatedAt(),
                 mediaList
         );
     }
 
     public DiaryDetailResp toDiaryDetailResp(Diary diary, List<DogDiary> dogList, List<Place> placeList, List<Media> mediaList) {
-        String formattedDate = diary.getCreatedAt().format(DATE_FORMATTER);
         List<DiaryDetailResp.Place> placeDTO = placeList.stream()
                 .map(place -> new DiaryDetailResp.Place(
                         place.getId(),
@@ -82,7 +76,7 @@ public class DiaryDtoMapper {
                 diary.getTitle(),
                 diary.getContent(),
                 diary.isPublicYn(),
-                formattedDate,
+                diary.getCreatedAt(),
                 dogDTO,
                 placeDTO,
                 mediaDTO
