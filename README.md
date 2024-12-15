@@ -9,7 +9,25 @@
 - 반려견 동반 가능한 장소 제공
 - 반려견과의 활동 활성화
 - 추억 기록
+  
+<br />
 
+## 🔧 기능 소개 
+**1. 회원 등록 및 관리 시스템** : 소셜 로그인 및 회원가입
+
+**2. 반려견 정보 관리 시스템** : 프로필 등록, 조회, 수정 및 삭제
+
+**3. 장소 검색 시스템** : 지도에서 장소 검색, 키워드로 장소 검색, 장소 검색 필터링
+
+**4. 즐겨찾기 시스템** : 즐겨찾기 등록, 조회 및 삭제
+
+**5. 다이어리 시스템(오늘멍)** : 오늘멍 등록, 조회, 수정 및 삭제
+
+**6. 후기 등록 시스템** : 후기 등록, 조회 및 삭제
+
+**7. 추천 시스템** : 위치정보 기반 추천, 즐겨찾기 순 추천, 견종별 입장 가능 시설 추천, 개인 맞춤형 추천
+
+<br />
 
 ## 🛠️ 시스템 아키텍쳐
 
@@ -23,6 +41,8 @@
 <img width="600" height="300" src="https://github.com/user-attachments/assets/23bbac49-e246-4a82-b88d-d5529e5979f9" alt="nolmung_architecture" style="border:1px solid black;">
 </kbd>
 
+<br />
+<br />
 
 ## 📌 ERD
 
@@ -33,6 +53,7 @@
   🔗 <a href="https://www.erdcloud.com/d/i8uWGycunfcGahQYE" rel="nofollow">ERDCloud</a>  
 </p>
 
+<br />
 
 ## 📋 Conventions
 
@@ -71,6 +92,7 @@
 - 팀원 중 1인 이상 코드 리뷰를 해주고, approve하면 본인이 merge하여 develop 브랜치에 푸쉬한다.
 - develop 브랜치에서 main 브랜치는 모든 팀원의 동의하에 merge 한다.
 
+<br />
 
 ## 🗓️ 추진 일정
 
@@ -78,6 +100,8 @@
 <img width="600" height="300" alt="스크린샷 2024-12-15 오후 3 34 05" src="https://github.com/user-attachments/assets/9e946772-27e8-49a1-bec2-6c8e813e0deb" style="border:1px solid black;" />
 </kbd>
 
+<br />
+<br />
 
 ## 👥 팀원 및 역할 소개
 
