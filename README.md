@@ -45,39 +45,39 @@
 </p>
 
 
-### 📋 Git 브랜치 전략
-> Github-Flow
-> 기본적으로 Github Flow를 따라 개발 프로세스를 진행한다. </br>
-> 이는 기능별 브랜치를 생성하고, 코드 리뷰 후 develop 브랜치에 병합하는 방식을 의미한다.
+### 📋 Conventions
 
-### 1. 깃 컨벤션
-  <kbd>
-    <img width="400" height="300" src="https://github.com/user-attachments/assets/f12fd40e-4dac-47c1-9347-4631c03c7ead" alt="nolmung_gitflow" style="border:1px solid black;">
-  </kbd>
+#### 1. Commit Message Conventions
+<details>
+<summary><b>Types</b></summary>
+<div markdown="1">
 
-### 2. 브랜치 명명 규칙
-- 이슈 생성 후 타입/SV-jira 티켓 넘버 로 브랜치를 생성한다.  
+  - `feat`: 새로운 기능  
+  - `fix`: 버그 수정  
+  - `refact`: 기능 변경 없이 코드 구조 개선  
+  - `docs`: 문서 수정 (README 등)  
+  - `test`: 테스트 코드 추가 또는 수정  
+  - `env`: 환경 설정 관련  
+  - `hotfix`: 긴급 수정  
+  - `chore`: 그 외의 작은 수정들  
+  - `deploy`: 운영 서버 배포  
+
+</div>
+</details>
+
+#### 2. Branch Conventions
+ - 지라 이슈 생성 후 '타입/SV-jira 티켓 넘버'로 브랜치를 생성한다.  
   예) `feat/SV-1`
+ - 구현됨에 따라 자주 커밋하고, 한번에 몰아 커밋하지 않는다.
+ - 커밋 메시지는 지정된 컨벤션에 따른다.
 
-### 3. 커밋 메시지 규칙
-- 브랜치를 로컬에 받아 개발한다.  
-- 구현됨에 따라 자주 커밋한다. 한번에 모아서 커밋하지 않는다.  
-- 커밋 메시지는 지정된 컨벤션에 따른다.
+#### 3. Code Review & PR Conventions 
+- PR은 지정된 template을 이용해 구현한다. 이때 PR 제목은 issue와 같은 형식으로 작성한다.
+- PR은 커밋 메시지와 마찬가지로 여러 업무를 모아서 보내지 말고 자주 보내 conflict를 줄여야한다.
+- 팀원 중 1인 이상 코드 리뷰를 해주고, approve하면 본인이 merge하여 develop 브랜치에 푸쉬한다.
+- develop 브랜치에서 main 브랜치는 모든 팀원의 동의하에 merge 한다.
 
-### 4. 코드 리뷰 및 PR 관리
-- PR을 생성한다. 이때 PR없이 절대 develop 브랜치에 merge하지 않는다.  
-- 지정된 template을 이용해 구현한다. 이때 PR 제목은 issue와 같은 형식으로 작성한다.  
-- PR은 커밋 메시지와 마찬가지로 여러 업무를 모아서 보내지말고 자주 보내 conflict를 줄여야 한다.  
-- 가능한 팀원은 코드 리뷰를 해주고, 1인 이상 approve하면 본인이 merge하여 메인 브랜치에 푸쉬한다.
-  
 ### 🗓️ 추진 일정
-  <kbd>
-      <img width="600" height="200" src="https://github.com/user-attachments/assets/307aa836-668e-48bb-8a39-266ec626a6e1" alt="nolmung_schedule" style="border:1px solid black;">
-  </kbd>
+<img width="682" alt="스크린샷 2024-12-15 오후 3 34 05" src="https://github.com/user-attachments/assets/9e946772-27e8-49a1-bec2-6c8e813e0deb" />
 
-- 현재 진행 사항 (5주차)
-  - 프론트 컴포넌트 (완료)
-  - API 연동 (완료)
-  - QA (진행 예정)
-    
 <!--### 🤔 고민한 이야기-->
