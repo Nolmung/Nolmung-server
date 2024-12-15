@@ -36,7 +36,12 @@
 
 ## 📋 Conventions
 
-#### 1. Commit Message Conventions
+#### 1. Git branch 전략
+**Github-Flow** <br />
+기본적으로 Github Flow를 따라 개발 프로세스를 진행한다. <br />
+이는 기능별 브랜치를 생성하고, 코드 리뷰 후 develop 브랜치에 병합하는 방식을 의미한다.<br />
+
+#### 2. Commit Message Conventions
 <details>
 <summary><b>Types</b></summary>
 <div markdown="1">
@@ -54,13 +59,13 @@
 </div>
 </details>
 
-#### 2. Branch Conventions
+#### 3. Branch Conventions
  - 지라 이슈 생성 후 '타입/SV-jira 티켓 넘버'로 브랜치를 생성한다.  
   예) `feat/SV-1`
  - 구현됨에 따라 자주 커밋하고, 한번에 몰아 커밋하지 않는다.
  - 커밋 메시지는 지정된 컨벤션에 따른다.
 
-#### 3. Code Review & PR Conventions 
+#### 4. Code Review & PR Conventions 
 - PR은 지정된 template을 이용해 구현한다. 이때 PR 제목은 issue와 같은 형식으로 작성한다.
 - PR은 커밋 메시지와 마찬가지로 여러 업무를 모아서 보내지 말고 자주 보내 conflict를 줄여야한다.
 - 팀원 중 1인 이상 코드 리뷰를 해주고, approve하면 본인이 merge하여 develop 브랜치에 푸쉬한다.
