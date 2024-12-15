@@ -10,34 +10,22 @@
 - 반려견과의 활동 활성화
 - 추억 기록
 
-### 🙋🏻 기능 및 기능별 담당자
-- 고경남(팀장)
-  -  장소 검색 시스템
-  -  다이어리 시스템(오늘멍) : 아호코라식 기법 적용
-  -  즐겨찾기 시스템
-  -  인프라 구축
-- 강희준
-  -  추천 시스템 
-- 배혜원
-  - 후기 시스템
-  - 다이어리 시스템(오늘멍)
-  - 인프라 구축
-- 정희진
-  - 회원 시스템 (소셜 로그인)
-  - 반려견 정보 관리 시스템
 
-### 🛠️ 시스템 아키텍쳐(개발)
+## 🛠️ 시스템 아키텍쳐
+
+#### 개발
 <kbd>
-<img width="600" height="300" src="https://github.com/user-attachments/assets/fe598b0f-16a8-43f0-9ac7-73ff3dff7c52" alt="nolmung_architecture" style="border:1px solid black;">
+<img width="600" height="300" src="https://github.com/user-attachments/assets/8d29a75d-bc22-4c70-ab9b-312520342607" alt="nolmung_architecture" style="border:1px solid black;">
 </kbd>
 
-### 🛠️ 시스템 아키텍쳐(운영)
-
+#### 운영
 <kbd>
-<img width="600" height="300" src="https://github.com/user-attachments/assets/81b46d91-97ac-4a2b-a0df-cbfbdd024cd4" alt="nolmung_architecture" style="border:1px solid black;">
+<img width="600" height="300" src="https://github.com/user-attachments/assets/23bbac49-e246-4a82-b88d-d5529e5979f9" alt="nolmung_architecture" style="border:1px solid black;">
 </kbd>
 
-### 📌 ERD
+
+## 📌 ERD
+
 <kbd>
 <img width="600" height="300" src="https://github.com/user-attachments/assets/1e9c0c56-0ee0-4a69-9566-d00def8160f5" alt="nolmung_erd" style="border:1px solid black;">
 </kbd>
@@ -46,7 +34,7 @@
 </p>
 
 
-### 📋 Conventions
+## 📋 Conventions
 
 #### 1. Commit Message Conventions
 <details>
@@ -78,9 +66,58 @@
 - 팀원 중 1인 이상 코드 리뷰를 해주고, approve하면 본인이 merge하여 develop 브랜치에 푸쉬한다.
 - develop 브랜치에서 main 브랜치는 모든 팀원의 동의하에 merge 한다.
 
-### 🗓️ 추진 일정
+
+## 🗓️ 추진 일정
+
 <kbd>
-<img width="682" alt="스크린샷 2024-12-15 오후 3 34 05" src="https://github.com/user-attachments/assets/9e946772-27e8-49a1-bec2-6c8e813e0deb" style="border:1px solid black;" />
+<img width="600" height="300" alt="스크린샷 2024-12-15 오후 3 34 05" src="https://github.com/user-attachments/assets/9e946772-27e8-49a1-bec2-6c8e813e0deb" style="border:1px solid black;" />
 </kbd>
 
-<!--### 🤔 고민한 이야기-->
+
+## 👥 팀원 및 역할 소개
+
+<table>
+  <tr align="center">
+    <td>강희준</td>
+    <td>고경남(팀장)</td>
+    <td>배혜원</td>
+    <td>정희진</td>
+  </tr>
+  <tr>
+     <td align="center">
+        <a href="https://github.com/orgs/Nolmung/people/dhfkdlsj">
+          <img src="https://avatars.githubusercontent.com/u/105478203?v=4" width="150px" alt="강희준"/><br />
+        </a>
+     </td>
+     <td align="center">
+        <a href="https://github.com/rhrudska987">
+          <img src="https://avatars.githubusercontent.com/u/59828706?v=4" width="150px" alt="고경남"/><br />
+        </a>
+     </td>
+     <td align="center">
+        <a href="https://github.com/hyewonbae">
+          <img src="https://avatars.githubusercontent.com/u/43161096?v=4" width="150px" alt="배혜원"/><br />
+        </a>
+     </td>
+     <td align="center">
+        <a href="https://github.com/JHJ08">
+          <img src="https://avatars.githubusercontent.com/u/161445093?v=4" width="150px" alt="정희진"/><br />
+        </a>
+     </td>
+  </tr>
+  <tr>
+     <td align="center">
+        <p> 테크리더 <br /> 추천시스템 </p>
+     </td>
+     <td align="center">
+        <p> 장소 검색 시스템 <br />  즐겨찾기 시스템 <br /> 인프라 </p>
+     </td>
+     <td align="center">
+        <p> 후기 시스템 <br /> 다이어리 시스템 <br /> 인프라 </p>
+     </td>
+     <td align="center">
+        <p> 회원 시스템(소셜 로그인) <br /> 반려견 정보 관리 시스템 </p>
+     </td>
+  </tr>
+</table>
+
