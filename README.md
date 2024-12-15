@@ -32,13 +32,14 @@
 </kbd>
 
 ### 🛠️ 시스템 아키텍쳐(운영)
+
 <kbd>
 <img width="600" height="300" src="https://github.com/user-attachments/assets/81b46d91-97ac-4a2b-a0df-cbfbdd024cd4" alt="nolmung_architecture" style="border:1px solid black;">
 </kbd>
 
 ### 📌 ERD
 <kbd>
-<img width="600" height="300" src="https://github.com/user-attachments/assets/530b465d-729f-4645-98fb-8a7906ece0cc" alt="nolmung_erd" style="border:1px solid black;">
+<img width="600" height="300" src="https://github.com/user-attachments/assets/1e9c0c56-0ee0-4a69-9566-d00def8160f5" alt="nolmung_erd" style="border:1px solid black;">
 </kbd>
 <p>
   🔗 <a href="https://www.erdcloud.com/d/i8uWGycunfcGahQYE" rel="nofollow">ERDCloud</a>  
@@ -78,6 +79,8 @@
 - develop 브랜치에서 main 브랜치는 모든 팀원의 동의하에 merge 한다.
 
 ### 🗓️ 추진 일정
-<img width="682" alt="스크린샷 2024-12-15 오후 3 34 05" src="https://github.com/user-attachments/assets/9e946772-27e8-49a1-bec2-6c8e813e0deb" />
+<kbd>
+<img width="682" alt="스크린샷 2024-12-15 오후 3 34 05" src="https://github.com/user-attachments/assets/9e946772-27e8-49a1-bec2-6c8e813e0deb" style="border:1px solid black;" />
+</kbd>
 
 <!--### 🤔 고민한 이야기-->
