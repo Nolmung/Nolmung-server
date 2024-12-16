@@ -1,5 +1,6 @@
 package ureca.nolmung.business.diary.dto.response;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public record DiaryDetailResp(
@@ -8,7 +9,7 @@ public record DiaryDetailResp(
         String title,
         String content,
         Boolean publicYn,
-        String createdAt,
+        LocalDateTime createdAt,
         List<DogDiary> dogs,
         List<Place> places,
         List<Media> medias
