@@ -70,6 +70,7 @@ public class BatchConfig {
         JdbcCursorItemReader<Long> reader = new JdbcCursorItemReader<>();
         reader.setDataSource(dataSource);
 
+        // ub.bookmark_count와 u.bookmark_count의 차이가 10이상인 유저만 배치 실행
         reader.setSql(
                 "SELECT u.user_id " +
                         "FROM user u " +
@@ -86,6 +87,7 @@ public class BatchConfig {
     @Bean
     public ItemProcessor<Long, Map.Entry<Long, List<RecommendResp>>> recommendationProcessor() {
         return userId -> {
+            // Aws Personalize Api 호출하여 추천 리스트 받아오기
             List<PredictedItem> awsRecs = awsPersonalizeManager.getRecs(userId);
             List<Place> places = awsPersonalizeManager.getPlaces(awsRecs);
             List<RecommendResp> recommendResponses = recommendDtoMapper.toGetPlaceRecommendations(places);
@@ -96,6 +98,7 @@ public class BatchConfig {
     @Bean
     public ItemWriter<Map.Entry<Long, List<RecommendResp>>> combinedWriter() {
         return items -> items.forEach(entry -> {
+            // 레디스에 저장하기
             Long userId = entry.getKey();
             List<RecommendResp> recommendResps = entry.getValue();
 

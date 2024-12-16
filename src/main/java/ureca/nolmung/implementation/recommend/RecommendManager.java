@@ -38,11 +38,13 @@ public class RecommendManager {
         return placeRepository.findAllByDogSizes(sizes);
     }
 
+    // Polygon 안의 장소 찾기
     public List<Place> findNearbyPlaces(double userLatitude, double userLongitude) {
         Polygon polygon = generateCirclePolygon(userLatitude, userLongitude);
         return placePositionRepository.findPlaceByCoordinate(polygon);
     }
 
+    // 유저의 위도와 경도를 이용하여 원형 Polygon 만들기
     private Polygon generateCirclePolygon(double userLatitude, double userLongitude) {
         int numPoints = 100;
         Coordinate[] coordinates = new Coordinate[numPoints + 1];
