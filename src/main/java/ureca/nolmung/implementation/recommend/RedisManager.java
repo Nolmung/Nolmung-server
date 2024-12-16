@@ -16,10 +16,12 @@ public class RedisManager {
 
     private final RedisTemplate<String, List<RecommendResp>> redisTemplate;
 
+    // TTL 조회
     public Long getExpire(String key, TimeUnit timeUnit) {
         return redisTemplate.getExpire(key, timeUnit);
     }
 
+    // TTL 갱신
     public void addExpire(String key, int hour, TimeUnit timeUnit) {
         redisTemplate.expire(key, hour, timeUnit);
     }
