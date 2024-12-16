@@ -1,16 +1,15 @@
 # Nolmung-server
 
 ### 💡 개요
-> 강아지 동반 가능 시설 공유 플랫폼 ‘놀멍(Nolmung)’은 반려인들이 반려견과 함께 방문할 수 있는 장소를 쉽게 탐색하고, </br>
-> 방문 후 ‘오늘멍’이라는 일기를 통해 소중한 추억을 기록하고 회상함으로써 반려견과의 유대감을 더욱 강화한다. </br>
-> 또한, 다른 사용자들과 오늘멍을 공유하여 다양한 반려생활을 지원한다.
+> 강아지 동반 가능 시설 공유 플랫폼 ‘놀멍(Nolmung)’은 반려인들이 반려견과 함께 방문할 수 있는 장소를 편리하게 찾아볼 수 있도록 돕습니다. </br>
+> 방문 후에는 ‘오늘멍’을 통해 소중한 추억을 기록하고 되새기며 반려견과의 유대감을 한층 깊게 만들 수 있습니다. </br>
+> 또한, 다른 사용자들과 오늘멍을 나누며 다양한 반려생활의 즐거움을 함께할 수 있습니다.
 
-### 🙌🏻 목적
-- 반려견 동반 가능한 장소 제공
-- 반려견과의 활동 활성화
-- 추억 기록
-  
-<br />
+![readme_1](https://github.com/user-attachments/assets/bb8a2898-c05b-4427-898d-ae6ea007b6c3)
+![readme_2](https://github.com/user-attachments/assets/2bc9f1f1-6069-409c-bcdb-ed5654646746)
+![readme_3](https://github.com/user-attachments/assets/68177987-b92f-4e06-93eb-3df0e6b9c54c)
+![readme_4](https://github.com/user-attachments/assets/f13b6643-2646-45b6-aeb9-2d2766733d3f)
+![readme_5](https://github.com/user-attachments/assets/770e3a5a-fb49-4be8-8fb3-2f2bc38de7d6)
 
 ## 🔧 기능 소개 
 **1. 회원 등록 및 관리 시스템** : 소셜 로그인 및 회원가입
