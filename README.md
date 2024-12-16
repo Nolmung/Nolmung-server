@@ -3,7 +3,7 @@
 ### 💡 개요
 > 강아지 동반 가능 시설 공유 플랫폼 ‘놀멍(Nolmung)’은 반려인들이 반려견과 함께 방문할 수 있는 장소를 편리하게 찾아볼 수 있도록 돕습니다. </br>
 > 방문 후에는 ‘오늘멍’을 통해 소중한 추억을 기록하고 되새기며 반려견과의 유대감을 한층 깊게 만들 수 있습니다. </br>
-> 또한, 다른 사용자들과 오늘멍을 나누며 다양한 반려생활의 즐거움을 함께할 수 있습니다.
+> 또한, 다른 사용자들과 오늘멍을 나누며 다양한 반려생활의 즐거움을 함께 할 수 있습니다.
 
 ![readme_1](https://github.com/user-attachments/assets/bb8a2898-c05b-4427-898d-ae6ea007b6c3)
 ![readme_2](https://github.com/user-attachments/assets/2bc9f1f1-6069-409c-bcdb-ed5654646746)
@@ -60,7 +60,7 @@
 ## 📌 ERD
 
 <kbd>
-<img width="600" height="300" src="https://github.com/user-attachments/assets/1e9c0c56-0ee0-4a69-9566-d00def8160f5" alt="nolmung_erd" style="border:1px solid black;">
+<img width="600" height="300" src="https://github.com/user-attachments/assets/e38ed23e-1397-49c5-9bab-ec3940141aed" alt="nolmung_erd" style="border:1px solid black;">
 </kbd>
 <p>
   🔗 <a href="https://www.erdcloud.com/d/i8uWGycunfcGahQYE" rel="nofollow">ERDCloud</a>  
@@ -114,6 +114,21 @@
 </kbd>
 
 <br />
+<br />
+
+## 🗂️ 산출물
+<p>
+  🔗 <a href="https://docs.google.com/spreadsheets/d/1gMqM7RShegYMpOJgnLBVFK00hbhpSXT2/edit?gid=965066708#gid=965066708" rel="nofollow">요구사항 명세서</a>  
+</p>
+<p>
+  🔗 <a href="https://docs.google.com/spreadsheets/d/1WBgP8ddhtZ4FpwaMSBfbj2j2OMT9PBkz/edit?gid=24648020#gid=24648020" rel="nofollow">테이블 정의서</a>  
+</p>
+<p>
+  🔗 <a href="https://docs.google.com/spreadsheets/d/1lPncS8BsyVdFOsJxUT-aXWuH5KTG0Shz/edit?gid=41944336#gid=41944336" rel="nofollow">API 명세서</a>  
+</p>
+<p>
+  🔗 <a href="https://docs.google.com/spreadsheets/d/11Fo8JespYtxbPJlsFSPIHOsGlviqmc2kPSXhVMMutSA/edit?gid=113761061#gid=113761061" rel="nofollow">WBS</a>  
+</p>
 <br />
 
 ## 👥 팀원 및 역할 소개
