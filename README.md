@@ -28,16 +28,30 @@
 
 <br />
 
+## ⚙️ 기술 스택
+
+#### 백엔드
+<kbd>
+<img width="600" src="https://github.com/user-attachments/assets/e67a1dde-685d-4708-893a-a17ee57b530f" alt="nolmung_architecture" style="border:1px solid black;">
+</kbd>
+
+#### 인프라
+<kbd>
+<img width="600" src="https://github.com/user-attachments/assets/7bd09edd-0661-48b6-b424-517d937cf62c" alt="nolmung_architecture" style="border:1px solid black;">
+</kbd>
+
+<br />
+
 ## 🛠️ 시스템 아키텍쳐
 
 #### 개발
 <kbd>
-<img width="600" height="300" src="https://github.com/user-attachments/assets/8d29a75d-bc22-4c70-ab9b-312520342607" alt="nolmung_architecture" style="border:1px solid black;">
+<img width="600" src="https://github.com/user-attachments/assets/8d29a75d-bc22-4c70-ab9b-312520342607" alt="nolmung_architecture" style="border:1px solid black;">
 </kbd>
 
 #### 운영
 <kbd>
-<img width="600" height="300" src="https://github.com/user-attachments/assets/23bbac49-e246-4a82-b88d-d5529e5979f9" alt="nolmung_architecture" style="border:1px solid black;">
+<img width="600" src="https://github.com/user-attachments/assets/4ec17975-2abc-4d40-adac-db163a7ae1d2" alt="nolmung_architecture" style="border:1px solid black;">
 </kbd>
 
 <br />
