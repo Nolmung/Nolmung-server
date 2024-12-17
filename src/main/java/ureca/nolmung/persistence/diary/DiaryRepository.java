@@ -21,7 +21,7 @@ public interface DiaryRepository extends JpaRepository<Diary, Long> {
             "LEFT JOIN FETCH d.mediaList m " +
             "WHERE d.user.id = :userId " +
             "ORDER BY d.createdAt DESC")
-    List<Diary> findDiariesWithFirstMediaByUser(@Param("userId") Long userId);
+    List<Diary> findDiaryWithMediaByUser(@Param("userId") Long userId);
 
     @Query("SELECT d FROM Diary d LEFT JOIN FETCH d.mediaList WHERE d.id = :diaryId")
     Diary findWithMediaById(@Param("diaryId") Long diaryId);

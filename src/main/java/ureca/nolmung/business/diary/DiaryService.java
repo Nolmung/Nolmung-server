@@ -46,6 +46,7 @@ public class DiaryService implements DiaryUseCase {
     @Override
     @Transactional
     public AddDiaryResp addDiary(User user, AddDiaryReq req) {
+        // 유저 검증
         User loginUser = userManager.validateUserExistence(user.getId());
         loginUser.incrementDiaryCount();
 
@@ -66,6 +67,8 @@ public class DiaryService implements DiaryUseCase {
                 badgeManager.addDiaryBadge(loginUser, badgeCode);
             }
         }
+
+        // 오늘 쓴 오늘멍이 존재하는지 확인
         diaryManager.checkTodayDiary(user.getId(),now());
 
         return diaryManager.addDiary(loginUser, req);
@@ -74,6 +77,7 @@ public class DiaryService implements DiaryUseCase {
     @Override
     @Transactional(readOnly = true)
     public DiaryListResp getAllDiaries(User user) {
+        // 유저 검증
         User loginUser = userManager.validateUserExistence(user.getId());
         List<Diary> diaryList = diaryManager.getDiaryList(loginUser.getId());
         return diaryDtoMapper.toAddDiaryResp(loginUser, diaryList);
@@ -83,6 +87,7 @@ public class DiaryService implements DiaryUseCase {
     @Override
     @Transactional(readOnly = true)
     public DiaryDetailResp getDetailDiary(Long diaryId) {
+        // 다이어리 유효성 검증
         Diary diaryCheck = diaryManager.checkExistDiary(diaryId);
         return getDiaryDetailResp(diaryCheck);
     }
@@ -90,14 +95,18 @@ public class DiaryService implements DiaryUseCase {
     @Override
     @Transactional(readOnly = true)
     public DiaryDetailResp getDetailMyDiary(User user, Long diaryId) {
+        // 작성자 검증
         Diary diaryCheck = diaryManager.checkDiaryWriter(user.getId(), diaryId);
         return getDiaryDetailResp(diaryCheck);
     }
 
     private DiaryDetailResp getDiaryDetailResp(Diary diaryCheck) {
         Diary diary = diaryManager.getDetailDiary(diaryCheck.getId());
+        // 함께한 반려견 리스트
         List<DogDiary> dogList = dogDiaryManager.getDogList(diaryCheck.getId());
+        // 방문한 장소 리스트
         List<Place> placeList = diaryPlaceManager.getPlaceList(diaryCheck.getId());
+        // 등록된 미디어 리스트
         List<Media> mediaList = diary.getMediaList();
         return diaryDtoMapper.toDiaryDetailResp(diary, dogList, placeList, mediaList);
     }
@@ -106,9 +115,12 @@ public class DiaryService implements DiaryUseCase {
     @Override
     @Transactional
     public DeleteDiaryResp deleteDiary(User user, Long diaryId) {
+        // 유저 검증
         User loginUser = userManager.validateUserExistence(user.getId());
+        // 작성자 검증
         Diary diaryCheck = diaryManager.checkDiaryWriter(user.getId(), diaryId);
 
+        // 일기 카운트 감소
         loginUser.decrementDiaryCount();
 
         return diaryManager.deleteDiary(diaryCheck);
@@ -117,6 +129,7 @@ public class DiaryService implements DiaryUseCase {
     @Override
     @Transactional
     public UpdateDiaryResp updateDiary(User user, Long diaryId, UpdateDiaryReq req) {
+        // 작성자 검증
         Diary diaryCheck = diaryManager.checkDiaryWriter(user.getId(), diaryId);
         return diaryManager.updateDiary(diaryCheck, req);
     }

@@ -45,18 +45,24 @@ public class ReviewManager {
 
         for (AddReviewReq.ReviewDto reviewDto : req.reviews()){
 
+            // 장소 유효성 검증
             Place place = placeRepository.findById(reviewDto.placeId())
                     .orElseThrow(() -> new PlaceException(PlaceExceptionType.PLACE_NOT_FOUND_EXCEPTION));
+
+            // 리뷰 저장
             Review newReview = createReview(user, reviewDto, place);
             reviewRepository.save(newReview);
 
+            // 장소에 대한 별점 총합 추가
             place.addRating(reviewDto.rating());
             placeRepository.save(place);
 
+            // 리뷰-라벨 저장 및 장소별 라벨 카운트 증가
             for (AddReviewReq.ReviewDto.LabelDto labelDto : reviewDto.labels()) {
                 ReviewLabel newReviewLabel = createReviewLabel(labelDto, newReview);
                 reviewLabelRepository.save(newReviewLabel);
 
+                // 해당 장소에 등록된 라벨 존재하는지 확인
                 Optional<Label> existLabelOpt = labelRepository.findById_LabelIdAndId_PlaceId(labelDto.labelId(), place.getId());
 
                 if (existLabelOpt.isPresent()) {
@@ -64,6 +70,7 @@ public class ReviewManager {
                     existingLabel.addLabelCount();
                     labelRepository.save(existingLabel);
                 } else {
+                    // 라벨이 존재하지 않으면 새로 생성하여 저장 (초기 labelCount는 1로 설정)
                     LabelId newLabelId = new LabelId(labelDto.labelId(), place.getId());
                     Label newLabel = createLabelCount(newLabelId, place);
                     labelRepository.save(newLabel);
@@ -77,21 +84,26 @@ public class ReviewManager {
 
     public DeleteReviewResp deleteReview(Long reviewId) {
 
+        // 리뷰 유효성 검증
         Review review = reviewRepository.findByIdWithPlace(reviewId)
                 .orElseThrow(() -> new ReviewException(ReviewExceptionType.REVIEW_NOT_FOUND_EXCEPTION));
 
         Place place = review.getPlace();
 
+        // 장소에서 해당 리뷰에 대한 별점 제거 및 갱신 작업
         place.removeRating(review.getRating());
         placeRepository.save(place);
 
         List<ReviewLabel> reviewLabels = reviewLabelRepository.findByReviewId(reviewId);
+
+        // 리뷰와 연관된 장소에 대한 라벨 카운트 차감
         for(ReviewLabel reviewLabel : reviewLabels){
             Label existingLabel = labelRepository.findById_LabelIdAndId_PlaceId(reviewLabel.getLabelId(), place.getId())
                     .orElseThrow(() -> new LabelException(LabelExceptionType.LABEL_NOT_FOUND_EXCEPTION));
 
             existingLabel.removeLabelCount();
 
+            // 카운트 0이면 라벨 삭제
             if (existingLabel.getLabelCount() == 0) {
                 labelRepository.delete(existingLabel);
             } else {
