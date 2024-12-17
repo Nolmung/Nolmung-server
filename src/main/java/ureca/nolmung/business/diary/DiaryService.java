@@ -1,5 +1,7 @@
 package ureca.nolmung.business.diary;
 
+import static java.time.LocalDate.*;
+
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -26,8 +28,6 @@ import ureca.nolmung.jpa.media.Media;
 import ureca.nolmung.jpa.place.Place;
 import ureca.nolmung.jpa.user.User;
 
-import static java.time.LocalDate.now;
-
 
 @Service
 @RequiredArgsConstructor
@@ -50,12 +50,16 @@ public class DiaryService implements DiaryUseCase {
         User loginUser = userManager.validateUserExistence(user.getId());
         loginUser.incrementDiaryCount();
 
+        boolean firstBadgeAdded = false;
+        boolean thirdBadgeAdded = false;
+
         if(!badgeManager.checkDiaryPostBadge(FIRST_DIARY_BADGE_CODE_ID, user.getId()))
         {
             if(loginUser.getDiaryCount() >= 1)
             {
                 BadgeCode badgeCode = badgeManager.validateBadgeCodeExistence(FIRST_DIARY_BADGE_CODE_ID);
                 badgeManager.addDiaryBadge(loginUser, badgeCode);
+                firstBadgeAdded = true;
             }
         }
 
@@ -65,13 +69,14 @@ public class DiaryService implements DiaryUseCase {
             {
                 BadgeCode badgeCode = badgeManager.validateBadgeCodeExistence(THIRD_DIARY_BADGE_CODE_ID);
                 badgeManager.addDiaryBadge(loginUser, badgeCode);
+                thirdBadgeAdded = true;
             }
         }
 
         // 오늘 쓴 오늘멍이 존재하는지 확인
         diaryManager.checkTodayDiary(user.getId(),now());
 
-        return diaryManager.addDiary(loginUser, req);
+        return diaryManager.addDiary(loginUser, req, firstBadgeAdded, thirdBadgeAdded);
     }
 
     @Override
