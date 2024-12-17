@@ -1,8 +1,9 @@
 package ureca.nolmung.business.review.dto.response;
 
-import ureca.nolmung.jpa.place.Enum.Category;
-
+import java.time.LocalDateTime;
 import java.util.List;
+
+import ureca.nolmung.jpa.place.Enum.Category;
 
 public record ReviewResp (
         Long reviewId,
@@ -11,6 +12,7 @@ public record ReviewResp (
         String placeName,
         String address,
         int rating,
-        List<LabelResp> Labels
+        List<LabelResp> Labels,
+		LocalDateTime createdAt
         )
 { }
