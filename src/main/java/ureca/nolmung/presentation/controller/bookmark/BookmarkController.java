@@ -16,12 +16,12 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import ureca.nolmung.business.bookmark.BookmarkUseCase;
-import ureca.nolmung.business.bookmark.response.BookmarkResponse;
+import ureca.nolmung.business.bookmark.dto.response.BookmarkResponse;
 import ureca.nolmung.business.user.dto.response.CustomUserDetails;
 import ureca.nolmung.config.response.ResponseDto;
 import ureca.nolmung.config.response.ResponseUtil;
 import ureca.nolmung.jpa.place.Enum.Category;
-import ureca.nolmung.presentation.controller.bookmark.request.BookmarkRequest;
+import ureca.nolmung.presentation.controller.bookmark.dto.request.BookmarkRequest;
 
 @Tag(name = "북마크")
 @RequiredArgsConstructor

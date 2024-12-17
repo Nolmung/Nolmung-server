@@ -1,4 +1,4 @@
-package ureca.nolmung.business.bookmark.request;
+package ureca.nolmung.business.bookmark.dto.request;
 
 import lombok.Builder;
 import lombok.Getter;

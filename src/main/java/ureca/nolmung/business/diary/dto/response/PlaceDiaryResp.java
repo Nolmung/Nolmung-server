@@ -1,4 +1,4 @@
-package ureca.nolmung.business.diary.response;
+package ureca.nolmung.business.diary.dto.response;
 
 import java.time.LocalDateTime;
 
@@ -6,11 +6,10 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import ureca.nolmung.jpa.diary.Diary;
-import ureca.nolmung.jpa.media.Media;
 
 @Getter
 @NoArgsConstructor
-public class PlaceDiaryResponse {
+public class PlaceDiaryResp {
 
 	private Long diaryId;
 	private String diaryName;
@@ -21,7 +20,7 @@ public class PlaceDiaryResponse {
 	private String imageUrl;
 
 	@Builder
-	public PlaceDiaryResponse(Long diaryId, String diaryName, String diaryWriter, String writerUrlImage,
+	public PlaceDiaryResp(Long diaryId, String diaryName, String diaryWriter, String writerUrlImage,
 		String diaryContent, LocalDateTime createdAt, String imageUrl, double rating) {
 		this.diaryId = diaryId;
 		this.diaryName = diaryName;
@@ -32,8 +31,8 @@ public class PlaceDiaryResponse {
 		this.imageUrl = imageUrl;
 	}
 
-	public PlaceDiaryResponse of(Diary diary, String mediaUrl) {
-		return PlaceDiaryResponse.builder()
+	public PlaceDiaryResp of(Diary diary, String mediaUrl) {
+		return PlaceDiaryResp.builder()
 			.diaryId(diary.getId())
 			.diaryName(diary.getTitle())
 			.diaryWriter(diary.getUser().getName())

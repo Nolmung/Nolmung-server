@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
-import ureca.nolmung.business.labels.response.LabelResponse;
+import ureca.nolmung.business.labels.dto.response.LabelResponse;
 import ureca.nolmung.jpa.label.Label;
 import ureca.nolmung.persistence.label.LabelRepository;
 

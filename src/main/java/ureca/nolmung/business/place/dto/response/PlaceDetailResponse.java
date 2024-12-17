@@ -1,11 +1,11 @@
-package ureca.nolmung.business.place.response;
+package ureca.nolmung.business.place.dto.response;
 
 import java.util.List;
 
 import lombok.Builder;
 import lombok.Getter;
-import ureca.nolmung.business.diary.response.PlaceDiaryResponse;
-import ureca.nolmung.business.labels.response.LabelResponse;
+import ureca.nolmung.business.diary.dto.response.PlaceDiaryResp;
+import ureca.nolmung.business.labels.dto.response.LabelResponse;
 import ureca.nolmung.jpa.place.Enum.Category;
 import ureca.nolmung.jpa.place.Place;
 
@@ -34,12 +34,12 @@ public class PlaceDetailResponse {
 	private Integer reviewCount;
 	private List<LabelResponse> labels;
 	private Integer totalDiaries;
-	private List<PlaceDiaryResponse> diaries;
+	private List<PlaceDiaryResp> diaries;
 	private double latitude;
 	private double longitude;
 	private Boolean isBookmarked;
 
-	public static PlaceDetailResponse of(Place place, List<LabelResponse> labels, List<PlaceDiaryResponse> diaries, Boolean isBookmarked) {
+	public static PlaceDetailResponse of(Place place, List<LabelResponse> labels, List<PlaceDiaryResp> diaries, Boolean isBookmarked) {
 		return PlaceDetailResponse.builder()
 			.placeId(place.getId())
 			.placeName(place.getName())
