@@ -39,12 +39,16 @@ dependencies {
     // spring batch
     implementation 'org.springframework.boot:spring-boot-starter-batch'
 
-    //AWS personalize, sdk
+    //AWS personalize, sdk, s3
     dependencies {
         implementation 'software.amazon.awssdk:personalize:2.16.83'
         implementation 'software.amazon.awssdk:personalizeruntime:2.16.83'
         implementation 'software.amazon.awssdk:personalizeevents:2.16.83'
+        implementation 'software.amazon.awssdk:s3:2.20.40'
     }
+
+    // Apache Commons CSV
+    implementation 'org.apache.commons:commons-csv:1.9.0'
 
     // lombok
     compileOnly 'org.projectlombok:lombok'
