@@ -76,7 +76,7 @@ public class DiaryManager {
 		return (media != null) ? media.getMediaUrl() : "이미지 없음";
 	}
 
-	public AddDiaryResp addDiary(User user, AddDiaryReq req) {
+	public AddDiaryResp addDiary(User user, AddDiaryReq req,  boolean firstBadgeAdded, boolean thirdBadgeAdded) {
 
 		Diary diary = createDiary(user, req);
 		Diary savedDiary = diaryRepository.save(diary);
@@ -104,7 +104,7 @@ public class DiaryManager {
 			mediaRepository.save(media);
 		});
 
-		return new AddDiaryResp(savedDiary.getId());
+		return new AddDiaryResp(savedDiary.getId(), firstBadgeAdded, thirdBadgeAdded);
 	}
 
 	public List<Diary> getDiaryList(Long userId) {
