@@ -7,10 +7,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import ureca.nolmung.business.diary.response.PlaceDiaryResponse;
-import ureca.nolmung.business.labels.response.LabelResponse;
-import ureca.nolmung.business.place.response.PlaceDetailResponse;
-import ureca.nolmung.business.place.response.SearchedPlaceResponse;
+import ureca.nolmung.business.diary.dto.response.PlaceDiaryResp;
+import ureca.nolmung.business.labels.dto.response.LabelResponse;
+import ureca.nolmung.business.place.dto.response.PlaceDetailResponse;
+import ureca.nolmung.business.place.dto.response.SearchedPlaceResponse;
 import ureca.nolmung.business.user.dto.response.CustomUserDetails;
 import ureca.nolmung.implementation.diary.DiaryManager;
 import ureca.nolmung.implementation.label.LabelManager;
@@ -39,7 +39,7 @@ public class PlaceService implements PlaceUseCase {
 	public PlaceDetailResponse findPlaceDetailById(CustomUserDetails userDetails, long placeId) {
 		Place place = placeManager.findPlaceById(placeId);
 		List<LabelResponse> labelResponses = labelManager.findLabelsByPlaceId(placeId);
-		List<PlaceDiaryResponse> placeDiaryResponses = diaryManager.findDiaryByPlace(place);
+		List<PlaceDiaryResp> placeDiaryResponses = diaryManager.findDiaryByPlace(place);
 		Boolean isBookmarked = placeManager.isBookmarked(userDetails, place);
 		return PlaceDetailResponse.of(place, labelResponses, placeDiaryResponses, isBookmarked);
 	}

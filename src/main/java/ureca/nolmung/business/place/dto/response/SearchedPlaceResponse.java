@@ -1,4 +1,4 @@
-package ureca.nolmung.business.place.response;
+package ureca.nolmung.business.place.dto.response;
 
 import lombok.Builder;
 import lombok.Getter;

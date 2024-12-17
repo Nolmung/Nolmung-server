@@ -12,7 +12,7 @@ import ureca.nolmung.business.diary.dto.request.UpdateDiaryReq;
 import ureca.nolmung.business.diary.dto.response.AddDiaryResp;
 import ureca.nolmung.business.diary.dto.response.DeleteDiaryResp;
 import ureca.nolmung.business.diary.dto.response.UpdateDiaryResp;
-import ureca.nolmung.business.diary.response.PlaceDiaryResponse;
+import ureca.nolmung.business.diary.dto.response.PlaceDiaryResp;
 import ureca.nolmung.implementation.dog.DogException;
 import ureca.nolmung.implementation.dog.DogExceptionType;
 import ureca.nolmung.implementation.place.PlaceException;
@@ -45,9 +45,9 @@ public class DiaryManager {
 	private final DogRepository dogRepository;
 	private final Trie trie;
 
-	public List<PlaceDiaryResponse> findDiaryByPlace(Place place) {
+	public List<PlaceDiaryResp> findDiaryByPlace(Place place) {
 		List<DiaryPlace> diaryPlaces = diaryPlaceRepository.findAllByPlaceOrderByCreatedAtDesc(place);
-		List<PlaceDiaryResponse> placeDiaryResponses = new ArrayList<>();
+		List<PlaceDiaryResp> placeDiaryResponses = new ArrayList<>();
 
 		for (DiaryPlace diaryPlace : diaryPlaces) {
 			Diary diary = findDiaryById(diaryPlace.getDiary().getId());
@@ -57,7 +57,7 @@ public class DiaryManager {
 			}
 
 			String mediaUrl = getMediaUrl(diary);
-			placeDiaryResponses.add(new PlaceDiaryResponse().of(diary, mediaUrl));
+			placeDiaryResponses.add(new PlaceDiaryResp().of(diary, mediaUrl));
 		}
 		return placeDiaryResponses;
 	}
