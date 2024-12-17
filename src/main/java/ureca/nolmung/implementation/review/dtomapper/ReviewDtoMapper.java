@@ -19,7 +19,9 @@ public class ReviewDtoMapper {
                 review.getPlace().getName(),
                 review.getPlace().getAddress(),
                 review.getRating(),
-                labels);
+                labels,
+                review.getCreatedAt()
+            );
     }
 
     public ReviewResp toReviewResp(Review review) {
