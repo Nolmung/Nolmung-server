@@ -32,7 +32,7 @@
 
 #### 백엔드
 <kbd>
-<img width="600" src="https://github.com/user-attachments/assets/e67a1dde-685d-4708-893a-a17ee57b530f" alt="nolmung_architecture" style="border:1px solid black;">
+<img width="600" src="https://github.com/user-attachments/assets/1c8f1462-6764-41b8-ab5b-7da1e616e373" alt="nolmung_architecture" style="border:1px solid black;">
 </kbd>
 
 #### 인프라
