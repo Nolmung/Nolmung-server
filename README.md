@@ -51,7 +51,7 @@
 
 #### 운영
 <kbd>
-<img width="600" src="https://github.com/user-attachments/assets/9307e7b8-4964-4991-b413-65b2935cda80" alt="nolmung_architecture" style="border:1px solid black;">
+<img width="600" src="https://github.com/user-attachments/assets/45422579-d4b7-4287-8a3b-19494a313fcc" alt="nolmung_architecture" style="border:1px solid black;">
 </kbd>
 
 <br />
