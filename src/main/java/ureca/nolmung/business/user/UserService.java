@@ -21,7 +21,7 @@ public class UserService implements UserUseCase{
 
 	@Transactional
 	public UserResp completeSignUp(Long userId, UserReq req) {
-
+		// 회원가입
 		User user = userManager.validateUserExistence(userId);
 		user.singUp(req);
 		return userDtoMapper.toUserResp(user);
@@ -30,13 +30,14 @@ public class UserService implements UserUseCase{
 	@Override
 	@Transactional
 	public UserResp updateUser(User user, UserReq req) {
-
+		// 사용자 정보 수정
 		User updatedUser = userManager.updateUser(user, req);
 		return userDtoMapper.toUserResp(updatedUser);
 	}
 
 	@Override
 	public UserResp getUser(User user) {
+		// 사용자 정보 반환
 		return userDtoMapper.toUserResp(user);
 	}
 }
