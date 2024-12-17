@@ -32,12 +32,14 @@ public class JWTUtil {
 
 
 	public JWTUtil(@Value("${jwt.secretKey}")String secret, @Value("${jwt.access.expiration}")Long expiredMs, UserManager userManager) {
+		// 비밀 키, 토큰 만료 시간 및 userManager 초기화
 		this.secretKey = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8), Jwts.SIG.HS256.key().build().getAlgorithm());
 		this.expiredMs = expiredMs;
 		this.userManager = userManager;
 	}
 
 	private String getEmail(String token) {
+		// 토큰에서 이메일 정보 추출
 		return Jwts.parser()
 			.verifyWith(secretKey)
 			.build()
@@ -46,6 +48,7 @@ public class JWTUtil {
 	}
 
 	public String createJwt(Long id, String email, UserRole role) {
+		// 토큰 생성
 		return Jwts.builder()
 			.claim("id", id)
 			.claim("email", email)
@@ -57,6 +60,7 @@ public class JWTUtil {
 	}
 
 	public Authentication getAuthentication(String accessToken) {
+		// 토큰을 사용하여 이메일을 추출하고, 해당 이메일로 사용자 정보를 조회하여 인증 정보를 생성
 		String email = getEmail(accessToken);
 		User user = userManager.findByEmail(email);
 		CustomUserDetails customUserDetails = new CustomUserDetails(user);
@@ -64,12 +68,14 @@ public class JWTUtil {
 	}
 
 	public boolean validateToken(String accessToken) {
+		// 토큰 유효성 검사
 		Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(accessToken);
 		return true;
 	}
 
 	public void setAuthorizationHeader(HttpServletResponse response, Long userId, String email, UserRole role)
 	{
+		// 헤더에 토큰 설정
 		String token = createJwt(userId,email,role);
 
 		if (token == null) {

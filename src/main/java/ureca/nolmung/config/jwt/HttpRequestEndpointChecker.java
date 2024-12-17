@@ -15,7 +15,7 @@ public class HttpRequestEndpointChecker {
 	private final DispatcherServlet servlet;
 
 	public boolean isEndpointExist(HttpServletRequest request) {
-
+		// 요청된 엔드포인트가 존재하면 true, 그렇지 않으면 false 반환
 		for (HandlerMapping handlerMapping : servlet.getHandlerMappings()) {
 			try {
 				HandlerExecutionChain foundHandler = handlerMapping.getHandler(request);

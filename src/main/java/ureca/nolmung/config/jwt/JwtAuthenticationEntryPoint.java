@@ -25,9 +25,12 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
 	@Override
 	public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException {
 
+		// 요청된 엔드포인트가 존재하지 않는 경우 404 오류 반환
 		if (!endpointChecker.isEndpointExist(request)) {
 			response.sendError(HttpServletResponse.SC_NOT_FOUND, "Resource not found");
-		} else {
+		}
+		// 인증되지 않은 요청에 대해 401 오류 반환
+		else {
 			JwtTokenExceptionType exceptionType = (JwtTokenExceptionType) request.getAttribute("exception");
 
 			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
