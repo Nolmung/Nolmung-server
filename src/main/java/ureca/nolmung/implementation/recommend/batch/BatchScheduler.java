@@ -18,7 +18,7 @@ public class BatchScheduler {
     private final Job saveRecommendationsJob;
 
 //    @Scheduled(initialDelay = 5000, fixedDelay = 5000)
-//    @Scheduled(cron = "0 0 3 * * ?") // 실제 사용한다하면 이거로
+    @Scheduled(cron = "0 0 3 * * ?") // 실제 사용한다하면 이거로
     public void runBatchJob() {
         try {
             jobLauncher.run(saveRecommendationsJob, new org.springframework.batch.core.JobParametersBuilder()
