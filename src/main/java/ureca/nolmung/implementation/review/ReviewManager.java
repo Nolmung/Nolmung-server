@@ -1,5 +1,6 @@
 package ureca.nolmung.implementation.review;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -153,5 +154,9 @@ public class ReviewManager {
 
     public List<Review> getTodayMyReviews(Long userId) {
         return reviewRepository.findByUserIdAndCreatedAt(userId, now());
+    }
+
+    public List<Review> getDateReviews(Long userId, LocalDate date) {
+        return reviewRepository.findByUserIdAndCreatedAt(userId, date);
     }
 }

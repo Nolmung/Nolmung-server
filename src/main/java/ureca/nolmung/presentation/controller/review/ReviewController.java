@@ -1,5 +1,6 @@
 package ureca.nolmung.presentation.controller.review;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -58,6 +59,13 @@ public class ReviewController {
     public ResponseDto<List<ReviewResp>> getTodayReviews(@AuthenticationPrincipal CustomUserDetails userDetails)
     {
         return ResponseUtil.SUCCESS("오늘 쓴 후기 조회에 성공하였습니다.", reviewUseCase.getTodayMyReviews(userDetails.getUser().getId()));
+    }
+
+    @Operation(summary = "날짜별 후기 목록 조회")
+    @GetMapping("/type")
+    public ResponseDto<List<ReviewResp>> getDateReviews(@AuthenticationPrincipal CustomUserDetails userDetails, @RequestParam LocalDate date)
+    {
+        return ResponseUtil.SUCCESS("해당 날짜에 쓴 후기 조회에 성공하였습니다.", reviewUseCase.getDateReviews(userDetails.getUser().getId(), date));
     }
 
 }

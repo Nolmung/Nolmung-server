@@ -10,8 +10,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-
-import ureca.nolmung.business.review.dto.response.ReviewResp;
 import ureca.nolmung.jpa.review.Review;
 
 @Repository

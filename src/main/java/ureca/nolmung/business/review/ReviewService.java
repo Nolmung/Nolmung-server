@@ -1,5 +1,6 @@
 package ureca.nolmung.business.review;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -62,6 +63,14 @@ public class ReviewService implements ReviewUseCase{
         // 유저 검증
         userManager.validateUserExistence(userId);
         List<Review> reviews = reviewManager.getTodayMyReviews(userId);
+        return reviews.stream().map(reviewDtoMapper::toReviewResp).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ReviewResp> getDateReviews(Long userId, LocalDate date) {
+        // 유저 검증
+        userManager.validateUserExistence(userId);
+        List<Review> reviews = reviewManager.getDateReviews(userId, date);
         return reviews.stream().map(reviewDtoMapper::toReviewResp).collect(Collectors.toList());
     }
 }
