@@ -1,9 +1,9 @@
-package ureca.nolmung.presentation.controller.bookmark.request;
+package ureca.nolmung.presentation.controller.bookmark.dto.request;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import ureca.nolmung.business.bookmark.request.BookmarkServiceRequest;
+import ureca.nolmung.business.bookmark.dto.request.BookmarkServiceRequest;
 
 @Getter
 @NoArgsConstructor

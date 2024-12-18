@@ -7,6 +7,7 @@ import ureca.nolmung.business.review.dto.response.ReviewResp;
 import ureca.nolmung.jpa.review.Review;
 import ureca.nolmung.jpa.user.User;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface ReviewUseCase {
@@ -14,4 +15,5 @@ public interface ReviewUseCase {
     DeleteReviewResp deleteReview(User user, Long reviewId);
     List<ReviewResp> getReviews(Long userId, int page, int size);
     List<ReviewResp> getTodayMyReviews(Long id);
+    List<ReviewResp> getDateReviews(Long userId, LocalDate date);
 }

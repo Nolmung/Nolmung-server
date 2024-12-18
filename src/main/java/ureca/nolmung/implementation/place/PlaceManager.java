@@ -10,7 +10,7 @@ import org.locationtech.jts.geom.Polygon;
 import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
-import ureca.nolmung.business.place.response.SearchedPlaceResponse;
+import ureca.nolmung.business.place.dto.response.SearchedPlaceResponse;
 import ureca.nolmung.business.user.dto.response.CustomUserDetails;
 import ureca.nolmung.jpa.place.Enum.Category;
 import ureca.nolmung.jpa.place.Place;

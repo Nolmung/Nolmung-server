@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
-import ureca.nolmung.business.bookmark.response.BookmarkResponse;
+import ureca.nolmung.business.bookmark.dto.response.BookmarkResponse;
 import ureca.nolmung.jpa.bookmark.Bookmark;
 import ureca.nolmung.jpa.place.Enum.Category;
 import ureca.nolmung.jpa.place.Place;

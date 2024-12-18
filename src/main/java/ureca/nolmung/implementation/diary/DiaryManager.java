@@ -12,7 +12,7 @@ import ureca.nolmung.business.diary.dto.request.UpdateDiaryReq;
 import ureca.nolmung.business.diary.dto.response.AddDiaryResp;
 import ureca.nolmung.business.diary.dto.response.DeleteDiaryResp;
 import ureca.nolmung.business.diary.dto.response.UpdateDiaryResp;
-import ureca.nolmung.business.diary.response.PlaceDiaryResponse;
+import ureca.nolmung.business.diary.dto.response.PlaceDiaryResp;
 import ureca.nolmung.implementation.dog.DogException;
 import ureca.nolmung.implementation.dog.DogExceptionType;
 import ureca.nolmung.implementation.place.PlaceException;
@@ -45,9 +45,9 @@ public class DiaryManager {
 	private final DogRepository dogRepository;
 	private final Trie trie;
 
-	public List<PlaceDiaryResponse> findDiaryByPlace(Place place) {
+	public List<PlaceDiaryResp> findDiaryByPlace(Place place) {
 		List<DiaryPlace> diaryPlaces = diaryPlaceRepository.findAllByPlaceOrderByCreatedAtDesc(place);
-		List<PlaceDiaryResponse> placeDiaryResponses = new ArrayList<>();
+		List<PlaceDiaryResp> placeDiaryResponses = new ArrayList<>();
 
 		for (DiaryPlace diaryPlace : diaryPlaces) {
 			Diary diary = findDiaryById(diaryPlace.getDiary().getId());
@@ -57,7 +57,7 @@ public class DiaryManager {
 			}
 
 			String mediaUrl = getMediaUrl(diary);
-			placeDiaryResponses.add(new PlaceDiaryResponse().of(diary, mediaUrl));
+			placeDiaryResponses.add(new PlaceDiaryResp().of(diary, mediaUrl));
 		}
 		return placeDiaryResponses;
 	}
@@ -76,7 +76,7 @@ public class DiaryManager {
 		return (media != null) ? media.getMediaUrl() : "이미지 없음";
 	}
 
-	public AddDiaryResp addDiary(User user, AddDiaryReq req) {
+	public AddDiaryResp addDiary(User user, AddDiaryReq req,  boolean firstBadgeAdded, boolean thirdBadgeAdded) {
 
 		Diary diary = createDiary(user, req);
 		Diary savedDiary = diaryRepository.save(diary);
@@ -104,11 +104,12 @@ public class DiaryManager {
 			mediaRepository.save(media);
 		});
 
-		return new AddDiaryResp(savedDiary.getId());
+		return new AddDiaryResp(savedDiary.getId(), firstBadgeAdded, thirdBadgeAdded);
 	}
 
 	public List<Diary> getDiaryList(Long userId) {
-		return diaryRepository.findDiariesWithFirstMediaByUser(userId);
+		// 일기 목록 조회 (등록된 미디어 리스트도 반환)
+		return diaryRepository.findDiaryWithMediaByUser(userId);
 	}
 
 	public Diary getDetailDiary(Long diaryId) {
@@ -121,11 +122,13 @@ public class DiaryManager {
 	}
 
 	public UpdateDiaryResp updateDiary(Diary diary, UpdateDiaryReq req) {
+		// 요청받은 dogID 리스트와 기존 dogID 리스트 비교
 		List<Long> reqDogIds = req.dogs();
 		List<Long> existingDogIds = diary.getDogDiaries().stream()
 			.map(dogDiary -> dogDiary.getDog().getId())
 			.toList();
 
+		// 기존 리스트에 없는 새로운 dogID -> dog_diary 테이블에 추가
 		for (Long reqDogId : reqDogIds) {
 			if (!existingDogIds.contains(reqDogId)) {
 				Dog dog = dogRepository.findById(reqDogId)
@@ -134,6 +137,8 @@ public class DiaryManager {
 				diary.addDogDiary(newDogDiary);
 			}
 		}
+
+		// 기존 리스트 중 요청에 없는 dogID -> 삭제
 		diary.getDogDiaries().removeIf(dogDiary -> {
 			if (!reqDogIds.contains(dogDiary.getDog().getId())) {
 				return true;
@@ -141,6 +146,7 @@ public class DiaryManager {
 			return false;
 		});
 
+		// 기존 등록된 미디어 삭제 후 새로운 미디어 추가
 		mediaRepository.deleteByDiaryId(diary.getId());
 		req.medias().forEach(mediaReq -> {
 			Media newMedia = updateMedia(mediaReq);

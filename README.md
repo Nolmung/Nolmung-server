@@ -32,7 +32,7 @@
 
 #### 백엔드
 <kbd>
-<img width="600" src="https://github.com/user-attachments/assets/e67a1dde-685d-4708-893a-a17ee57b530f" alt="nolmung_architecture" style="border:1px solid black;">
+<img width="600" src="https://github.com/user-attachments/assets/1c8f1462-6764-41b8-ab5b-7da1e616e373" alt="nolmung_architecture" style="border:1px solid black;">
 </kbd>
 
 #### 인프라
@@ -51,7 +51,7 @@
 
 #### 운영
 <kbd>
-<img width="600" src="https://github.com/user-attachments/assets/4ec17975-2abc-4d40-adac-db163a7ae1d2" alt="nolmung_architecture" style="border:1px solid black;">
+<img width="600" src="https://github.com/user-attachments/assets/45422579-d4b7-4287-8a3b-19494a313fcc" alt="nolmung_architecture" style="border:1px solid black;">
 </kbd>
 
 <br />

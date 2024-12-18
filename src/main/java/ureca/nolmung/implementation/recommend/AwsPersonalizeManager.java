@@ -30,7 +30,7 @@ public class AwsPersonalizeManager {
     private static final int DEFAULT_NUM_RESULTS = 50;
 
     public List<PredictedItem> getRecs(Long userId) {
-
+        // Aws Personalize Api에 요청하여 추천 목록 받아오기
         List<PredictedItem> items = new ArrayList<>();
         try {
             GetRecommendationsRequest recommendationsRequest = GetRecommendationsRequest.builder()
@@ -50,6 +50,7 @@ public class AwsPersonalizeManager {
         return items;
     }
 
+    // PredictedItem List를 Place 객체 List로 바꾸기
     public List<Place> getPlaces(List<PredictedItem> recs) {
         List<Long> ids = recs.stream()
                 .map(item -> Long.valueOf(item.itemId()))

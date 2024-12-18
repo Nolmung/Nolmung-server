@@ -4,7 +4,7 @@
 
     <!-- springProfile 태그를 사용하여 profile 별 property 값 설정 -->
     <springProfile name="prod">
-        <!-- loca1l log file path -->
+        <!-- local log file path -->
         <property name="LOG_PATH" value="./app/logs"/>
     </springProfile>
 

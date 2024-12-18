@@ -2,8 +2,8 @@ package ureca.nolmung.business.place;
 
 import java.util.List;
 
-import ureca.nolmung.business.place.response.PlaceDetailResponse;
-import ureca.nolmung.business.place.response.SearchedPlaceResponse;
+import ureca.nolmung.business.place.dto.response.PlaceDetailResponse;
+import ureca.nolmung.business.place.dto.response.SearchedPlaceResponse;
 import ureca.nolmung.business.user.dto.response.CustomUserDetails;
 import ureca.nolmung.jpa.place.Enum.Category;
 

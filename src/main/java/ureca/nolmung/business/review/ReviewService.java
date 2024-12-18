@@ -1,5 +1,6 @@
 package ureca.nolmung.business.review;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,12 +29,14 @@ public class ReviewService implements ReviewUseCase{
     @Override
     @Transactional
     public List<AddReviewResp> addReview(User user, AddReviewReq req) {
+        // 유저 검증
         User loginUser = userManager.validateUserExistence(user.getId());
         return reviewManager.addReview(loginUser, req);
     }
 
     @Transactional
     public DeleteReviewResp deleteReview(User user, Long reviewId) {
+        // 작성자 검증
         reviewManager.checkReviewWriter(user.getId(), reviewId);
         return reviewManager.deleteReview(reviewId);
     }
@@ -57,8 +60,17 @@ public class ReviewService implements ReviewUseCase{
     @Override
     @Transactional(readOnly = true)
     public List<ReviewResp> getTodayMyReviews(Long userId) {
+        // 유저 검증
         userManager.validateUserExistence(userId);
         List<Review> reviews = reviewManager.getTodayMyReviews(userId);
+        return reviews.stream().map(reviewDtoMapper::toReviewResp).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ReviewResp> getDateReviews(Long userId, LocalDate date) {
+        // 유저 검증
+        userManager.validateUserExistence(userId);
+        List<Review> reviews = reviewManager.getDateReviews(userId, date);
         return reviews.stream().map(reviewDtoMapper::toReviewResp).collect(Collectors.toList());
     }
 }
