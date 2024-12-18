@@ -116,6 +116,8 @@
 <br />
 <br />
 
+<!--
+
 ## 🗂️ 산출물
 <p>
   🔗 <a href="https://docs.google.com/spreadsheets/d/1gMqM7RShegYMpOJgnLBVFK00hbhpSXT2/edit?gid=965066708#gid=965066708" rel="nofollow">요구사항 명세서</a>  
@@ -130,6 +132,8 @@
   🔗 <a href="https://docs.google.com/spreadsheets/d/11Fo8JespYtxbPJlsFSPIHOsGlviqmc2kPSXhVMMutSA/edit?gid=113761061#gid=113761061" rel="nofollow">WBS</a>  
 </p>
 <br />
+
+-->
 
 ## 👥 팀원 및 역할 소개
 
