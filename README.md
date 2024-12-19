@@ -118,8 +118,19 @@
 
 ## 🗂️ 최종 산출물
 <p>
-  🔗 <a href="https://drive.google.com/drive/folders/1Rmy9ZKCieFMIPWcxvuHWrIyLjg-tCtvi?hl=ko" rel="nofollow">구글 드라이브</a>  
+  🔗 <a href="https://drive.google.com/file/d/1TizUd2Brb62Lb2Tquvokx-YJDTbOWV2w/view?usp=drive_link" rel="nofollow">기획안</a>  
 </p>
+<p>
+  🔗 <a href="https://docs.google.com/spreadsheets/d/1hXpnE_wmo2KGW5uxmJ7RMQ8YVLunX73K/edit?gid=965066708#gid=965066708" rel="nofollow">요구사항 정의서</a>  
+</p>
+<p>
+  🔗 <a href="https://docs.google.com/spreadsheets/d/1uxIxU9jdLQmCJ0fDzqik5ey6tGnAfIg1/edit?gid=24648020#gid=24648020" rel="nofollow">테이블 정의서</a>  
+</p>
+<p>
+  🔗 <a href="https://docs.google.com/spreadsheets/d/1327Zj17dGWZG511GWrY7uQ4Dtb3TVmBA/edit?gid=41944336#gid=41944336" rel="nofollow">API 명세서</a>  
+</p>
+<p>
+  🔗 <a href="https://drive.google.com/file/d/1L7RKpdLvweRE0fctmd8e3DIA3cQ9HkWs/view?usp=drive_link" rel="nofollow">WBS</a> 
 <br />
 
 ## 👥 팀원 및 역할 소개
