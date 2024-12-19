@@ -14,17 +14,22 @@ import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.item.database.JdbcCursorItemReader;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.transaction.PlatformTransactionManager;
 import software.amazon.awssdk.services.personalizeruntime.model.PredictedItem;
 import ureca.nolmung.business.recommend.dto.response.RecommendResp;
+import ureca.nolmung.implementation.bookmark.BookmarkManager;
 import ureca.nolmung.implementation.recommend.AwsPersonalizeManager;
+import ureca.nolmung.implementation.recommend.CsvGeneratorManager;
 import ureca.nolmung.implementation.recommend.RedisManager;
+import ureca.nolmung.implementation.recommend.S3Manager;
 import ureca.nolmung.implementation.recommend.dtomapper.RecommendDtoMapper;
 import ureca.nolmung.implementation.user.UserManager;
+import ureca.nolmung.jpa.bookmark.Bookmark;
 import ureca.nolmung.jpa.place.Place;
+import org.springframework.batch.core.step.tasklet.Tasklet;
 
 import javax.sql.DataSource;
+import java.nio.file.Path;
 import java.sql.ResultSet;
 import java.util.AbstractMap;
 import java.util.List;
@@ -44,6 +49,9 @@ public class BatchConfig {
     private final AwsPersonalizeManager awsPersonalizeManager;
     private final RedisManager redisManager;
     private final RecommendDtoMapper recommendDtoMapper;
+    private final S3Manager s3Manager;
+    private final BookmarkManager bookmarkManager;
+    private final CsvGeneratorManager csvGeneratorManager;
 
     private static final int TIME_TO_LIVE = 48;
 
@@ -107,4 +115,42 @@ public class BatchConfig {
             userManager.updateBookmarkCount(userId);
         });
     }
+
+
+    // S3 파일 업로드
+    @Bean
+    public Job exportCsvToS3Job() {
+        return new JobBuilder("exportCsvToS3Job", jobRepository)
+                .start(exportCsvToS3Step())
+                .build();
+    }
+
+    @Bean
+    public Step exportCsvToS3Step() {
+        return new StepBuilder("exportCsvToS3Step", jobRepository)
+                .tasklet(csvS3Tasklet(), platformTransactionManager)
+                .build();
+    }
+
+    @Bean
+    public Tasklet csvS3Tasklet() {
+        return (contribution, chunkContext) -> {
+
+            List<Bookmark> bookmarks = bookmarkManager.findAll();
+
+            Path csvFile = csvGeneratorManager.generateCsv(bookmarks);
+
+            // 3. S3에 업로드
+            if (csvFile != null) {
+                String key = "nolmung-personalize-dataset/interaction.csv";
+                s3Manager.uploadFile(csvFile, key);
+                log.info("모든 Bookmark 데이터를 S3에 업로드 완료: s3://{}", key);
+            } else {
+                log.warn("CSV 파일 생성 실패");
+            }
+
+            return org.springframework.batch.repeat.RepeatStatus.FINISHED;
+        };
+    }
+
 }
