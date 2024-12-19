@@ -118,7 +118,7 @@
 
 ## 🗂️ 최종 산출물
 <p>
-  🔗 <a href="https://drive.google.com/file/d/1HjKxtfCJIgxNXVhmwZHX5ojS32-ZUuTC/view?usp=drive_link" rel="nofollow">기획안</a>  
+  🔗 <a href="https://drive.google.com/file/d/1cBW-VoGA-f9fJF0o-UTys3I1bYAIayuv/view?usp=drive_link" rel="nofollow">기획안</a>  
 </p>
 <p>
   🔗 <a href="https://docs.google.com/spreadsheets/d/1hXpnE_wmo2KGW5uxmJ7RMQ8YVLunX73K/edit?gid=965066708#gid=965066708" rel="nofollow">요구사항 정의서</a>  
