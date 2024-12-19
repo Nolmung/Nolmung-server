@@ -116,18 +116,9 @@
 <br />
 <br />
 
-## 🗂️ 산출물
+## 🗂️ 최종 산출물
 <p>
-  🔗 <a href="https://docs.google.com/spreadsheets/d/1gMqM7RShegYMpOJgnLBVFK00hbhpSXT2/edit?gid=965066708#gid=965066708" rel="nofollow">요구사항 명세서</a>  
-</p>
-<p>
-  🔗 <a href="https://docs.google.com/spreadsheets/d/1WBgP8ddhtZ4FpwaMSBfbj2j2OMT9PBkz/edit?gid=24648020#gid=24648020" rel="nofollow">테이블 정의서</a>  
-</p>
-<p>
-  🔗 <a href="https://docs.google.com/spreadsheets/d/1lPncS8BsyVdFOsJxUT-aXWuH5KTG0Shz/edit?gid=41944336#gid=41944336" rel="nofollow">API 명세서</a>  
-</p>
-<p>
-  🔗 <a href="https://docs.google.com/spreadsheets/d/11Fo8JespYtxbPJlsFSPIHOsGlviqmc2kPSXhVMMutSA/edit?gid=113761061#gid=113761061" rel="nofollow">WBS</a>  
+  🔗 <a href="https://drive.google.com/drive/folders/1Rmy9ZKCieFMIPWcxvuHWrIyLjg-tCtvi?hl=ko" rel="nofollow">구글 드라이브</a>  
 </p>
 <br />
 
