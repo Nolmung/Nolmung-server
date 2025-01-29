@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- 30초마다 로그에 변경이 있는지 체크하는것 -->
 <configuration scan="true" scanPeriod="30 seconds">
-    <!-- 30초마다 로그에 변경이 있는지 체크하는것 -->
 
     <!-- springProfile 태그를 사용하여 profile 별 property 값 설정 -->
     <springProfile name="prod">

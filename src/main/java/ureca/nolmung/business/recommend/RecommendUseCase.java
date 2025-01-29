@@ -9,5 +9,5 @@ public interface RecommendUseCase {
     List<RecommendResp> getMostBookmarkedPlaces();
     List<RecommendResp> getPlaceRecommendationsForDogs(User user);
     List<RecommendResp> getPlaceRecommendationsNearByUser(User user);
-    List<RecommendResp> getPlaceRecommendationsFromPersonalize(User user);
+    // List<RecommendResp> getPlaceRecommendationsFromPersonalize(User user);
 }

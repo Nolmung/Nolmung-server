@@ -23,13 +23,13 @@ public class RecommendController {
 
     private final RecommendUseCase recommendUseCase;
 
-    @Operation(summary = "개인 맞춤형 장소 추천")
-    @GetMapping("/similar/bookmarks")
-    public ResponseDto<List<RecommendResp>> getPlaceRecommendations(@AuthenticationPrincipal CustomUserDetails userDetails) {
-        return ResponseUtil.SUCCESS(
-                "개인 맞춤형 장소 추천에 성공하였습니다.",
-                recommendUseCase.getPlaceRecommendationsFromPersonalize(userDetails.getUser()));
-    }
+    // @Operation(summary = "개인 맞춤형 장소 추천")
+    // @GetMapping("/similar/bookmarks")
+    // public ResponseDto<List<RecommendResp>> getPlaceRecommendations(@AuthenticationPrincipal CustomUserDetails userDetails) {
+    //     return ResponseUtil.SUCCESS(
+    //             "개인 맞춤형 장소 추천에 성공하였습니다.",
+    //             recommendUseCase.getPlaceRecommendationsFromPersonalize(userDetails.getUser()));
+    // }
 
     @Operation(summary = "즐겨찾기가 많은 장소 추천")
     @GetMapping("/bookmarks")

@@ -84,7 +84,7 @@ dependencies {
     implementation 'io.micrometer:micrometer-registry-prometheus'
 
     // logback
-    implementation 'ch.qos.logback:logback-classic:1.5.12'
+//    implementation 'ch.qos.logback:logback-classic:1.5.12'
 
     // test
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
