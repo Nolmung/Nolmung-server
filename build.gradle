@@ -34,7 +34,7 @@ dependencies {
     runtimeOnly 'com.mysql:mysql-connector-j'
 
     // redis
-    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+//    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 
     // spring batch
     implementation 'org.springframework.boot:spring-boot-starter-batch'
