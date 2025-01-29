@@ -1,32 +1,29 @@
 package ureca.nolmung.business.recommend;
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import software.amazon.awssdk.services.personalizeruntime.model.PredictedItem;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import ureca.nolmung.business.recommend.dto.response.RecommendResp;
 import ureca.nolmung.implementation.dog.DogManager;
-import ureca.nolmung.implementation.recommend.AwsPersonalizeManager;
 import ureca.nolmung.implementation.recommend.RecommendManager;
-import ureca.nolmung.implementation.recommend.RedisManager;
 import ureca.nolmung.implementation.recommend.dtomapper.RecommendDtoMapper;
 import ureca.nolmung.jpa.dog.Dog;
 import ureca.nolmung.jpa.place.Place;
 import ureca.nolmung.jpa.user.User;
 
-import java.util.List;
-import java.util.concurrent.TimeUnit;
-
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class RecommendService implements RecommendUseCase {
-    private final AwsPersonalizeManager awsPersonalizeManager;
+    // private final AwsPersonalizeManager awsPersonalizeManager;
     private final RecommendManager recommendManager;
     private final DogManager dogManager;
     private final RecommendDtoMapper recommendDtoMapper;
-    private final RedisManager redisManager;
+    // private final RedisManager redisManager;
 
     private static final int RANDOM_SELECTION_COUNT = 10;
     private static final int SELECTION_COUNT = 10;
@@ -62,24 +59,24 @@ public class RecommendService implements RecommendUseCase {
         return recommendDtoMapper.toGetPlaceRecommendations(randomSelectNearByPlaces);
     }
 
-    @Override
-    public List<RecommendResp> getPlaceRecommendationsFromPersonalize(User user) {
-        log.info("개인 맞춤형 추천");
-        String key = String.valueOf(user.getId());
-        // Redis에서 Key로 조회한 Value의 TTL 조회
-        Long ttl = redisManager.getExpire(key, TimeUnit.SECONDS);
-
-        if (ttl != null && ttl > MIN_TTL_THRESHOLD) {
-            // TTL 갱신
-            redisManager.addExpire(key, TIME_TO_LIVE, TimeUnit.HOURS);
-            List<RecommendResp> recommendResps = redisManager.getRedis(user.getId());
-            return awsPersonalizeManager.getRandomRecommendResps(recommendResps, RANDOM_SELECTION_COUNT);
-        }
-        // AWS Personalize Campaign에 요청을 보내 추천 장소 정보 받아오기
-        List<PredictedItem> awsRecs = awsPersonalizeManager.getRecs(user.getId());
-        // 받아온 장소 정보들로 데이터베이스에 있는 장소 객체 가져오기
-        List<Place> places = awsPersonalizeManager.getPlaces(awsRecs);
-        List<RecommendResp> recommendResps = redisManager.saveRedis(places, key);
-        return awsPersonalizeManager.getRandomRecommendResps(recommendResps, RANDOM_SELECTION_COUNT);
-    }
+    // @Override
+    // public List<RecommendResp> getPlaceRecommendationsFromPersonalize(User user) {
+    //     log.info("개인 맞춤형 추천");
+    //     String key = String.valueOf(user.getId());
+    //     // Redis에서 Key로 조회한 Value의 TTL 조회
+    //     Long ttl = redisManager.getExpire(key, TimeUnit.SECONDS);
+    //
+    //     if (ttl != null && ttl > MIN_TTL_THRESHOLD) {
+    //         // TTL 갱신
+    //         redisManager.addExpire(key, TIME_TO_LIVE, TimeUnit.HOURS);
+    //         List<RecommendResp> recommendResps = redisManager.getRedis(user.getId());
+    //         return awsPersonalizeManager.getRandomRecommendResps(recommendResps, RANDOM_SELECTION_COUNT);
+    //     }
+    //     // AWS Personalize Campaign에 요청을 보내 추천 장소 정보 받아오기
+    //     List<PredictedItem> awsRecs = awsPersonalizeManager.getRecs(user.getId());
+    //     // 받아온 장소 정보들로 데이터베이스에 있는 장소 객체 가져오기
+    //     List<Place> places = awsPersonalizeManager.getPlaces(awsRecs);
+    //     List<RecommendResp> recommendResps = redisManager.saveRedis(places, key);
+    //     return awsPersonalizeManager.getRandomRecommendResps(recommendResps, RANDOM_SELECTION_COUNT);
+    // }
 }

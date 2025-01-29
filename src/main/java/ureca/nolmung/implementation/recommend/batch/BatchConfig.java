@@ -1,35 +1,20 @@
 package ureca.nolmung.implementation.recommend.batch;
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.batch.core.Job;
-import org.springframework.batch.core.Step;
+import java.sql.ResultSet;
+
+import javax.sql.DataSource;
+
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
-import org.springframework.batch.core.job.builder.JobBuilder;
-import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.core.repository.JobRepository;
-import org.springframework.batch.core.step.builder.StepBuilder;
-import org.springframework.batch.item.ItemProcessor;
-import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.item.database.JdbcCursorItemReader;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.transaction.PlatformTransactionManager;
-import software.amazon.awssdk.services.personalizeruntime.model.PredictedItem;
-import ureca.nolmung.business.recommend.dto.response.RecommendResp;
-import ureca.nolmung.implementation.recommend.AwsPersonalizeManager;
-import ureca.nolmung.implementation.recommend.RedisManager;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import ureca.nolmung.implementation.recommend.dtomapper.RecommendDtoMapper;
 import ureca.nolmung.implementation.user.UserManager;
-import ureca.nolmung.jpa.place.Place;
-
-import javax.sql.DataSource;
-import java.sql.ResultSet;
-import java.util.AbstractMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @Configuration
@@ -41,29 +26,29 @@ public class BatchConfig {
     private final JobRepository jobRepository;
     private final PlatformTransactionManager platformTransactionManager;
     private final UserManager userManager;
-    private final AwsPersonalizeManager awsPersonalizeManager;
-    private final RedisManager redisManager;
+    // private final AwsPersonalizeManager awsPersonalizeManager;
+    // private final RedisManager redisManager;
     private final RecommendDtoMapper recommendDtoMapper;
 
     private static final int TIME_TO_LIVE = 48;
 
-    @Bean
-    public Job saveRecommendationsJob() {
-        return new JobBuilder("saveRecommendationsJob", jobRepository)
-                .incrementer(new RunIdIncrementer())
-                .start(saveRecommendationsStep())
-                .build();
-    }
+    // @Bean
+    // public Job saveRecommendationsJob() {
+    //     return new JobBuilder("saveRecommendationsJob", jobRepository)
+    //             .incrementer(new RunIdIncrementer())
+    //             .start(saveRecommendationsStep())
+    //             .build();
+    // }
 
-    @Bean
-    public Step saveRecommendationsStep() {
-        return new StepBuilder("saveRecommendationsStep", jobRepository)
-                .<Long, Map.Entry<Long, List<RecommendResp>>>chunk(100, platformTransactionManager)
-                .reader(userJdbcReader())
-                .processor(recommendationProcessor())
-                .writer(combinedWriter())
-                .build();
-    }
+    // @Bean
+    // public Step saveRecommendationsStep() {
+    //     return new StepBuilder("saveRecommendationsStep", jobRepository)
+    //             .<Long, Map.Entry<Long, List<RecommendResp>>>chunk(100, platformTransactionManager)
+    //             .reader(userJdbcReader())
+    //             .processor(recommendationProcessor())
+    //             .writer(combinedWriter())
+    //             .build();
+    // }
 
     @Bean
     public JdbcCursorItemReader<Long> userJdbcReader() {
@@ -84,27 +69,27 @@ public class BatchConfig {
     }
 
 
-    @Bean
-    public ItemProcessor<Long, Map.Entry<Long, List<RecommendResp>>> recommendationProcessor() {
-        return userId -> {
-            // Aws Personalize Api 호출하여 추천 리스트 받아오기
-            List<PredictedItem> awsRecs = awsPersonalizeManager.getRecs(userId);
-            List<Place> places = awsPersonalizeManager.getPlaces(awsRecs);
-            List<RecommendResp> recommendResponses = recommendDtoMapper.toGetPlaceRecommendations(places);
-            return new AbstractMap.SimpleEntry<>(userId, recommendResponses);
-        };
-    }
+    // @Bean
+    // public ItemProcessor<Long, Map.Entry<Long, List<RecommendResp>>> recommendationProcessor() {
+    //     return userId -> {
+    //         // Aws Personalize Api 호출하여 추천 리스트 받아오기
+    //         List<PredictedItem> awsRecs = awsPersonalizeManager.getRecs(userId);
+    //         List<Place> places = awsPersonalizeManager.getPlaces(awsRecs);
+    //         List<RecommendResp> recommendResponses = recommendDtoMapper.toGetPlaceRecommendations(places);
+    //         return new AbstractMap.SimpleEntry<>(userId, recommendResponses);
+    //     };
+    // }
 
-    @Bean
-    public ItemWriter<Map.Entry<Long, List<RecommendResp>>> combinedWriter() {
-        return items -> items.forEach(entry -> {
-            // 레디스에 저장하기
-            Long userId = entry.getKey();
-            List<RecommendResp> recommendResps = entry.getValue();
-
-            redisManager.boundValueOps(String.valueOf(userId), recommendResps, TIME_TO_LIVE, TimeUnit.HOURS);
-
-            userManager.updateBookmarkCount(userId);
-        });
-    }
+    // @Bean
+    // public ItemWriter<Map.Entry<Long, List<RecommendResp>>> combinedWriter() {
+    //     return items -> items.forEach(entry -> {
+    //         // 레디스에 저장하기
+    //         Long userId = entry.getKey();
+    //         List<RecommendResp> recommendResps = entry.getValue();
+    //
+    //         redisManager.boundValueOps(String.valueOf(userId), recommendResps, TIME_TO_LIVE, TimeUnit.HOURS);
+    //
+    //         userManager.updateBookmarkCount(userId);
+    //     });
+    // }
 }
