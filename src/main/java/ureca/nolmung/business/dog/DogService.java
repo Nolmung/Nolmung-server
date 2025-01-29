@@ -44,6 +44,7 @@ public class DogService implements DogUseCase{
     public DogResp deleteDog(Long userId, Long dogId) {
         // 반려견 프로필 삭제
         Dog currentDog = dogManager.validateDogExistence(userId, dogId);
+        dogManager.checkDogDeletionLimit(userId);
         dogManager.deleteDog(dogId);
         return dogDtoMapper.toDogResp(currentDog);
     }
