@@ -66,4 +66,12 @@ public class DogManager {
             throw new DogException(DogExceptionType.DOG_REGISTRATION_LIMIT_EXCEEDED);
         }
     }
+
+    public void checkDogDeletionLimit(Long userId) {
+
+        // 현재 등록된 반려견 프로필 개수를 확인하여, 반려견 프로필 삭제 가능한 상태인지 판단 (등록된 프로필 개수가 최소 1개는 있어야 함)
+        if (dogRepository.countByUserId(userId) <= 1) {
+            throw new DogException(DogExceptionType.DOG_MIN_PROFILE_NOT_EMPTY);
+        }
+    }
 }

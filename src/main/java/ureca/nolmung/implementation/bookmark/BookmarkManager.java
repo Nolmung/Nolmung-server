@@ -57,4 +57,7 @@ public class BookmarkManager {
 			.collect(Collectors.toList());
 	}
 
+	public List<Bookmark> findAll() {
+		return bookmarkRepository.findAll();
+	}
 }
