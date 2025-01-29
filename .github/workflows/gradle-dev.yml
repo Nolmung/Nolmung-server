@@ -62,10 +62,14 @@ jobs:
             echo "현재 실행 중인 모든 Docker 컨테이너 중지"
             sudo docker rm -f $(sudo docker ps -qa)
             echo "모든 Docker 컨테이너 강제로 삭제"
+            sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/nolmung
+            echo "docker pull 성공"
+            sudo docker run -d -p 80:8080 ${{ secrets.DOCKERHUB_USERNAME }}/nolmung
             docker rmi $(docker images -q)
             echo "모든 image 강제로 삭제"
-            sudo docker-compose up  -d
-            echo "Docker Compose로 컨테이너 시작 완료"
+
+#            sudo docker-compose up  -d
+#            echo "Docker Compose로 컨테이너 시작 완료"
     
 
     # NOTE: The Gradle Wrapper is the default and recommended way to run Gradle (https://docs.gradle.org/current/userguide/gradle_wrapper.html).
